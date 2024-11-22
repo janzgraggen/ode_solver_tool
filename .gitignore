@@ -2,6 +2,7 @@ step-*.csv
 build
 cmake-build-debug
 starting_point
+html
 *~
 .idea
 .DS_Store

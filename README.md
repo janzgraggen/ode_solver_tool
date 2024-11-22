@@ -13,6 +13,20 @@ mkdir build
 cd build
 cmake ..
 make
+
+alternatively: (build all)
+mkdir build
+cd build
+cmake ..
+cmake --build .
+./MyExec
+
+alternatively (build specific exec)
+mkdir build
+cd build
+cmake ..
+cmake --build . --target MyExec
+./MyExec
 ```
 
 

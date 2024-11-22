@@ -1,0 +1,6 @@
+step-*.csv
+build
+starting_point
+*~
+.idea
+.DS_Store

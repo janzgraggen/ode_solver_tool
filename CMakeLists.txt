@@ -9,6 +9,7 @@ add_library(pcsc
 )
 
 add_subdirectory(googletest)
+add_subdirectory(eigen)
 
 add_executable(main src/main.cc)
 target_link_libraries(main pcsc)

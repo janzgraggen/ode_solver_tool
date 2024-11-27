@@ -46,7 +46,16 @@ if(GIT_SUBMODULE)
 endif()
 
 
-add_executable(main src/main.cc)
+add_executable(main src/main.cc
+        src/OdeSolver.hpp
+        src/OdeSolver.cpp
+        src/Explicit.hpp
+        src/Explicit.cpp
+        src/ForwardEuler.hpp
+        src/ForwardEuler.cpp
+        src/RungeKutta.hpp
+        src/RungeKutta.cpp)
+target_link_libraries(main eigen)
 target_link_libraries(main pcsc)
 
 add_executable(test_pcsc test/test.cc)

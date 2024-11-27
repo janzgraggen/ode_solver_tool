@@ -1,21 +1,21 @@
 //
 // Created by natha on 25/11/2024.
 //
-#ifndef ODE_SOLVER_HPP
-#define ODE_SOLVER_HPP
+#ifndef ODESOLVER_HPP
+#define ODESOLVER_HPP
 
 #include <iostream>
 #include <Eigen/Dense>
 #include <functional>
 
 /**
- * @class ODE_Solver
+ * @class OdeSolver
  * @brief A base class for solving Ordinary Differential Equations (ODEs).
  *
  * This class provides an interface for solving ODEs using different numerical methods.
  * It uses Eigen for vector representation and supports customizable right-hand side functions.
  */
-class ODE_Solver {
+class OdeSolver {
 private:
     double stepSize; ///< The step size for the numerical method.
     double initialTime; ///< The initial time of the simulation.
@@ -25,14 +25,14 @@ private:
 
 public:
     /**
-     * @brief Default constructor for the ODE_Solver class.
+     * @brief Default constructor for the OdeSolver class.
      */
-    ODE_Solver();
+    OdeSolver();
 
     /**
-     * @brief Virtual destructor for the ODE_Solver class.
+     * @brief Virtual destructor for the OdeSolver class.
      */
-    virtual ~ODE_Solver();
+    virtual ~OdeSolver();
 
     /**
      * @brief Sets the step size for the ODE solver.
@@ -100,4 +100,4 @@ public:
     virtual void SolveODE(std::ostream& stream) = 0;
 };
 
-#endif // ODE_SOLVER_HPP
+ #endif // ODESOLVER_HPP

@@ -14,7 +14,7 @@
  * This class extends `ODE_Solver` to provide a structure for explicit methods,
  * where derived classes implement the step logic for updating the solution.
  */
-class Explicit : public ODE_Solver {
+class Explicit : public OdeSolver {
 public:
     /**
      * @brief Default virtual destructor for the Explicit class.

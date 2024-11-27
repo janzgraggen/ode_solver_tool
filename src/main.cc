@@ -1,5 +1,7 @@
 #include <iostream>
 #include <Eigen/Dense>
+
+#include "AdamsBashforth.hpp"
 #include "ForwardEuler.hpp"
 #include "RungeKutta.hpp"
 
@@ -17,7 +19,8 @@ int main() {
     Eigen::VectorXd initialValue(3);  // Vector of size 3
     initialValue << 0.0, 1.0, 0.0;  // Initial values for y(0)
 
-    // Create the Forward Euler solver
+    // FORWARD EULER -------------------------------------------
+    std::cout << "Forward Euler" << std::endl;
     FwdEuler FE_solver;
 
     // Set ODE parameters
@@ -32,6 +35,11 @@ int main() {
     // Solve the ODE and output the results
     FE_solver.SolveODE(std::cout);
 
+    std::cout << "\n\n\n" << std::endl;
+
+    // RUNGE KUTTA -------------------------------------------
+    std::cout << "Runge Kutta order 4" << std::endl;
+
     RungeKutta rk4(4);
 
     // Set ODE parameters
@@ -45,6 +53,25 @@ int main() {
 
     // Solve the ODE and output the results
     rk4.SolveODE(std::cout);
+
+    std::cout << "\n\n\n" << std::endl;
+
+    // ADAMS BASHFORTH order 4 -------------------------------------------
+    std::cout << "Adams Bashforth order 4" << std::endl;
+
+    AdamsBashforth ab4(4);
+
+    // Set ODE parameters
+    ab4.SetStepSize(0.01);
+    ab4.SetTimeInterval(0.0, 1.0);
+
+    ab4.SetInitialValue(initialValue);
+
+    // Set the right-hand side function
+    ab4.SetRightHandSide(ODEFunction);
+
+    // Solve the ODE and output the results
+    // ab4.SolveODE(std::cout);
 
     return 0;
 }

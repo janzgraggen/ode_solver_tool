@@ -54,7 +54,9 @@ add_executable(main src/main.cc
         src/ForwardEuler.hpp
         src/ForwardEuler.cpp
         src/RungeKutta.hpp
-        src/RungeKutta.cpp)
+        src/RungeKutta.cpp
+        src/AdamsBashforth.hpp
+        src/AdamsBashforth.cpp)
 target_link_libraries(main eigen)
 target_link_libraries(main pcsc)
 

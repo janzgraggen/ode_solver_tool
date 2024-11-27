@@ -5,25 +5,25 @@
 #include "OdeSolver.hpp"
 
 /**
- * @brief Default constructor for ODE_Solver.
+ * @brief Default constructor for OdeSolver.
  *
  * Initializes the step size, initial time, and final time to zero.
  */
-ODE_Solver::ODE_Solver() : stepSize(0.0), initialTime(0.0), finalTime(0.0) {}
+OdeSolver::OdeSolver() : stepSize(0.0), initialTime(0.0), finalTime(0.0) {}
 
 /**
- * @brief Virtual destructor for ODE_Solver.
+ * @brief Virtual destructor for OdeSolver.
  *
  * This ensures proper cleanup in derived classes.
  */
-ODE_Solver::~ODE_Solver() = default;
+OdeSolver::~OdeSolver() = default;
 
 /**
  * @brief Sets the step size for the ODE solver.
  *
  * @param h The step size for numerical integration.
  */
-void ODE_Solver::SetStepSize(const double h) {
+void OdeSolver::SetStepSize(const double h) {
     stepSize = h;
 }
 
@@ -32,7 +32,7 @@ void ODE_Solver::SetStepSize(const double h) {
  *
  * @return The current step size.
  */
-double ODE_Solver::GetStepSize() const {
+double OdeSolver::GetStepSize() const {
     return stepSize;
 }
 
@@ -42,7 +42,7 @@ double ODE_Solver::GetStepSize() const {
  * @param t0 The initial time of the interval.
  * @param t1 The final time of the interval.
  */
-void ODE_Solver::SetTimeInterval(const double t0, const double t1) {
+void OdeSolver::SetTimeInterval(const double t0, const double t1) {
     initialTime = t0;
     finalTime = t1;
 }
@@ -52,7 +52,7 @@ void ODE_Solver::SetTimeInterval(const double t0, const double t1) {
  *
  * @return The initial time.
  */
-double ODE_Solver::GetInitialTime() const {
+double OdeSolver::GetInitialTime() const {
     return initialTime;
 }
 
@@ -61,7 +61,7 @@ double ODE_Solver::GetInitialTime() const {
  *
  * @return The final time.
  */
-double ODE_Solver::GetFinalTime() const {
+double OdeSolver::GetFinalTime() const {
     return finalTime;
 }
 
@@ -70,7 +70,7 @@ double ODE_Solver::GetFinalTime() const {
  *
  * @param y0 The initial value as an Eigen vector.
  */
-void ODE_Solver::SetInitialValue(const Eigen::VectorXd& y0) {
+void OdeSolver::SetInitialValue(const Eigen::VectorXd& y0) {
     initialValue = y0;
 }
 
@@ -79,7 +79,7 @@ void ODE_Solver::SetInitialValue(const Eigen::VectorXd& y0) {
  *
  * @return The initial value as an Eigen vector.
  */
-Eigen::VectorXd ODE_Solver::GetInitialValue() const {
+Eigen::VectorXd OdeSolver::GetInitialValue() const {
     return initialValue;
 }
 
@@ -91,7 +91,7 @@ Eigen::VectorXd ODE_Solver::GetInitialValue() const {
  * @param f A function that computes the right-hand side, taking the state vector
  * and time as inputs, and returning the derivative as an Eigen vector.
  */
-void ODE_Solver::SetRightHandSide(const std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>& f) {
+void OdeSolver::SetRightHandSide(const std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>& f) {
     f_rhs = f;
 }
 
@@ -100,6 +100,6 @@ void ODE_Solver::SetRightHandSide(const std::function<Eigen::VectorXd(const Eige
  *
  * @return The right-hand side function as a `std::function`.
  */
-std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)> ODE_Solver::GetRightHandSide() const {
+std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)> OdeSolver::GetRightHandSide() const {
     return f_rhs;
 }

@@ -49,6 +49,7 @@ endif()
 add_executable(main src/main.cc
         src/OdeSolver.hpp
         src/OdeSolver.cpp
+
         src/Explicit.hpp
         src/Explicit.cpp
         src/ForwardEuler.hpp
@@ -56,7 +57,25 @@ add_executable(main src/main.cc
         src/RungeKutta.hpp
         src/RungeKutta.cpp
         src/AdamsBashforth.hpp
-        src/AdamsBashforth.cpp)
+        src/AdamsBashforth.cpp
+        
+        src/Implicit.hpp
+        src/Implicit.cpp
+        src/BackwardEuler.hpp
+        src/BackwardEuler.cpp
+
+        src/LinSysStruct.hh
+
+        src/LinSysSolver/LinSysSolver.hh
+        src/LinSysSolver/LinSysSolver.cc
+        src/LinSysSolver/GaussElimSolve.hh
+        src/LinSysSolver/GaussElimSolve.cc
+
+        src/RootFinder/RootFinder.hh
+        src/RootFinder/RootFinder.cc
+        src/RootFinder/NewtonRaphson.hh
+        src/RootFinder/NewtonRaphson.cc
+        )
 target_link_libraries(main eigen)
 #target_link_libraries(main pcsc)
 

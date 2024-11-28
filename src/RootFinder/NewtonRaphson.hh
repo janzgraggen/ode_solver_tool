@@ -1,3 +1,6 @@
+//
+// Created by janzgraggen on 27/11/2024.
+//
 #ifndef __NEWTON_RAPHSON__HH__
 #define __NEWTON_RAPHSON__HH__
 

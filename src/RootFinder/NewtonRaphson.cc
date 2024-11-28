@@ -1,3 +1,6 @@
+//
+// Created by janzgraggen on 27/11/2024.
+//
 #include "NewtonRaphson.hh"
 #include "GaussElimSolve.hh"
 #include <iostream>

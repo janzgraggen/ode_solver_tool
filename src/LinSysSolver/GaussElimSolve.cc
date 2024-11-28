@@ -3,9 +3,6 @@
 //
 #include "GaussElimSolve.hh"
 
-//add constructor and destructor implementation
-GaussElimSolve::GaussElimSolve() {}
-GaussElimSolve::~GaussElimSolve() {}
 
 // Implement the Solve method 
 Eigen::VectorXd GaussElimSolve::Solve() {

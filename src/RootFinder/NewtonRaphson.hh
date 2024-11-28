@@ -11,7 +11,7 @@ private:
     double dx; // Step size for numerical differentiation
 
 public:
-    // Constructors
+    // Constructors (need because additional dx argument to initialize)
     NewtonRaphson(Eigen::VectorXd (*F_in)(Eigen::VectorXd));
     NewtonRaphson(Eigen::VectorXd (*F_in)(Eigen::VectorXd), double tol, double dx, int maxIter);
 

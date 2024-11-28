@@ -17,6 +17,10 @@ class GaussElimSolve : public LinSysSolver {
 /* Methods                                                                  */
 /* ------------------------------------------------------------------------ */
 
+public:
+    // Declaration of the default destructor
+    ~GaussElimSolve() override = default; 
+
 // Override solve method from LinSysSolver
 public:     
     Eigen::VectorXd Solve() override; // Declaration of the Solve method

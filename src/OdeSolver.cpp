@@ -3,7 +3,7 @@
 //
 
 #include "OdeSolver.hpp"
-
+using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 /**
  * @brief Default constructor for OdeSolver.
  *
@@ -91,7 +91,7 @@ Eigen::VectorXd OdeSolver::GetInitialValue() const {
  * @param f A function that computes the right-hand side, taking the state vector
  * and time as inputs, and returning the derivative as an Eigen vector.
  */
-void OdeSolver::SetRightHandSide(const std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>& f) {
+void OdeSolver::SetRightHandSide(const f_TYPE& f) {
     f_rhs = f;
 }
 
@@ -100,6 +100,6 @@ void OdeSolver::SetRightHandSide(const std::function<Eigen::VectorXd(const Eigen
  *
  * @return The right-hand side function as a `std::function`.
  */
-std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)> OdeSolver::GetRightHandSide() const {
+f_TYPE OdeSolver::GetRightHandSide() const {
     return f_rhs;
 }

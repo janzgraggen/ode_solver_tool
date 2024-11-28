@@ -8,6 +8,7 @@
 #include <Eigen/Dense>
 #include <functional>
 
+using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 /**
  * @class OdeSolver
  * @brief A base class for solving Ordinary Differential Equations (ODEs).
@@ -21,7 +22,9 @@ private:
     double initialTime; ///< The initial time of the simulation.
     double finalTime; ///< The final time of the simulation.
     Eigen::VectorXd initialValue; ///< The initial state vector of the system.
-    std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)> f_rhs; ///< The right-hand side function of the ODE.
+
+protected: //need protedted to be able do assign different functions (linear/nonlinear in child classes)
+    f_TYPE f_rhs; ///< The right-hand side function of the ODE.
 
 public:
     /**
@@ -81,16 +84,16 @@ public:
      * @brief Sets the right-hand side function of the ODE.
      * @param f A function representing the right-hand side of the ODE: \( f(y, t) \).
      */
-    void SetRightHandSide(const std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>& f);
+    virtual void SetRightHandSide(const f_TYPE& f);
 
     /**
      * @brief Gets the right-hand side function of the ODE.
      * @return The right-hand side function.
      */
-    [[nodiscard]] std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)> GetRightHandSide() const;
+    [[nodiscard]] f_TYPE GetRightHandSide() const;
 
     /**
-     * @brief Computes a single explicit step of the ODE solver.
+     * @brief Computes a single step of the ODE solver.
      *
      * Derived classes must implement this method to define the logic for advancing
      * the solution by one step.

@@ -5,6 +5,7 @@
 #define __NEWTON_RAPHSON__HH__
 
 #include "RootFinder.hh"
+using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
 
 class NewtonRaphson : public RootFinder {
 private:
@@ -12,8 +13,11 @@ private:
 
 public:
     // Constructors (need because additional dx argument to initialize)
-    NewtonRaphson(Eigen::VectorXd (*F_in)(Eigen::VectorXd));
-    NewtonRaphson(Eigen::VectorXd (*F_in)(Eigen::VectorXd), double tol, double dx, int maxIter);
+    // Default constructor using std::function for flexibility
+    NewtonRaphson(F_TYPE F_in);
+
+    // Parameterized constructor using std::function for flexibility
+    NewtonRaphson(F_TYPE F_in, double tol, double dx, int maxIter);
 
     // Destructor
     virtual ~NewtonRaphson();

@@ -4,7 +4,7 @@
 #ifndef __GAUSSELIMSOLVE_HH__
 #define __GAUSSELIMSOLVE_HH__
 
-#include <LinSysSolver.hh>
+#include "LinSysSolver.hh"
 
 
 class GaussElimSolve : public LinSysSolver {

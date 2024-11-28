@@ -2,15 +2,18 @@
 // Created by janzgraggen on 27/11/2024.
 //
 #include "NewtonRaphson.hh"
-#include "GaussElimSolve.hh"
+#include "../LinSysSolver/GaussElimSolve.hh"
 #include <iostream>
 
+using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
+
 // Default constructor
-NewtonRaphson::NewtonRaphson(Eigen::VectorXd (*F_in)(Eigen::VectorXd))
-    : RootFinder(F_in), dx(1e-6) {}
+NewtonRaphson::NewtonRaphson(F_TYPE F_in)
+    : RootFinder(F_in), dx(1e-6) {  // Default step size dx set to 1e-6
+}
 
 // Parameterized constructor
-NewtonRaphson::NewtonRaphson(Eigen::VectorXd (*F_in)(Eigen::VectorXd), double tol, double dx, int maxIter)
+NewtonRaphson::NewtonRaphson(F_TYPE F_in, double tol, double dx, int maxIter)
     : RootFinder(F_in), dx(dx) { // Use provided dx
     setTolerance(tol);
     setMaxIterations(maxIter);

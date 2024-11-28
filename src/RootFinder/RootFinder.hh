@@ -5,20 +5,19 @@
 #define __ROOT_FINDER__HH__
 
 #include <Eigen/Dense>
-#include <string>
+#include <functional>
 #include <iostream>
 
 #include <cmath> 
 #include <stdexcept>
-
-
+using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
 
 class RootFinder {
 /* ------------------------------------------------------------------------ */
 /* Members                                                                  */
 /* ------------------------------------------------------------------------ */
 private:
-    Eigen::VectorXd (*F)(Eigen::VectorXd y1);     // The root function
+    std::function<Eigen::VectorXd(const Eigen::VectorXd&)> F; // Change to std::function
 
     double tolerance;             // Error tolerance
     int maxIterations;            // Maximum number of iterations
@@ -33,8 +32,9 @@ private:
 /* ------------------------------------------------------------------------ */
 public:
     // Constructor
-    RootFinder(Eigen::VectorXd (*F_in)(Eigen::VectorXd));
-    RootFinder(Eigen::VectorXd (*F_in)(Eigen::VectorXd), double tol, int maxIter);
+    RootFinder(F_TYPE F);
+    RootFinder(F_TYPE F, double tol, int maxIter);
+
     // Destructor
     virtual ~RootFinder();
 

@@ -1,7 +1,7 @@
 //
 // Created by janzgraggen on 27/11/2024.
 //
-#include <LinSysSolver.hh>
+#include "LinSysSolver.hh"
 
 // Constructor  
 LinSysSolver::LinSysSolver() {}

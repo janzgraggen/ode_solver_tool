@@ -27,10 +27,10 @@ private:
 
 public:
   // constructor 
-  LinSysSolver() {}
+  LinSysSolver();
 
   // destructor
-  virtual ~LinSysSolver() {}
+  virtual ~LinSysSolver();
 
   // setters 
   void SetA(const Eigen::MatrixXd& A);

@@ -19,7 +19,7 @@ mkdir build
 cd build
 cmake ..
 cmake --build .
-./MyExec
+./main
 
 alternatively (build specific exec)
 mkdir build

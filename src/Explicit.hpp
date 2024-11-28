@@ -24,18 +24,6 @@ public:
     ~Explicit() override = default;
 
     /**
-     * @brief Computes a single explicit step of the ODE solver.
-     *
-     * Derived classes must implement this method to define the logic for advancing
-     * the solution by one step.
-     *
-     * @param y The current state vector.
-     * @param t The current time.
-     * @return The state vector after one step.
-     */
-    virtual Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) = 0;
-
-    /**
      * @brief Solves the ODE using an explicit method.
      *
      * Encapsulates the loop for integrating the ODE from the initial time to the final time

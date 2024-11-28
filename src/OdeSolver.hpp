@@ -90,6 +90,19 @@ public:
     [[nodiscard]] std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)> GetRightHandSide() const;
 
     /**
+     * @brief Computes a single explicit step of the ODE solver.
+     *
+     * Derived classes must implement this method to define the logic for advancing
+     * the solution by one step.
+     *
+     * @param y The current state vector.
+     * @param t The current time.
+     * @return The state vector after one step.
+     */
+    virtual Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) = 0;
+
+
+    /**
      * @brief Pure virtual function for solving the ODE.
      *
      * This function must be implemented by derived classes to solve the ODE and output

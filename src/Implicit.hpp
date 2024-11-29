@@ -5,7 +5,7 @@
 #include "OdeSolver.hpp"
 #include "LinSysStruct.hh"
 
-using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
+using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 
 class Implicit : public OdeSolver {
 
@@ -24,7 +24,7 @@ public:
     void SetRhsSystem(LinearSystem);
 
     // override SetRightHandSide function to check if the right-hand side function is linear
-    void SetRightHandSide(const F_TYPE& f) override;
+    void SetRightHandSide(const f_TYPE& f) override;
 
    
 

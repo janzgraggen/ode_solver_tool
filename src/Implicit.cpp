@@ -1,7 +1,7 @@
 #include "Implicit.hpp"
 #include "RootFinder/NewtonRaphson.hh"
 
-using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
+using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 
 bool Implicit::GetRhsIsLinear() const {
     return rhs_is_linear;
@@ -19,7 +19,7 @@ void Implicit::SetRhsSystem(LinearSystem system) {
     rhs_system = system;
 }
 
-void Implicit::SetRightHandSide(const F_TYPE& f) {
+void Implicit::SetRightHandSide(const f_TYPE& f) {
     if (GetRhsIsLinear()) {
         // Set the right-hand side function
 

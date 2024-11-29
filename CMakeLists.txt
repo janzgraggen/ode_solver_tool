@@ -47,22 +47,22 @@ endif()
 
 
 add_executable(main src/main.cc
-        src/OdeSolver.hh
-        src/OdeSolver.cc
+        src/Ode/OdeSolver.hh
+        src/Ode/OdeSolver.cc
 
-        src/Explicit.hh
-        src/Explicit.cc
-        src/ForwardEuler.hh
-        src/ForwardEuler.cc
-        src/RungeKutta.hh
-        src/RungeKutta.cc
-        src/AdamsBashforth.hh
-        src/AdamsBashforth.cc
+        src/Ode/Explicit.hh
+        src/Ode/Explicit.cc
+        src/Ode/ForwardEuler.hh
+        src/Ode/ForwardEuler.cc
+        src/Ode/RungeKutta.hh
+        src/Ode/RungeKutta.cc
+        src/Ode/AdamsBashforth.hh
+        src/Ode/AdamsBashforth.cc
 
-        src/Implicit.hh
-        src/Implicit.cc
-        src/BackwardEuler.hh
-        src/BackwardEuler.cc
+        src/Ode/Implicit.hh
+        src/Ode/Implicit.cc
+        src/Ode/BackwardEuler.hh
+        src/Ode/BackwardEuler.cc
 
         src/LinSysStruct.hh
 

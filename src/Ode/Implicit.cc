@@ -1,5 +1,5 @@
 #include "Implicit.hh"
-#include "RootFinder/NewtonRaphson.hh"
+#include "../RootFinder/NewtonRaphson.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 

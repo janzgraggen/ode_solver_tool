@@ -1,5 +1,5 @@
 #include "BackwardEuler.hh"
-#include "LinSysSolver/GaussElimSolve.hh"
+#include "../LinSysSolver/GaussElimSolve.hh"
 
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
 

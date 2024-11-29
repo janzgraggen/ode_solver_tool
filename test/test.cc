@@ -1,6 +1,5 @@
 #include <cmath>
 #include <gtest/gtest.h>
-#include "AdamsBashforth.hh"
-#include <Eigen/Dense>
+#include "../src/AdamsBashforth.hh"
 
 TEST(sqrt, integer) { EXPECT_EQ(2, std::sqrt(4)); }

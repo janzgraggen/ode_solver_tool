@@ -1,9 +1,8 @@
 #include <iostream>
-#include <Eigen/Dense>
 
-#include "AdamsBashforth.hh"
-#include "ForwardEuler.hh"
-#include "RungeKutta.hh"
+#include "Ode/AdamsBashforth.hh"
+#include "Ode/ForwardEuler.hh"
+#include "Ode/RungeKutta.hh"
 
 // Vectorized ODE function: dy/dt = -y + t
 Eigen::VectorXd ODEFunction(const Eigen::VectorXd& y, double t) {

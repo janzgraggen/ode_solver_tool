@@ -5,3 +5,7 @@
 	path = eigen
 	url = https://gitlab.com/libeigen/eigen
 	branch = master
+[submodule "yaml"]
+	path = yaml
+	url = https://github.com/jbeder/yaml-cpp
+	branch = master

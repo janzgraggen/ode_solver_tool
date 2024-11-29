@@ -31,6 +31,17 @@ if(EIGEN)
   endif()
 endif()
 
+option(YAML "activate yaml support" ON)
+message("yaml option is ${YAML}")
+if(YAML)
+  if(EXISTS "../yaml") ## With respect to build directory
+    message("activating yaml support")
+    add_subdirectory(yaml)
+  else()
+    message(FATAL_ERROR "Cannot find the yaml directory" )
+  endif()
+endif()
+
 # Update submodules as needed
 set(GIT_EXECUTABLE "git")
 option(GIT_SUBMODULE "Check submodules during build" ON)

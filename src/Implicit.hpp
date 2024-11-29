@@ -24,7 +24,7 @@ public:
     void SetRhsSystem(LinearSystem);
 
     // override SetRightHandSide function to check if the right-hand side function is linear
-    void SetRightHandSide(const std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>& f) override;
+    void SetRightHandSide(const F_TYPE& f) override;
 
    
 

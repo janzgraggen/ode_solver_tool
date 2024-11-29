@@ -2,10 +2,10 @@
 // Created by natha on 25/11/2024.
 //
 
-#ifndef FORWARD_EULER_HPP
-#define FORWARD_EULER_HPP
+#ifndef FORWARD_EULER_HH
+#define FORWARD_EULER_HH
 
-#include "Explicit.hpp"
+#include "Explicit.hh"
 
 class FwdEuler : public Explicit {
 public:
@@ -15,4 +15,4 @@ public:
     Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;  // Vectorized Step
 };
 
-#endif // FORWARD_EULER_HPP
+#endif // FORWARD_EULER_HH

@@ -1,8 +1,8 @@
 //
 // Created by natha on 25/11/2024.
 //
-#ifndef ODESOLVER_HPP
-#define ODESOLVER_HPP
+#ifndef ODESOLVER_HH
+#define ODESOLVER_HH
 
 #include <iostream>
 #include <Eigen/Dense>
@@ -116,4 +116,4 @@ public:
     virtual void SolveODE(std::ostream& stream) = 0;
 };
 
- #endif // ODESOLVER_HPP
+ #endif // ODESOLVER_HH

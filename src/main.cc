@@ -1,9 +1,9 @@
 #include <iostream>
 #include <Eigen/Dense>
 
-#include "AdamsBashforth.hpp"
-#include "ForwardEuler.hpp"
-#include "RungeKutta.hpp"
+#include "AdamsBashforth.hh"
+#include "ForwardEuler.hh"
+#include "RungeKutta.hh"
 
 // Vectorized ODE function: dy/dt = -y + t
 Eigen::VectorXd ODEFunction(const Eigen::VectorXd& y, double t) {
@@ -71,7 +71,7 @@ int main() {
     ab4.SetRightHandSide(ODEFunction);
 
     // Solve the ODE and output the results
-    // ab4.SolveODE(std::cout);
+    ab4.SolveODE(std::cout);
 
     return 0;
 }

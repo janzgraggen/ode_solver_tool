@@ -2,7 +2,7 @@
 // Created by natha on 25/11/2024.
 //
 
-#include "Explicit.hpp"
+#include "Explicit.hh"
 
 void Explicit::SolveODE(std::ostream& stream) {
     Eigen::VectorXd y = GetInitialValue();  // Vector initialization.

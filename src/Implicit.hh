@@ -2,7 +2,7 @@
 // Created by janzgraggen on 28/11/2024.
 //
 
-#include "OdeSolver.hpp"
+#include "OdeSolver.hh"
 #include "LinSysStruct.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;

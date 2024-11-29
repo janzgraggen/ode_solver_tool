@@ -2,7 +2,7 @@
 // Created by natha on 25/11/2024.
 //
 
-#include "OdeSolver.hpp"
+#include "OdeSolver.hh"
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 /**
  * @brief Default constructor for OdeSolver.

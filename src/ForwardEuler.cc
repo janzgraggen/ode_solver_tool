@@ -2,7 +2,7 @@
 // Created by natha on 25/11/2024.
 //
 
-#include "ForwardEuler.hpp"
+#include "ForwardEuler.hh"
 
 FwdEuler::FwdEuler() {}
 FwdEuler::~FwdEuler() {}

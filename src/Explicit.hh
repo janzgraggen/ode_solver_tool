@@ -2,10 +2,10 @@
 // Created by natha on 25/11/2024.
 //
 
-#ifndef EXPLICIT_HPP
-#define EXPLICIT_HPP
+#ifndef EXPLICIT_HH
+#define EXPLICIT_HH
 
-#include "OdeSolver.hpp"
+#include "OdeSolver.hh"
 
 /**
  * @class Explicit
@@ -34,4 +34,4 @@ public:
     void SolveODE(std::ostream& stream) override;
 };
 
-#endif // EXPLICIT_HPP
+#endif // EXPLICIT_HH

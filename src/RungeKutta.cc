@@ -2,7 +2,7 @@
 // Created by natha on 27/11/2024.
 //
 
-#include "RungeKutta.hpp"
+#include "RungeKutta.hh"
 
 /**
  * @brief Constructor for predefined Runge-Kutta methods by order.

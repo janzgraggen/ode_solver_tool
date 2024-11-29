@@ -2,10 +2,10 @@
 // Created by natha on 27/11/2024.
 //
 
-#ifndef RUNGEKUTTA_HPP
-#define RUNGEKUTTA_HPP
+#ifndef RUNGEKUTTA_HH
+#define RUNGEKUTTA_HH
 
-#include "Explicit.hpp"
+#include "Explicit.hh"
 
 /**
  * @class RungeKutta
@@ -43,4 +43,4 @@ public:
     Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;  // Vectorized Step
 };
 
-#endif // RUNGEKUTTA_HPP
+#endif // RUNGEKUTTA_HH

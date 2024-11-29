@@ -2,8 +2,12 @@
 // Created by natha on 27/11/2024.
 //
 
-#include "AdamsBashforth.hpp"
+#include "AdamsBashforth.hh"
 #include <stdexcept>
+
+#include "AdamsBashforth.hh"
+#include <stdexcept>
+#include <iostream>
 
 AdamsBashforth::AdamsBashforth(int maxOrder) : maxOrder(maxOrder) {
     if (maxOrder < 1 || maxOrder > 4) {
@@ -24,24 +28,34 @@ Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
 }
 
 Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
-    const int currentOrder = std::min(maxOrder, static_cast<int>(history.size()) + 1);
+    // Compute the derivative at the current step
+    Eigen::VectorXd dydt = f_rhs(y, t);
 
+    // If history is empty, this is the first step. Use order 1.
+    if (history.empty()) {
+        coefficients = generateCoefficients(1); // Set to order 1 coefficients
+        Eigen::VectorXd result = y + GetStepSize() * coefficients(0) * dydt;
+        history.push_front(dydt); // Update history with the current derivative
+        return result;
+    }
+
+    // Determine the current order based on available history
+    const int currentOrder = std::min(maxOrder, static_cast<int>(history.size()) + 1);
     if (history.size() < currentOrder) {
         coefficients = generateCoefficients(currentOrder); // Adjust coefficients for the current order
     }
 
-    Eigen::VectorXd result = y;
-    for (int i = 0; i < currentOrder; ++i) {
-        result += GetStepSize() * coefficients(i) * history[i];
+    // Perform the Adams-Bashforth step
+    Eigen::VectorXd result = y + GetStepSize() * coefficients(0) * dydt;
+    for (int i = 1; i < currentOrder; ++i) {
+        result += GetStepSize() * coefficients(i) * history[i - 1];
     }
 
-    return result;
-}
-
-void AdamsBashforth::updateHistory(const Eigen::VectorXd& y) {
-    history.push_front(y);
-
+    // Update history with the current derivative
+    history.push_front(dydt);
     if (history.size() > static_cast<size_t>(maxOrder)) {
         history.pop_back();
     }
+
+    return result;
 }

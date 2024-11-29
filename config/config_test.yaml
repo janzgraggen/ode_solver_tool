@@ -1,0 +1,54 @@
+
+# General configuration ––––––––––––––––––––––––––––––––––––––––
+solver_type: "Implicit"  # Choose between "Implicit" or "Explicit"
+
+# OdeSolver settings
+OdeSolver:
+  step_size: 0.01123
+  initial_time: 0.1221
+  final_time: 122.0
+  initial_value: [1.0, 0.0]
+
+
+# Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Explicit:
+  method: "RungeKutta"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  #if method is "RungeKutta"
+  RungeKutta:
+    order: 4  # Choose between 1, 2, 3, 4
+    #if not order
+    coefficients:
+      a: 
+        - [0.0, 0.0, 0.0, 0.0]
+        - [1/2.0, 0.0, 0.0, 0.0]
+        - [0.0, 1/2.0, 0.0, 0.0]
+        - [0.0, 0.0, 1.0, 0.0]
+      b: [1/6.0, 1/3.0, 1/3.0, 1/6.0]
+      c: [0.0, 1/2.0, 1/2.0, 1.0]
+
+  #if method is "AdamsBashforth"
+  AdamsBashforth:
+    max_order: 4 # Choose between 1, 2, 3, 4
+    #if NOT max_order
+    coefficients_vector: [55/24.0, -59/24.0, 37/24.0, -9/24.0]
+
+
+# Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Implicit:
+  method: "BackwardEuler"  # Choose between "BackwardEuler" (or "CrankNicolson")
+  rhs_is_linear: true 
+  # if rhs is linear :y' = Ay + b
+  rhs_system:         
+    A: 
+      - [1.0, 0.0, 0.0]
+      - [0.0, 1.0, 0.0]
+      - [0.0, 0.0, 1.0]
+    b: [0.0, 0.0, 0.0]
+  # if rhs is NOT linear 
+  tolerance: 1e-6
+  max_iterations: 100
+  root_finding_method: "NewtonRaphson"  # Choose between "NewtonRaphson" (or "FixedPoint")
+  dx : 1e-6 # for NewtonRaphson (or methods that use numerical differentiation)
+  linear_system_solver: "GaussianElimination"  # Choose between "GaussianElimination" (or "LU") 
+
+f 

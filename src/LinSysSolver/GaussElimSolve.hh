@@ -21,8 +21,7 @@ public:
     // Declaration of the default destructor
     ~GaussElimSolve() override = default; 
 
-// Override solve method from LinSysSolver
-public:     
+    // Override solve method from LinSysSolver
     Eigen::VectorXd Solve() override; // Declaration of the Solve method
 };
 #endif // __GAUSSELIMSOLVE_HH__

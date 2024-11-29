@@ -4,9 +4,7 @@ project (PCSC-project)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# add_library(pcsc
-#   src/pcsc.cc
-# )
+
 
 # Check directories of submodules
 option(GOOGLETEST "activate googletest  support" ON)
@@ -58,6 +56,9 @@ endif()
 
 
 add_executable(main src/main.cc
+        src/Reader/Reader.hh
+        src/Reader/Reader.cc
+
         src/Ode/OdeSolver.hh
         src/Ode/OdeSolver.cc
 
@@ -87,8 +88,8 @@ add_executable(main src/main.cc
         src/RootFinder/NewtonRaphson.hh
         src/RootFinder/NewtonRaphson.cc
         )
-target_link_libraries(main eigen)
-#target_link_libraries(main pcsc)
+
+target_link_libraries(main eigen yaml-cpp::yaml-cpp)
 
 add_executable(test_pcsc test/test.cc)
 target_link_libraries(test_pcsc gtest_main gtest pthread)

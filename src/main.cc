@@ -3,6 +3,7 @@
 #include "Ode/AdamsBashforth.hh"
 #include "Ode/ForwardEuler.hh"
 #include "Ode/RungeKutta.hh"
+#include "Reader/Reader.hh"
 
 // Vectorized ODE function: dy/dt = -y + t
 Eigen::VectorXd ODEFunction(const Eigen::VectorXd& y, double t) {
@@ -72,5 +73,16 @@ int main() {
     // Solve the ODE and output the results
     ab4.SolveODE(std::cout);
 
+    // Test REader -------------------------------------------
+    std::cout << "READER" << std::endl;
+
+    Reader reader("../config/config_test.yaml");
+    std::cout << reader.getOdeSettings().final_time << std::endl;
+    std::cout << reader.getOdeSettings().initial_time << std::endl;
+    std::cout << reader.getOdeSettings().initial_value<< std::endl;
+    std::cout << reader.getOdeSettings().step_size<< std::endl;
+    
     return 0;
+
+
 }

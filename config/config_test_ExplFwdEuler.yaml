@@ -33,6 +33,7 @@ Explicit:
 Implicit:
   method:  # Choose between "BackwardEuler" (or "CrankNicolson")
   rhs_is_linear:
+  linear_system_solver:  # Choose between "GaussianElimination" (or "LU")
   # if rhs is linear :y' = Ay + b
   rhs_system:         
     A:
@@ -42,4 +43,3 @@ Implicit:
   max_iterations:
   root_finder:  # Choose between "NewtonRaphson" (or "FixedPoint")
   dx : # for NewtonRaphson (or methods that use numerical differentiation)
-  linear_system_solver:  # Choose between "GaussianElimination" (or "LU")

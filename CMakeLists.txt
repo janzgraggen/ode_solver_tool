@@ -59,6 +59,9 @@ add_executable(main src/main.cc
         src/Reader/Reader.hh
         src/Reader/Reader.cc
 
+        src/Runner/Runner.hh
+        src/Runner/Runner.cc
+
         src/Ode/OdeSolver.hh
         src/Ode/OdeSolver.cc
 
@@ -91,7 +94,43 @@ add_executable(main src/main.cc
 
 target_link_libraries(main eigen yaml-cpp::yaml-cpp)
 
-add_executable(test_pcsc test/test.cc)
-target_link_libraries(test_pcsc gtest_main gtest pthread)
+add_executable(test_pcsc test/test.cc
+        src/Reader/Reader.hh
+        src/Reader/Reader.cc
+
+        src/Runner/Runner.hh
+        src/Runner/Runner.cc
+
+        src/Ode/OdeSolver.hh
+        src/Ode/OdeSolver.cc
+
+        src/Ode/Explicit.hh
+        src/Ode/Explicit.cc
+        src/Ode/ForwardEuler.hh
+        src/Ode/ForwardEuler.cc
+        src/Ode/RungeKutta.hh
+        src/Ode/RungeKutta.cc
+        src/Ode/AdamsBashforth.hh
+        src/Ode/AdamsBashforth.cc
+
+        src/Ode/Implicit.hh
+        src/Ode/Implicit.cc
+        src/Ode/BackwardEuler.hh
+        src/Ode/BackwardEuler.cc
+
+        src/LinSysStruct.hh
+
+        src/LinSysSolver/LinSysSolver.hh
+        src/LinSysSolver/LinSysSolver.cc
+        src/LinSysSolver/GaussElimSolve.hh
+        src/LinSysSolver/GaussElimSolve.cc
+
+        src/RootFinder/RootFinder.hh
+        src/RootFinder/RootFinder.cc
+        src/RootFinder/NewtonRaphson.hh
+        src/RootFinder/NewtonRaphson.cc
+        )
+
+target_link_libraries(test_pcsc gtest_main gtest pthread eigen yaml-cpp)
 
 add_custom_target(test ./test_pcsc DEPENDS test_pcsc)

@@ -4,9 +4,6 @@
 
 #include "AdamsBashforth.hh"
 #include <stdexcept>
-
-#include "AdamsBashforth.hh"
-#include <stdexcept>
 #include <iostream>
 
 AdamsBashforth::AdamsBashforth(int maxOrder) : maxOrder(maxOrder) {
@@ -28,21 +25,22 @@ Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
 }
 
 Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
-    // Compute the derivative at the current step
-    Eigen::VectorXd dydt = f_rhs(y, t);
+    Eigen::VectorXd dydt = f_rhs(y, t); // Compute the derivative at the current step
 
     // If history is empty, this is the first step. Use order 1.
     if (history.empty()) {
-        coefficients = generateCoefficients(1); // Set to order 1 coefficients
-        Eigen::VectorXd result = y + GetStepSize() * coefficients(0) * dydt;
+        Eigen::VectorXd defaultCoefficients = generateCoefficients(1);
+        Eigen::VectorXd result = y + GetStepSize() * defaultCoefficients(0) * dydt;
         history.push_front(dydt); // Update history with the current derivative
         return result;
     }
 
     // Determine the current order based on available history
     const int currentOrder = std::min(maxOrder, static_cast<int>(history.size()) + 1);
-    if (history.size() < currentOrder) {
-        coefficients = generateCoefficients(currentOrder); // Adjust coefficients for the current order
+
+    // Update coefficients dynamically if not using a custom vector
+    if (coefficients.size() != currentOrder) {
+        coefficients = generateCoefficients(currentOrder);
     }
 
     // Perform the Adams-Bashforth step

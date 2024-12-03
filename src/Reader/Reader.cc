@@ -1,8 +1,8 @@
 #include "Reader.hh"
 
+
 // Constructor to load the YAML file
 Reader::Reader(const str& filename) {
-    // Load the YAML configuration file
     config = YAML::LoadFile(filename);
 }
 
@@ -16,6 +16,7 @@ Reader::OdeSettings Reader::getOdeSettings() const {
     OdeSettings odeSolverSettings;
     auto odeSolverNode = config["OdeSolver"];
 
+    // Read values directly from the YAML node
     odeSolverSettings.step_size = odeSolverNode["step_size"].as<double>();
     odeSolverSettings.initial_time = odeSolverNode["initial_time"].as<double>();
     odeSolverSettings.final_time = odeSolverNode["final_time"].as<double>();
@@ -31,27 +32,46 @@ Reader::OdeSettings Reader::getOdeSettings() const {
 Reader::ExplicitSettings Reader::getExplicitSettings() const {
     ExplicitSettings explSet;
     auto explicitNode = config["Explicit"];
-
     explSet.method = explicitNode["method"].as<str>();
+    if (explSet.method == "ForwardEuler") {
 
-    if (explSet.method == "RungeKutta") {
-        explSet.RungeKutta_order = explicitNode["RungeKutta"]["order"].as<int>();
+    // Check if RungeKutta method is selected
+    } else if (explSet.method == "RungeKutta") {
 
-        // Read coefficients as Eigen types
-        auto a = explicitNode["RungeKutta"]["coefficients"]["a"].as<std::vector<std::vector<double>>>();
-        Eigen::MatrixXd a_matrix(a.size(), a[0].size());
-        for (size_t i = 0; i < a.size(); ++i) {
-            a_matrix.row(i) = Eigen::VectorXd::Map(a[i].data(), a[i].size());
+        // Check if an 'order' int is provided
+        if (explicitNode["RungeKutta"]["order"].IsScalar()) {
+            explSet.RungeKutta_order = explicitNode["RungeKutta"]["order"].as<int>();
         }
-        explSet.RungeKutta_coefficients_a = a_matrix;
+        // If 'order' is not provided, check if all 'coefficients' are available
+        else if (explicitNode["RungeKutta"]["coefficients"]["a"].IsSequence()
+            && explicitNode["RungeKutta"]["coefficients"]["b"].IsSequence()
+            && explicitNode["RungeKutta"]["coefficients"]["c"].IsSequence()) {
+            auto rkCoefsNode = explicitNode["RungeKutta"]["coefficients"];
 
-        explSet.RungeKutta_coefficients_b = Eigen::VectorXd::Map(explicitNode["RungeKutta"]["coefficients"]["b"].as<std::vector<double>>().data(), a[0].size());
-        explSet.RungeKutta_coefficients_c = Eigen::VectorXd::Map(explicitNode["RungeKutta"]["coefficients"]["c"].as<std::vector<double>>().data(), a[0].size());
+            auto a = rkCoefsNode["a"].as<std::vector<std::vector<double>>>();
+            Eigen::MatrixXd a_matrix(a.size(), a[0].size());
+            for (size_t i = 0; i < a.size(); ++i) {
+                a_matrix.row(i) = Eigen::VectorXd::Map(a[i].data(), a[i].size());
+            }
+            explSet.RungeKutta_coefficients_a = a_matrix;
 
+            auto b = rkCoefsNode["b"].as<std::vector<double>>();
+            explSet.RungeKutta_coefficients_b = Eigen::VectorXd::Map(b.data(), b.size());
+
+            auto c = rkCoefsNode["c"].as<std::vector<double>>();
+            explSet.RungeKutta_coefficients_c = Eigen::VectorXd::Map(c.data(), c.size());
+
+        } else {
+            throw std::runtime_error("Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
+        }
     } else if (explSet.method == "AdamsBashforth") {
-        explSet.AdamsBashforth_max_order = explicitNode["AdamsBashforth"]["max_order"].as<int>();
-        explSet.AdamsBashforth_coefficients_vector = Eigen::VectorXd::Map(explicitNode["AdamsBashforth"]["coefficients_vector"].as<std::vector<double>>().data(),
-                                                                           explicitNode["AdamsBashforth"]["coefficients_vector"].as<std::vector<double>>().size());
+        if (explicitNode["AdamsBashforth"]["max_order"].IsScalar()) {
+            explSet.AdamsBashforth_max_order = explicitNode["AdamsBashforth"]["max_order"].as<int>();
+        } else {
+            throw std::runtime_error("AdamsBashforth settings are invalid. Max order is missing.");
+        }
+    } else {
+        throw std::runtime_error("Invalid solver method: " + explSet.method);
     }
 
     return explSet;
@@ -66,33 +86,35 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
     implSet.rhs_is_linear = implicitNode["rhs_is_linear"].as<bool>();
 
     if (implSet.rhs_is_linear) {
-        // Read matrices A and b if available
-        if (implicitNode["rhs_system"]["A"] || implicitNode["rhs_system"]["b"]){
-            LinearSystem rhs_sys_struct;
-        
-        
-            if (implicitNode["rhs_system"]["A"]) {
-                auto A_matrix = implicitNode["rhs_system"]["A"].as<std::vector<std::vector<double>>>();
-                Eigen::MatrixXd A(A_matrix.size(), A_matrix[0].size());
-                for (size_t i = 0; i < A_matrix.size(); ++i) {
-                    A.row(i) = Eigen::VectorXd::Map(A_matrix[i].data(), A_matrix[i].size());
-                }
-                rhs_sys_struct.A = A;
+        auto rhsNode = implicitNode["rhs_system"];
+        if (rhsNode["A"].IsSequence()) {
+            auto A_matrix = rhsNode["A"].as<std::vector<std::vector<double>>>();
+            Eigen::MatrixXd A(A_matrix.size(), A_matrix[0].size());
+            for (size_t i = 0; i < A_matrix.size(); ++i) {
+                A.row(i) = Eigen::VectorXd::Map(A_matrix[i].data(), A_matrix[i].size());
             }
-
-            if (implicitNode["rhs_system"]["b"]) {
-                rhs_sys_struct.b = Eigen::VectorXd::Map(implicitNode["rhs_system"]["b"].as<std::vector<double>>().data(), rhs_sys_struct.A.cols());
-            }
-
-            implSet.rhs_system = rhs_sys_struct;    
+            implSet.rhs_system->A = A;
+        } else {
+            throw std::runtime_error("Invalid rhs system settings: A is not provided.");
+        }
+        if (rhsNode["b"].IsSequence()) {
+            auto b = rhsNode["b"].as<std::vector<double>>();
+            implSet.rhs_system->b = Eigen::VectorXd::Map(b.data(), b.size());
         }
     } else {
-        // Read settings for nonlinear case if available
-        if (implicitNode["tolerance"]) implSet.tolerance = implicitNode["tolerance"].as<double>();
-        if (implicitNode["max_iterations"]) implSet.max_iterations = implicitNode["max_iterations"].as<int>();
-        if (implicitNode["root_finding_method"]) implSet.root_finding_method = implicitNode["root_finding_method"].as<str>();
-        if (implicitNode["dx"]) implSet.dx = implicitNode["dx"].as<double>();
-        if (implicitNode["linear_system_solver"]) implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
+        // Handle non-linear cases
+        if (implicitNode["tolerance"].IsScalar()
+            && implicitNode["max_iterations"].IsScalar()
+            && implicitNode["root_finding_method"].IsScalar()
+            && implicitNode["dx"].IsScalar()
+            && implicitNode["linear_system_solver"].IsScalar()) {
+            implSet.tolerance = implicitNode["tolerance"].as<double>();
+            implSet.max_iterations = implicitNode["max_iterations"].as<int>();if (implicitNode["root_finding_method"]) implSet.root_finding_method = implicitNode["root_finding_method"].as<str>();
+            implSet.dx = implicitNode["dx"].as<double>();
+            implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
+            } else {
+                throw std::runtime_error("Invalid implicit nonlinear settings: missing entries.");
+            }
     }
 
     return implSet;

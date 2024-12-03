@@ -1,6 +1,9 @@
 #include <Eigen/Dense>
 #include <iostream>
 
+#ifndef LIN_SYS_STRUCT_HH
+#define LIN_SYS_STRUCT_HH
+
 struct LinearSystem {
     Eigen::MatrixXd A; // The coefficient matrix
     Eigen::VectorXd b; // The right-hand side vector
@@ -24,3 +27,5 @@ struct LinearSystem {
         std::cout << "Vector b:\n" << b << "\n";
     }
 };
+
+#endif // LIN_SYS_STRUCT_HH

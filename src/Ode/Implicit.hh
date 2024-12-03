@@ -38,6 +38,6 @@ public:
     virtual Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;
 
     // override Solve function
-    void SolveODE(std::ostream& stream) override;
+    Eigen::VectorXd SolveODE(std::ostream& stream) override;
         
 };

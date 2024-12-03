@@ -113,7 +113,7 @@ public:
      *
      * @param stream The output stream to which results are written.
      */
-    virtual void SolveODE(std::ostream& stream) = 0;
+    virtual Eigen::VectorXd SolveODE(std::ostream& stream) = 0;
 };
 
  #endif // ODESOLVER_HH

@@ -4,7 +4,7 @@
 
 #include "Explicit.hh"
 
-void Explicit::SolveODE(std::ostream& stream) {
+Eigen::VectorXd Explicit::SolveODE(std::ostream& stream) {
     Eigen::VectorXd y = GetInitialValue();  // Vector initialization.
     double t = GetInitialTime();
 
@@ -17,4 +17,6 @@ void Explicit::SolveODE(std::ostream& stream) {
         t += GetStepSize();
         stream << "t: " << t << ", y: " << y.transpose() << std::endl;
     }
+
+    return y;
 }

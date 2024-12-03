@@ -59,7 +59,7 @@ Eigen::VectorXd Implicit::Step(const Eigen::VectorXd& y, double t) {
     }
 }
 
-void Implicit::SolveODE(std::ostream& stream) {
+Eigen::VectorXd Implicit::SolveODE(std::ostream& stream) {
     Eigen::VectorXd y = GetInitialValue();  // Vector initialization.
     double t = GetInitialTime();
 
@@ -76,5 +76,7 @@ void Implicit::SolveODE(std::ostream& stream) {
 
         stream << "t: " << t << ", y: " << y.transpose() << std::endl;
     }
+
+    return y;
 }
 

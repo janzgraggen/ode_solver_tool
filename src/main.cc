@@ -32,12 +32,15 @@ int main() {
     // Set the right-hand side function
     FE_solver.SetRightHandSide(ODEFunction);
 
+    auto* finalSolution = new Eigen::VectorXd;
+
     // Solve the ODE and output the results
-    FE_solver.SolveODE(std::cout);
+    *finalSolution = FE_solver.SolveODE(std::cout);
 
     std::cout << "\n\n\n" << std::endl;
+    std::cout << *finalSolution << std::endl;
 
-    // RUNGE KUTTA -------------------------------------------
+    /*// RUNGE KUTTA -------------------------------------------
     std::cout << "Runge Kutta order 4" << std::endl;
 
     RungeKutta rk4(4);
@@ -80,7 +83,7 @@ int main() {
     std::cout << reader.getOdeSettings().final_time << std::endl;
     std::cout << reader.getOdeSettings().initial_time << std::endl;
     std::cout << reader.getOdeSettings().initial_value<< std::endl;
-    std::cout << reader.getOdeSettings().step_size<< std::endl;
+    std::cout << reader.getOdeSettings().step_size<< std::endl;*/
     
     return 0;
 

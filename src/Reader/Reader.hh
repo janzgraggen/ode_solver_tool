@@ -33,7 +33,7 @@ public:
         std::optional<Eigen::MatrixXd> RungeKutta_coefficients_a;
         std::optional<Eigen::VectorXd> RungeKutta_coefficients_b;
         std::optional<Eigen::VectorXd> RungeKutta_coefficients_c;
-        
+
         std::optional<int> AdamsBashforth_max_order;
         std::optional<Eigen::VectorXd> AdamsBashforth_coefficients_vector;
     };

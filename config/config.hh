@@ -8,9 +8,9 @@ Eigen::VectorXd f(const Eigen::VectorXd& y, double t) {
     // –––––––––––––––––––––––––––––––––––––––––––––
     // your function here:
     Eigen::VectorXd f_out(y.size());
-    for (int i = 0; i < y.size(); ++i) {
-        f_out(i) = y(i);  
-    }
+    f_out(0) = 0.0;
+    f_out(1) = y(1);
+    f_out(2) = 2.0 * t;
     // –––––––––––––––––––––––––––––––––––––––––––––
     return f_out;
 }

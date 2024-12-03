@@ -17,7 +17,7 @@ public:
     ~Runner();
 
     //run method
-    void run();
+    Eigen::VectorXd run();
 
 };
 

@@ -7,19 +7,26 @@
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
+using str = std::string;
 
 class Implicit : public OdeSolver {
 
 private:
     bool rhs_is_linear; // flag to check if the right-hand side function is linear
     LinearSystem rhs_system; // linear system to solve for implicit methods
+    str root_finder; // root finder to use for implicit methods
 public:
     // destructor
     ~Implicit() override = default;
 
-    // getter/ setter
+    // getter
     bool GetRhsIsLinear() const;
+    str GetRootFinder() const;
+
+    // setter
     void SetRhsIsLinear(bool);
+    void SetRootFinder(str);
+
 
     LinearSystem GetRhsSystem() const;
     void SetRhsSystem(LinearSystem);

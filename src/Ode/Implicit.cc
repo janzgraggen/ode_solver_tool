@@ -1,4 +1,5 @@
 #include "Implicit.hh"
+#include "../RootFinder/RootFinder.hh"
 #include "../RootFinder/NewtonRaphson.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
@@ -11,10 +12,17 @@ void Implicit::SetRhsIsLinear(bool is_linear) {
     rhs_is_linear = is_linear;
 }
 
+str Implicit::GetRootFinder() const {
+    return root_finder;
+}
+
 LinearSystem Implicit::GetRhsSystem() const {
     return rhs_system;
 }
 
+void Implicit::SetRootFinder(str root_finder) {
+    root_finder = root_finder;
+}
 void Implicit::SetRhsSystem(LinearSystem system) {
     rhs_system = system;
 }
@@ -36,15 +44,18 @@ void Implicit::SetRightHandSide(const f_TYPE& f) {
 
 Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
     // Use RootFinder to solve the nonlinear system
-        
-        // Create a NewtonRaphson solver
-        NewtonRaphson solver(makeFstep(y, t));
+        if (GetRootFinder() == "NewtonRaphson") {
+            // Create a NewtonRaphson solver
+            NewtonRaphson solver(makeFstep(y, t));
 
-        // Set the initial guess
-        solver.setInitialGuess(y);
+            // Set the initial guess
+            solver.setInitialGuess(y);
 
-        // Solve the nonlinear system
-        return solver.Solve();
+            // Solve the nonlinear system
+            return solver.Solve();
+        } else {
+            throw std::runtime_error("Invalid root finder method: " + GetRootFinder());
+        }
 }
 
 

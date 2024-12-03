@@ -3,6 +3,7 @@
 #include "../RootFinder/NewtonRaphson.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
+using str = std::string;
 
 bool Implicit::GetRhsIsLinear() const {
     return rhs_is_linear;
@@ -10,6 +11,10 @@ bool Implicit::GetRhsIsLinear() const {
 
 void Implicit::SetRhsIsLinear(bool is_linear) {
     rhs_is_linear = is_linear;
+}
+
+str Implicit::GetLinearSystemSolver() const {
+    return linear_system_solver;
 }
 
 str Implicit::GetRootFinder() const {
@@ -20,11 +25,15 @@ LinearSystem Implicit::GetRhsSystem() const {
     return rhs_system;
 }
 
-void Implicit::SetRootFinder(str root_finder) {
-    root_finder = root_finder;
+void Implicit::SetRootFinder(str root_finder_in) {
+    root_finder = root_finder_in;
 }
 void Implicit::SetRhsSystem(LinearSystem system) {
     rhs_system = system;
+}
+
+void Implicit::SetLinearSystemSolver(str solver) {
+    linear_system_solver = solver;
 }
 
 void Implicit::SetRightHandSide(const f_TYPE& f) {
@@ -50,6 +59,7 @@ Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
 
             // Set the initial guess
             solver.setInitialGuess(y);
+            solver.SetLinearSystemSolver(GetLinearSystemSolver());
 
             // Solve the nonlinear system
             return solver.Solve();

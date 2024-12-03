@@ -13,7 +13,11 @@ class Implicit : public OdeSolver {
 
 private:
     bool rhs_is_linear; // flag to check if the right-hand side function is linear
+    str linear_system_solver; // linear system solver to use for implicit methods
+
+    // for Linear case: 
     LinearSystem rhs_system; // linear system to solve for implicit methods
+    // for NonLinear case:
     str root_finder; // root finder to use for implicit methods
 public:
     // destructor
@@ -21,10 +25,12 @@ public:
 
     // getter
     bool GetRhsIsLinear() const;
+    str GetLinearSystemSolver() const;
     str GetRootFinder() const;
 
     // setter
     void SetRhsIsLinear(bool);
+    void SetLinearSystemSolver(str);
     void SetRootFinder(str);
 
 

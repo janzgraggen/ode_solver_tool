@@ -42,14 +42,15 @@ public:
     struct ImplicitSettings {
         str method;  // BackwardEuler, CrankNicolson
         bool rhs_is_linear;
+        std::optional<str> linear_system_solver;
+
+        //linear system settings
         std::optional<LinearSystem> rhs_system;
 
         // Nonlinear settings
         std::optional<double> tolerance;
         std::optional<int> max_iterations;
-        std::optional<str> root_finding_method;
         std::optional<double> dx;
-        std::optional<str> linear_system_solver;
         std::optional<str> root_finder;
     };
 

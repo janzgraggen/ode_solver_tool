@@ -82,12 +82,18 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
     ImplicitSettings implSet;
     auto implicitNode = config["Implicit"];
 
-    implSet.method = implicitNode["method"].as<str>();
-    implSet.rhs_is_linear = implicitNode["rhs_is_linear"].as<bool>();
-
+    if (implicitNode["method"].IsScalar()
+    && implicitNode["rhs_is_linear"].IsDefined()
+    && implicitNode["linear_system_solver"].IsDefined()) {
+        implSet.method = implicitNode["method"].as<str>();
+        implSet.rhs_is_linear = implicitNode["rhs_is_linear"].as<bool>();
+        implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
+    }
     if (implSet.rhs_is_linear) {
+
         auto rhsNode = implicitNode["rhs_system"];
         if (rhsNode["A"].IsSequence()) {
+
             auto A_matrix = rhsNode["A"].as<std::vector<std::vector<double>>>();
             Eigen::MatrixXd A(A_matrix.size(), A_matrix[0].size());
             for (size_t i = 0; i < A_matrix.size(); ++i) {
@@ -104,18 +110,16 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
     } else {
         // Handle non-linear cases
         if (implicitNode["tolerance"].IsScalar()
-            && implicitNode["max_iterations"].IsScalar()
-            && implicitNode["root_finding_method"].IsScalar()
-            && implicitNode["dx"].IsScalar()
-            && implicitNode["linear_system_solver"].IsScalar()) {
+        && implicitNode["max_iterations"].IsScalar()
+        && implicitNode["root_finder"].IsDefined()
+        && implicitNode["dx"].IsScalar()) {
             implSet.tolerance = implicitNode["tolerance"].as<double>();
-            implSet.max_iterations = implicitNode["max_iterations"].as<int>();if (implicitNode["root_finding_method"]) implSet.root_finding_method = implicitNode["root_finding_method"].as<str>();
+            implSet.max_iterations = implicitNode["max_iterations"].as<int>();
             implSet.dx = implicitNode["dx"].as<double>();
-            implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
             implSet.root_finder = implicitNode["root_finder"].as<str>();
-            } else {
-                throw std::runtime_error("Invalid implicit nonlinear settings: missing entries.");
-            }
+        } else {
+            throw std::runtime_error("Invalid implicit nonlinear settings: missing entries.");
+        }
     }
 
     return implSet;

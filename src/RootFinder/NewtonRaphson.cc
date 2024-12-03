@@ -6,7 +6,7 @@
 #include <iostream>
 
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
-
+using str = std::string;
 // Default constructor
 NewtonRaphson::NewtonRaphson(F_TYPE F_in)
     : RootFinder(F_in), dx(1e-6) {  // Default step size dx set to 1e-6
@@ -14,7 +14,7 @@ NewtonRaphson::NewtonRaphson(F_TYPE F_in)
 
 // Parameterized constructor
 NewtonRaphson::NewtonRaphson(F_TYPE F_in, double tol, double dx, int maxIter)
-    : RootFinder(F_in), dx(dx) { // Use provided dx
+    : RootFinder(F_in), dx(dx){ // Use provided dx
     setTolerance(tol);
     setMaxIterations(maxIter);
 }
@@ -27,9 +27,16 @@ void NewtonRaphson::setDx(double dx) {
     this->dx = dx;
 }
 
+void NewtonRaphson::SetLinearSystemSolver(str linear_system_solver_in) {
+    linear_system_solver = linear_system_solver_in;
+}
 // Getter
 double NewtonRaphson::getDx() const {
     return dx;
+}
+
+str NewtonRaphson::GetLinearSystemSolver() const {
+    return linear_system_solver;
 }
 
 // Numerical Jacobian computation
@@ -61,31 +68,35 @@ Eigen::MatrixXd NewtonRaphson::NumericalJacobian(Eigen::VectorXd& x) {
 // Solve function
 Eigen::VectorXd NewtonRaphson::Solve() {
     Eigen::VectorXd x = getInitialGuess();
-    Eigen::VectorXd Fx = callF(x);
+    Eigen::VectorXd Fx = callF(x); 
+    if (GetLinearSystemSolver() == "GaussianElimination") {
+        GaussElimSolve solver;
 
-    GaussElimSolve solver;
+        while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
+            Eigen::MatrixXd J = NumericalJacobian(x);
 
-    while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
-        Eigen::MatrixXd J = NumericalJacobian(x);
+            try {
+                solver.SetA(J);
+                solver.SetB(-Fx);
 
-        try {
-            solver.SetA(J);
-            solver.SetB(-Fx);
+                Eigen::VectorXd delta = solver.Solve();
+                x += delta;
 
-            Eigen::VectorXd delta = solver.Solve();
-            x += delta;
-
-            Fx = callF(x);
-            setIterationCount(getIterationCount() + 1);
-        
-        } catch (std::exception& e) {
-            std::cerr << "Error during solving: " << e.what() << std::endl;
-            break;
+                Fx = callF(x);
+                setIterationCount(getIterationCount() + 1);
+            
+            } catch (std::exception& e) {
+                std::cerr << "Error during solving: " << e.what() << std::endl;
+                break;
+            }
         }
-    }
+        
 
-    if (getIterationCount() == getMaxIterations()) {
-        std::cerr << "Newton-Raphson did not converge within the maximum number of iterations." << std::endl;
+        if (getIterationCount() == getMaxIterations()) {
+            std::cerr << "Newton-Raphson did not converge within the maximum number of iterations." << std::endl;
+        }
+    } else {
+        std::cerr << "Invalid linear system solver" << std::endl;
     }
 
     return x;

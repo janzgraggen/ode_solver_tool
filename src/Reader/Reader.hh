@@ -50,6 +50,7 @@ public:
         std::optional<str> root_finding_method;
         std::optional<double> dx;
         std::optional<str> linear_system_solver;
+        std::optional<str> root_finder;
     };
 
     // Methods to retrieve the settings

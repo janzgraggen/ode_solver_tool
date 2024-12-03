@@ -112,6 +112,7 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
             implSet.max_iterations = implicitNode["max_iterations"].as<int>();if (implicitNode["root_finding_method"]) implSet.root_finding_method = implicitNode["root_finding_method"].as<str>();
             implSet.dx = implicitNode["dx"].as<double>();
             implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
+            implSet.root_finder = implicitNode["root_finder"].as<str>();
             } else {
                 throw std::runtime_error("Invalid implicit nonlinear settings: missing entries.");
             }

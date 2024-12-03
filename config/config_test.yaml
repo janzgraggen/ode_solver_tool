@@ -47,6 +47,6 @@ Implicit:
   # if rhs is NOT linear 
   tolerance: 1e-6
   max_iterations: 100
-  root_finding_method: "NewtonRaphson"  # Choose between "NewtonRaphson" (or "FixedPoint")
+  root_finder: "NewtonRaphson"  # Choose between "NewtonRaphson" (or "FixedPoint")
   dx : 1e-6 # for NewtonRaphson (or methods that use numerical differentiation)
   linear_system_solver: "GaussianElimination"  # Choose between "GaussianElimination" (or "LU")

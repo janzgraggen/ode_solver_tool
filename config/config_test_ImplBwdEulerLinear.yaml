@@ -1,6 +1,6 @@
 
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
+solver_type: "Implicit"  # Choose between "Implicit" or "Explicit"
 
 # OdeSolver settings
 OdeSolver:
@@ -12,7 +12,7 @@ OdeSolver:
 
 # Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Explicit:
-  method: "ForwardEuler"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  method:  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
   #if method is "RungeKutta"
   RungeKutta:
     order:  # Choose between 1, 2, 3, 4
@@ -43,6 +43,6 @@ Implicit:
   # if rhs is NOT linear 
   tolerance:
   max_iterations:
-  root_finding_method:  # Choose between "NewtonRaphson" (or "FixedPoint")
+  root_finder: # Choose between "NewtonRaphson" (or "FixedPoint")
   dx : # for NewtonRaphson (or methods that use numerical differentiation)
   linear_system_solver:  # Choose between "GaussianElimination" (or "LU")

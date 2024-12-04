@@ -20,6 +20,11 @@ private:
 
 public:
     /**
+     * @brief Default constructor for Runge-Kutta methods.
+     */
+    RungeKutta();
+
+    /**
      * @brief Constructor for predefined Runge-Kutta methods by order.
      * @param order The order of the Runge-Kutta method (1, 2, 3, or 4).
      */
@@ -30,6 +35,7 @@ public:
      * @param a Coefficients for intermediate steps (Butcher tableau).
      * @param b Weights for the final summation.
      * @param c Nodes (time fractions).
+     * @throws std::invalid_argument if has invalid settings
      */
     RungeKutta(const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c);
 
@@ -39,6 +45,14 @@ public:
      * @throws std::invalid_argument if the order is unsupported.
      */
     void setOrder(int order);
+
+    void setOrderInput(int order);
+    void setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c);
+    /**
+     * @brief Sets the coefficients for a user-defined Runge-Kutta method.
+     * @param Rdr The reader object containing the coefficients.
+     */
+    void SetConfig(const Reader& Rdr) override;
 
     Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;  // Vectorized Step
 };

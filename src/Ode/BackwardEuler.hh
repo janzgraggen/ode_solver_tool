@@ -11,6 +11,7 @@ public:
     // a function that returns a passable F function
     virtual F_TYPE makeFstep(Eigen::VectorXd y0,double t0) override;
 
+    void SetConfig(const Reader& Rdr) override;
 
     Eigen::VectorXd LinStep(const Eigen::VectorXd y, double t) override;
     

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <Eigen/Dense>
 #include <functional>
+#include "../src/Reader/Reader.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 /**
@@ -55,6 +56,22 @@ public:
      * @param t1 The final time.
      */
     void SetTimeInterval(double t0, double t1);
+
+    /**
+     * @brief Sets the global parameters for the ODE solver.
+     * 
+     * This method is used to set global parameters for the ODE solver, such as the step size,
+     * 
+     * @param Rdr The Reader object containing the global parameters.
+     */
+    virtual void SetGlobalConfig(const Reader& Rdr);
+
+    /**
+     * @brief Sets the specific parameters for the ODE solver Methods.
+     * 
+     * @param Rdr The Reader object containing the global parameters.
+     */
+    virtual void SetConfig(const Reader& Rdr) = 0;
 
     /**
      * @brief Gets the initial time of the ODE solver.

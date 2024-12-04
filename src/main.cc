@@ -17,7 +17,7 @@ Eigen::VectorXd ODEFunction(const Eigen::VectorXd& y, double t) {
 
 int main() {
 
-    Runner runner("../config/config_test_ImplBwdEulerLinear.yaml");
+    Runner runner("../config/config_test_ExplCustomRK.yaml");
 
     const Eigen::VectorXd finalSolution = runner.run();
     std::cout << finalSolution << std::endl;

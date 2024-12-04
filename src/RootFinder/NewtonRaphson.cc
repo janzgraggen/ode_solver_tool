@@ -98,9 +98,7 @@ Eigen::VectorXd NewtonRaphson::Solve() {
         }
 
     } else if (GetLinearSystemSolver() == "LU") {
-        std::cout << "LUSolve" << std::endl;
         LUSolve solver;
-        std::cout << "LUSolve 1" << std::endl;
 
         while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
             Eigen::MatrixXd J = NumericalJacobian(x);

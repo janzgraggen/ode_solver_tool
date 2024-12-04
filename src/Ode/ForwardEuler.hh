@@ -12,6 +12,8 @@ public:
     FwdEuler();
     ~FwdEuler();
 
+    void SetConfig(const Reader& Rdr) override;
+    
     Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;  // Vectorized Step
 };
 

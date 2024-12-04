@@ -4,7 +4,7 @@
 
 #include <Eigen/Dense>
 
-Eigen::VectorXd f(const Eigen::VectorXd& y, double t) {
+Eigen::VectorXd __f__(const Eigen::VectorXd& y, double t) {
     // –––––––––––––––––––––––––––––––––––––––––––––
     // your function here:
     Eigen::VectorXd f_out(y.size());

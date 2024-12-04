@@ -4,6 +4,12 @@
 
 #include "RungeKutta.hh"
 
+
+/**
+ * @brief Default constructor for Runge-Kutta methods.
+ */
+RungeKutta::RungeKutta() {}
+ 
 /**
  * @brief Constructor for predefined Runge-Kutta methods by order.
  */
@@ -64,6 +70,30 @@ void RungeKutta::setOrder(const int order) {
         throw std::invalid_argument("Unsupported order!");
     }
     this->order = order;
+}
+
+void RungeKutta::setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c) {
+    this->a = a;
+    this->b = b;
+    this->c = c;
+}
+
+void RungeKutta::SetConfig(const Reader& Rdr) {
+    SetGlobalConfig(Rdr); // Call the base class method
+
+    if (Rdr.getExplicitSettings().RungeKutta_order.has_value()) {
+        setOrderInput(Rdr.getExplicitSettings().RungeKutta_order.value());
+    } else if (Rdr.getExplicitSettings().RungeKutta_coefficients_a.has_value() &&
+               Rdr.getExplicitSettings().RungeKutta_coefficients_b.has_value() &&
+               Rdr.getExplicitSettings().RungeKutta_coefficients_c.has_value()) {
+        setCoefficients(
+            Rdr.getExplicitSettings().RungeKutta_coefficients_a.value(),
+            Rdr.getExplicitSettings().RungeKutta_coefficients_b.value(),
+            Rdr.getExplicitSettings().RungeKutta_coefficients_c.value());
+            std::cout << "Coefficients set" << std::endl;
+    } else {
+        throw std::invalid_argument("Invalid RungeKutta settings");
+    }
 }
 
 /**

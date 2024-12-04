@@ -14,6 +14,20 @@ F_TYPE BackwardEuler::makeFstep(Eigen::VectorXd y0,double t0){
     return [this, y0, t0](const Eigen::VectorXd& y1) { return this->F(y1, y0, t0); };
 }
 
+void BackwardEuler::SetConfig(const Reader& Rdr) {
+    SetRhsIsLinear(Rdr.getImplicitSettings().rhs_is_linear);
+    SetLinearSystemSolver(Rdr.getImplicitSettings().linear_system_solver.value());
+
+    if (GetRhsIsLinear()) {
+        SetRhsSystem(Rdr.getImplicitSettings().rhs_system.value());
+    } else {
+        SetRootFinder(Rdr.getImplicitSettings().root_finder.value());
+    }
+
+    // After Set RHS System, call the SetGlobalConfig -> adds f accordingly
+    SetGlobalConfig(Rdr);  // Call the base class method
+}
+
 Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
     // Solve the linear system
 

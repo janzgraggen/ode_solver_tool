@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <iostream>
 
+
+AdamsBashforth::AdamsBashforth() {}
 AdamsBashforth::AdamsBashforth(int maxOrder) : maxOrder(maxOrder), customCoefficients(Eigen::VectorXd()) {
     if (maxOrder < 1 || maxOrder > 4) {
         throw std::invalid_argument("Supported orders are 1 through 4.");
@@ -26,6 +28,31 @@ Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
         case 4: return (Eigen::VectorXd(4) << 55.0 / 24.0, -59.0 / 24.0, 37.0 / 24.0, -9.0 / 24.0).finished();
         default:
             throw std::invalid_argument("Unsupported order for coefficients.");
+    }
+}
+
+void AdamsBashforth::SetMaxOrder(int maxOrder) {
+    if (maxOrder < 1 || maxOrder > 4) {
+        throw std::invalid_argument("Supported orders are 1 through 4.");
+    }
+    this->maxOrder = maxOrder;
+}
+
+void AdamsBashforth::SetCustomCoefficients(Eigen::VectorXd customCoefficients) {
+    this->customCoefficients = customCoefficients;
+}
+
+
+void AdamsBashforth::SetConfig(const Reader& Rdr) {
+    SetGlobalConfig(Rdr); // Call the base class method
+
+    if (Rdr.getExplicitSettings().AdamsBashforth_max_order.has_value()) {
+        SetMaxOrder( Rdr.getExplicitSettings().AdamsBashforth_max_order.value() );
+
+    }else if (Rdr.getExplicitSettings().AdamsBashforth_coefficients_vector.has_value()) {
+        SetCustomCoefficients( Rdr.getExplicitSettings().AdamsBashforth_coefficients_vector.value());
+    } else {
+        throw std::invalid_argument("Invalid AdamsBashforth settings");
     }
 }
 

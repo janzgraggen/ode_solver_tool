@@ -42,12 +42,11 @@ Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
 
     // Determine the current order based on available history
     const int currentOrder = static_cast<int>(history.size()) + 1;
-    std::cout << currentOrder << std::endl;
 
     // Update coefficients dynamically if not using a custom vector
     if (customCoefficients.size() != 0 && currentOrder == customCoefficients.size()) {
         coefficients = customCoefficients;
-    } else {
+    } else if (currentOrder <= 4) {
         coefficients = generateCoefficients(currentOrder);
     }
 

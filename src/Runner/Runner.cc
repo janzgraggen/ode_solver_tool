@@ -50,10 +50,13 @@ Eigen::VectorXd Runner::run() {
             if (Rdr.getExplicitSettings().AdamsBashforth_max_order.has_value()){
                 Solver = new AdamsBashforth(
                     Rdr.getExplicitSettings().AdamsBashforth_max_order.value());
+            } else if (Rdr.getExplicitSettings().AdamsBashforth_coefficients_vector.has_value()) {
+                Solver = new AdamsBashforth(Rdr.getExplicitSettings().AdamsBashforth_coefficients_vector.value());
             } else {
                 std::cout << "Invalid AdamsBashforth settings" << std::endl;
-                return Eigen::VectorXd();  // Return empty vector for failure
+                return {};  // Return empty vector for failure
             }
+
         } else {
             std::cout << "Invalid explicit solver method" << std::endl;
             return Eigen::VectorXd();  // Return empty vector for failure

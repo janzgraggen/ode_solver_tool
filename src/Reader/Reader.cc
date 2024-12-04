@@ -67,8 +67,11 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
     } else if (explSet.method == "AdamsBashforth") {
         if (explicitNode["AdamsBashforth"]["max_order"].IsScalar()) {
             explSet.AdamsBashforth_max_order = explicitNode["AdamsBashforth"]["max_order"].as<int>();
+        } else if (explicitNode["AdamsBashforth"]["coefficients_vector"].IsSequence()) {
+            auto v = explicitNode["AdamsBashforth"]["coefficients_vector"].as<std::vector<double>>();
+            explSet.AdamsBashforth_coefficients_vector = Eigen::VectorXd::Map(v.data(), v.size());
         } else {
-            throw std::runtime_error("AdamsBashforth settings are invalid. Max order is missing.");
+            throw std::runtime_error("Invalid AdamsBashforth settings: Either 'maxOrder' or 'coefficients_vector' must be provided.");
         }
     } else {
         throw std::runtime_error("Invalid solver method: " + explSet.method);

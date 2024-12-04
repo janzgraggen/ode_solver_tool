@@ -4,6 +4,7 @@
 #include "Ode/ForwardEuler.hh"
 #include "Ode/RungeKutta.hh"
 #include "Reader/Reader.hh"
+#include "Runner/Runner.hh"
 
 // Vectorized ODE function: dy/dt = -y + t
 Eigen::VectorXd ODEFunction(const Eigen::VectorXd& y, double t) {
@@ -16,29 +17,33 @@ Eigen::VectorXd ODEFunction(const Eigen::VectorXd& y, double t) {
 
 int main() {
 
-    Eigen::VectorXd initialValue(3);  // Vector of size 3
-    initialValue << 0.0, 1.0, 0.0;  // Initial values for y(0)
+    Runner runner("../config/config_test_ImplBwdEulerLinear.yaml");
 
-    // FORWARD EULER -------------------------------------------
-    std::cout << "Forward Euler" << std::endl;
-    FwdEuler FE_solver;
+    const Eigen::VectorXd finalSolution = runner.run();
+    std::cout << finalSolution << std::endl;
+    // Eigen::VectorXd initialValue(3);  // Vector of size 3
+    // initialValue << 0.0, 1.0, 0.0;  // Initial values for y(0)
 
-    // Set ODE parameters
-    FE_solver.SetStepSize(0.01);
-    FE_solver.SetTimeInterval(0.0, 1.0);
+    // // FORWARD EULER -------------------------------------------
+    // std::cout << "Forward Euler" << std::endl;
+    // FwdEuler FE_solver;
 
-    FE_solver.SetInitialValue(initialValue);
+    // // Set ODE parameters
+    // FE_solver.SetStepSize(0.01);
+    // FE_solver.SetTimeInterval(0.0, 1.0);
 
-    // Set the right-hand side function
-    FE_solver.SetRightHandSide(ODEFunction);
+    // FE_solver.SetInitialValue(initialValue);
 
-    auto* finalSolution = new Eigen::VectorXd;
+    // // Set the right-hand side function
+    // FE_solver.SetRightHandSide(ODEFunction);
 
-    // Solve the ODE and output the results
-    *finalSolution = FE_solver.SolveODE(std::cout);
+    // auto* finalSolution = new Eigen::VectorXd;
 
-    std::cout << "\n\n\n" << std::endl;
-    std::cout << *finalSolution << std::endl;
+    // // Solve the ODE and output the results
+    // *finalSolution = FE_solver.SolveODE(std::cout);
+
+    // std::cout << "\n\n\n" << std::endl;
+    // std::cout << *finalSolution << std::endl;
 
     /*// RUNGE KUTTA -------------------------------------------
     std::cout << "Runge Kutta order 4" << std::endl;

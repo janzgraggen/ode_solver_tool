@@ -63,6 +63,7 @@ Eigen::VectorXd Runner::run() {
         }
 
     } else if (Rdr.getSolverType() == "Implicit") {
+
         if (Rdr.getImplicitSettings().method == "BackwardEuler") {
             Solver = new BackwardEuler();
             dynamic_cast<BackwardEuler*>(Solver)->SetRhsIsLinear(Rdr.getImplicitSettings().rhs_is_linear);
@@ -87,8 +88,7 @@ Eigen::VectorXd Runner::run() {
         delete Solver;
         return Eigen::VectorXd();  // Return empty vector for failure
     } else {
-        
-    
+
         Solver->SetStepSize(Rdr.getOdeSettings().step_size);
         Solver->SetTimeInterval(Rdr.getOdeSettings().initial_time, Rdr.getOdeSettings().final_time);
         Solver->SetInitialValue(Rdr.getOdeSettings().initial_value);

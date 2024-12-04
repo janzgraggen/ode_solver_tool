@@ -12,7 +12,7 @@ OdeSolver:
 
 # Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Explicit:
-  method: "ForwardEuler"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  method:  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
   #if method is "RungeKutta"
   RungeKutta:
     order:  # Choose between 1, 2, 3, 4
@@ -33,13 +33,13 @@ Explicit:
 Implicit:
   method: "BackwardEuler"  # Choose between "BackwardEuler" (or "CrankNicolson")
   rhs_is_linear: false
-  linear_system_solver: "GaussianElimination"  # Choose between "GaussianElimination" (or "LU") (also needed for systems in RootFinding)
+  linear_system_solver: "GaussianElimination"  # Choose between "GaussianElimination"  "LU"  (also needed for systems in RootFinding)
   # if rhs is linear :y' = Ay + b
   rhs_system:         
     A:
     b:
   # if rhs is NOT linear 
-  tolerance: 1e-6
+  tolerance: 0.000001
   max_iterations: 100
   root_finder: "NewtonRaphson"  # Choose between "NewtonRaphson" (or "FixedPoint")
-  dx : 1e-6 # for NewtonRaphson (or methods that use numerical differentiation)
+  dx : 0.000001 # for NewtonRaphson (or methods that use numerical differentiation)

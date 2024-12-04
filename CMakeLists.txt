@@ -85,6 +85,8 @@ add_executable(main src/main.cc
         src/LinSysSolver/LinSysSolver.cc
         src/LinSysSolver/GaussElimSolve.hh
         src/LinSysSolver/GaussElimSolve.cc
+        src/LinSysSolver/LUsolve.hh
+        src/LinSysSolver/LUsolve.cc
 
         src/RootFinder/RootFinder.hh
         src/RootFinder/RootFinder.cc
@@ -124,6 +126,8 @@ add_executable(test_pcsc test/test.cc
         src/LinSysSolver/LinSysSolver.cc
         src/LinSysSolver/GaussElimSolve.hh
         src/LinSysSolver/GaussElimSolve.cc
+        src/LinSysSolver/LUsolve.hh
+        src/LinSysSolver/LUsolve.cc
 
         src/RootFinder/RootFinder.hh
         src/RootFinder/RootFinder.cc

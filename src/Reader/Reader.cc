@@ -84,30 +84,32 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
 Reader::ImplicitSettings Reader::getImplicitSettings() const {
     ImplicitSettings implSet;
     auto implicitNode = config["Implicit"];
-
     if (implicitNode["method"].IsScalar()
-    && implicitNode["rhs_is_linear"].IsDefined()
-    && implicitNode["linear_system_solver"].IsDefined()) {
+    && implicitNode["rhs_is_linear"].IsScalar()
+    && implicitNode["linear_system_solver"].IsScalar()) {
         implSet.method = implicitNode["method"].as<str>();
         implSet.rhs_is_linear = implicitNode["rhs_is_linear"].as<bool>();
         implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
     }
     if (implSet.rhs_is_linear) {
-
-        auto rhsNode = implicitNode["rhs_system"];
-        if (rhsNode["A"].IsSequence()) {
-
-            auto A_matrix = rhsNode["A"].as<std::vector<std::vector<double>>>();
+        //auto rhsNode = implicitNode["rhs_system"];
+        if (implicitNode["rhs_system"]["A"].IsSequence()) {
+            auto A_matrix = implicitNode["rhs_system"]["A"].as<std::vector<std::vector<double>>>();
             Eigen::MatrixXd A(A_matrix.size(), A_matrix[0].size());
+
             for (size_t i = 0; i < A_matrix.size(); ++i) {
-                A.row(i) = Eigen::VectorXd::Map(A_matrix[i].data(), A_matrix[i].size());
+                for (size_t j = 0; j < A_matrix[i].size(); ++j) {
+                    A(i, j) = A_matrix[i][j];
+                }
             }
-            implSet.rhs_system->A = A;
+            LinearSystem SysToSet(A, Eigen::VectorXd::Zero(A.rows()));
+            implSet.rhs_system = SysToSet;
+
         } else {
             throw std::runtime_error("Invalid rhs system settings: A is not provided.");
         }
-        if (rhsNode["b"].IsSequence()) {
-            auto b = rhsNode["b"].as<std::vector<double>>();
+        if (implicitNode["rhs_system"]["b"].IsSequence()) {
+            auto b = implicitNode["rhs_system"]["b"].as<std::vector<double>>();
             implSet.rhs_system->b = Eigen::VectorXd::Map(b.data(), b.size());
         }
     } else {

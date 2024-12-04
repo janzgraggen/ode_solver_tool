@@ -1,5 +1,6 @@
 #include "BackwardEuler.hh"
 #include "../LinSysSolver/GaussElimSolve.hh"
+#include "../LinSysSolver/LUSolve.hh"
 
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
 
@@ -18,17 +19,28 @@ Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
 
     // Create I + hA 
     Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(GetRhsSystem().A.rows(), GetRhsSystem().A.cols());
-    Eigen::MatrixXd A = identity + GetStepSize() * GetRhsSystem().A;
+    Eigen::MatrixXd A = identity - GetStepSize() * GetRhsSystem().A;
     // Create b + hy
     Eigen::VectorXd b = GetStepSize() * GetRhsSystem().b + y; 
-
-    // Create a linear solver
-    GaussElimSolve solver;
-    solver.SetA(A);
-    solver.SetB(b);
+    if (GetLinearSystemSolver() == "GaussianElimination") {
+        GaussElimSolve solver;
+        solver.SetA(A);
+        solver.SetB(b);
+        return solver.Solve();
 
     // Solve the linear system
     return solver.Solve();
+    } else if (GetLinearSystemSolver() == "LU") {
+        LUSolve solver;
+        solver.SetA(A);
+        solver.SetB(b);
+        return solver.Solve();
+
+    }else {
+        throw std::runtime_error("Invalid linear system solver: " + GetLinearSystemSolver());
+    }
+
+    
 }
 
 

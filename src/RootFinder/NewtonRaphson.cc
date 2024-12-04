@@ -3,6 +3,7 @@
 //
 #include "NewtonRaphson.hh"
 #include "../LinSysSolver/GaussElimSolve.hh"
+#include "../LinSysSolver/LUSolve.hh"
 #include <iostream>
 
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
@@ -71,6 +72,35 @@ Eigen::VectorXd NewtonRaphson::Solve() {
     Eigen::VectorXd Fx = callF(x); 
     if (GetLinearSystemSolver() == "GaussianElimination") {
         GaussElimSolve solver;
+
+        while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
+            Eigen::MatrixXd J = NumericalJacobian(x);
+
+            try {
+                solver.SetA(J);
+                solver.SetB(-Fx);
+
+                Eigen::VectorXd delta = solver.Solve();
+                x += delta;
+
+                Fx = callF(x);
+                setIterationCount(getIterationCount() + 1);
+            
+            } catch (std::exception& e) {
+                std::cerr << "Error during solving: " << e.what() << std::endl;
+                break;
+            }
+        }
+        
+
+        if (getIterationCount() == getMaxIterations()) {
+            std::cerr << "Newton-Raphson did not converge within the maximum number of iterations." << std::endl;
+        }
+
+    } else if (GetLinearSystemSolver() == "LU") {
+        std::cout << "LUSolve" << std::endl;
+        LUSolve solver;
+        std::cout << "LUSolve 1" << std::endl;
 
         while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
             Eigen::MatrixXd J = NumericalJacobian(x);

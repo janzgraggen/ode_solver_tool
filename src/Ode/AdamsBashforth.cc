@@ -6,12 +6,17 @@
 #include <stdexcept>
 #include <iostream>
 
-AdamsBashforth::AdamsBashforth(int maxOrder) : maxOrder(maxOrder) {
+AdamsBashforth::AdamsBashforth(int maxOrder) : maxOrder(maxOrder), customCoefficients(Eigen::VectorXd()) {
     if (maxOrder < 1 || maxOrder > 4) {
         throw std::invalid_argument("Supported orders are 1 through 4.");
     }
     coefficients = generateCoefficients(1); // Start with order 1 coefficients
 }
+
+AdamsBashforth::AdamsBashforth(const Eigen::VectorXd customCoefficients)
+    : maxOrder(customCoefficients.size()),
+      customCoefficients(customCoefficients),
+      coefficients(generateCoefficients(1)) {}
 
 Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
     switch (order) {
@@ -25,7 +30,7 @@ Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
 }
 
 Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
-    Eigen::VectorXd dydt = f_rhs(y, t); // Compute the derivative at the current step
+  const Eigen::VectorXd dydt = f_rhs(y, t); // Compute the derivative at the current step
 
     // If history is empty, this is the first step. Use order 1.
     if (history.empty()) {
@@ -36,22 +41,25 @@ Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
     }
 
     // Determine the current order based on available history
-    const int currentOrder = std::min(maxOrder, static_cast<int>(history.size()) + 1);
+    const int currentOrder = static_cast<int>(history.size()) + 1;
+    std::cout << currentOrder << std::endl;
 
     // Update coefficients dynamically if not using a custom vector
-    if (coefficients.size() != currentOrder) {
+    if (customCoefficients.size() != 0 && currentOrder == customCoefficients.size()) {
+        coefficients = customCoefficients;
+    } else {
         coefficients = generateCoefficients(currentOrder);
     }
 
     // Perform the Adams-Bashforth step
     Eigen::VectorXd result = y + GetStepSize() * coefficients(0) * dydt;
-    for (int i = 1; i < currentOrder; ++i) {
+    for (int i = 1; i < coefficients.size(); ++i) {
         result += GetStepSize() * coefficients(i) * history[i - 1];
     }
 
     // Update history with the current derivative
     history.push_front(dydt);
-    if (history.size() > static_cast<size_t>(maxOrder)) {
+    if (history.size() > maxOrder - 1 || history.size() == customCoefficients.size()) {
         history.pop_back();
     }
 

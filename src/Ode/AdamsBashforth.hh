@@ -16,6 +16,7 @@ class AdamsBashforth final : public Explicit {
 private:
  int maxOrder; ///< Maximum order of the Adams-Bashforth method.
  Eigen::VectorXd coefficients; ///< Coefficients for the current order of the method.
+ Eigen::VectorXd customCoefficients;
  std::deque<Eigen::VectorXd> history; ///< History of previous derivatives.
 
  /**
@@ -32,6 +33,7 @@ public:
   * @param maxOrder The maximum order of the Adams-Bashforth method (1, 2, 3, or 4).
   */
  explicit AdamsBashforth(int maxOrder);
+ explicit AdamsBashforth(Eigen::VectorXd customCoefficients);
 
  /**
   * @brief Advances the solution using the Adams-Bashforth method.

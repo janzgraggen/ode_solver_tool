@@ -1,5 +1,5 @@
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output_test_ExplABcustomCoef.txt"
+output_file: "output_test_ExplABcustomCoef.csv"
 solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 
 # OdeSolver settings

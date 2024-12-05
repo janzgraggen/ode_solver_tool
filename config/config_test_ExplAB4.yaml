@@ -1,5 +1,5 @@
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output_test_ExplAB4.txt"
+output_file: "output_test_ExplAB4.csv"
 solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 
 # OdeSolver settings

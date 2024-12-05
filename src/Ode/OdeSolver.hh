@@ -10,6 +10,7 @@
 #include "../src/Reader/Reader.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
+using str = std::string;
 /**
  * @class OdeSolver
  * @brief A base class for solving Ordinary Differential Equations (ODEs).
@@ -23,6 +24,7 @@ private:
     double initialTime; ///< The initial time of the simulation.
     double finalTime; ///< The final time of the simulation.
     Eigen::VectorXd initialValue; ///< The initial state vector of the system.
+    str OutputFileName; ///< The output file name.
 
 protected: //need protedted to be able do assign different functions (linear/nonlinear in child classes)
     f_TYPE f_rhs; ///< The right-hand side function of the ODE.
@@ -43,6 +45,19 @@ public:
      * @param h The step size.
      */
     void SetStepSize(double h);
+
+    /**
+     * 
+     * @brief Sets the output file name for the ODE solver.
+     * @param filename The name of the output file.
+     */
+    void SetOutputFileName(const str& filename);
+
+    /**
+     * @brief Gets the output file name for the ODE solver.
+     * @return The name of the output file.
+     */  
+    [[nodiscard]] str GetOutputFileName() const;
 
     /**
      * @brief Gets the step size of the ODE solver.
@@ -123,14 +138,14 @@ public:
 
 
     /**
-     * @brief Pure virtual function for solving the ODE.
+     * @brief  virtual function for solving the ODE.
      *
      * This function must be implemented by derived classes to solve the ODE and output
      * the results.
      *
      * @param stream The output stream to which results are written.
      */
-    virtual Eigen::VectorXd SolveODE(std::ostream& stream) = 0;
+    Eigen::VectorXd SolveODE(std::ostream& stream);
 };
 
  #endif // ODESOLVER_HH

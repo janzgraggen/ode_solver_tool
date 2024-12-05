@@ -31,7 +31,7 @@ public:
      *
      * @param stream The output stream to write results (e.g., `std::cout` or a file stream).
      */
-    Eigen::VectorXd SolveODE(std::ostream& stream) override;
+    //Eigen::VectorXd SolveODE(std::ostream& stream) override;
 };
 
 #endif // EXPLICIT_HH

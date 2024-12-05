@@ -8,60 +8,99 @@
 #include <optional>
 #include "../Utils/LinSysStruct.hh"
 
+/**
+ * @file Reader.hh
+ * @brief Defines the `Reader` class for parsing ODE solver settings from a YAML file.
+ */
+
 using str = std::string;
 
+/**
+ * @class Reader
+ * @brief Parses configuration settings for ODE solvers from a YAML file.
+ *
+ * This class provides methods to retrieve general ODE solver settings,
+ * as well as specific settings for explicit and implicit solvers.
+ */
 class Reader {
 public:
-    // Constructor to load the YAML file
+    /**
+     * @brief Constructs a `Reader` object and loads the specified YAML file.
+     * @param filename The path to the YAML configuration file.
+     * @throws std::runtime_error If the file cannot be opened or parsed.
+     */
     Reader(const str& filename);
 
-    // Method to get the solver type (Implicit or Explicit)
+    /**
+     * @brief Retrieves the solver type specified in the configuration.
+     * @return A string indicating the solver type (e.g., "Implicit" or "Explicit").
+     */
     str getSolverType() const;
+    str getOutputFileName() const;
 
-    // OdeSolver settings structure
+    /**
+     * @struct OdeSettings
+     * @brief Holds general settings for ODE solvers.
+     */
     struct OdeSettings {
-        double step_size;
-        double initial_time;
-        double final_time;
-        Eigen::VectorXd initial_value;
+        double step_size;          //!< The step size for time integration.
+        double initial_time;       //!< The initial time of the simulation.
+        double final_time;         //!< The final time of the simulation.
+        Eigen::VectorXd initial_value; //!< The initial state vector.
     };
 
-    // Explicit solver settings structure
+    /**
+     * @struct ExplicitSettings
+     * @brief Holds settings for explicit solvers.
+     */
     struct ExplicitSettings {
-        str method;  // RungeKutta, AdamsBashforth, etc.
-        std::optional<int> RungeKutta_order;
-        std::optional<Eigen::MatrixXd> RungeKutta_coefficients_a;
-        std::optional<Eigen::VectorXd> RungeKutta_coefficients_b;
-        std::optional<Eigen::VectorXd> RungeKutta_coefficients_c;
+        str method;                            //!< The explicit solver method (e.g., Runge-Kutta, Adams-Bashforth).
+        std::optional<int> RungeKutta_order;   //!< Order of the Runge-Kutta method, if applicable.
+        std::optional<Eigen::MatrixXd> RungeKutta_coefficients_a; //!< Coefficients \(a_{ij}\) for Runge-Kutta methods.
+        std::optional<Eigen::VectorXd> RungeKutta_coefficients_b; //!< Coefficients \(b_i\) for Runge-Kutta methods.
+        std::optional<Eigen::VectorXd> RungeKutta_coefficients_c; //!< Coefficients \(c_i\) for Runge-Kutta methods.
 
-        std::optional<int> AdamsBashforth_max_order;
-        std::optional<Eigen::VectorXd> AdamsBashforth_coefficients_vector;
+        std::optional<int> AdamsBashforth_max_order; //!< Maximum order for Adams-Bashforth methods.
+        std::optional<Eigen::VectorXd> AdamsBashforth_coefficients_vector; //!< Coefficients for Adams-Bashforth methods.
     };
 
-    // Implicit solver settings structure
+    /**
+     * @struct ImplicitSettings
+     * @brief Holds settings for implicit solvers.
+     */
     struct ImplicitSettings {
-        str method;  // BackwardEuler, CrankNicolson
-        bool rhs_is_linear;
-        std::optional<str> linear_system_solver;
+        str method;                            //!< The implicit solver method (e.g., Backward Euler, Crank-Nicolson).
+        bool rhs_is_linear;                    //!< Flag indicating whether the right-hand side is linear.
+        std::optional<str> linear_system_solver; //!< Name of the solver for linear systems.
 
-        //linear system settings
-        std::optional<LinearSystem> rhs_system;
+        std::optional<LinearSystem> rhs_system; //!< The linear system representing the RHS, if applicable.
 
-        // Nonlinear settings
-        std::optional<double> tolerance;
-        std::optional<int> max_iterations;
-        std::optional<double> dx;
-        std::optional<str> root_finder;
+        std::optional<double> tolerance;       //!< Convergence tolerance for nonlinear solvers.
+        std::optional<int> max_iterations;     //!< Maximum iterations for nonlinear solvers.
+        std::optional<double> dx;              //!< Step size for numerical differentiation.
+        std::optional<str> root_finder;        //!< Name of the root-finding method for nonlinear solvers.
     };
 
-    // Methods to retrieve the settings
+    /**
+     * @brief Retrieves the general ODE solver settings.
+     * @return An `OdeSettings` structure containing the general settings.
+     */
     OdeSettings getOdeSettings() const;
+
+    /**
+     * @brief Retrieves the settings for explicit solvers.
+     * @return An `ExplicitSettings` structure containing the explicit solver settings.
+     */
     ExplicitSettings getExplicitSettings() const;
+
+    /**
+     * @brief Retrieves the settings for implicit solvers.
+     * @return An `ImplicitSettings` structure containing the implicit solver settings.
+     */
     ImplicitSettings getImplicitSettings() const;
 
 private:
-    // YAML configuration object
-    YAML::Node config;
+    YAML::Node config; //!< The YAML configuration object.
 };
 
 #endif // READER_HH

@@ -1,17 +1,38 @@
 #include "Reader.hh"
 
+/**
+ * @file Reader.cc
+ * @brief Implements the `Reader` class that loads configuration from a YAML file for ODE solvers.
+ */
 
 // Constructor to load the YAML file
+/**
+ * @brief Constructs a `Reader` object and loads the specified YAML file.
+ * @param filename The path to the YAML configuration file.
+ * @throws std::runtime_error If the file cannot be opened or parsed.
+ */
 Reader::Reader(const str& filename) {
     config = YAML::LoadFile(filename);
 }
 
 // General configuration method to get the solver type
+/**
+ * @brief Retrieves the solver type specified in the configuration.
+ * @return A string indicating the solver type (e.g., "Implicit" or "Explicit").
+ */
 str Reader::getSolverType() const {
     return config["solver_type"].as<str>();
 }
 
+str Reader::getOutputFileName() const {
+    return config["output_file"].as<str>();
+}
+
 // Get OdeSolver settings
+/**
+ * @brief Retrieves the general settings for the ODE solver.
+ * @return An `OdeSettings` structure containing the ODE solver settings.
+ */
 Reader::OdeSettings Reader::getOdeSettings() const {
     OdeSettings odeSolverSettings;
     auto odeSolverNode = config["OdeSolver"];
@@ -29,20 +50,23 @@ Reader::OdeSettings Reader::getOdeSettings() const {
 }
 
 // Get Explicit solver settings
+/**
+ * @brief Retrieves the settings for explicit solvers.
+ * @return An `ExplicitSettings` structure containing the explicit solver settings.
+ * @throws std::runtime_error If the configuration for an explicit solver is invalid.
+ */
 Reader::ExplicitSettings Reader::getExplicitSettings() const {
     ExplicitSettings explSet;
     auto explicitNode = config["Explicit"];
     explSet.method = explicitNode["method"].as<str>();
     if (explSet.method == "ForwardEuler") {
-
-    // Check if RungeKutta method is selected
+        // Handle ForwardEuler case (currently empty).
     } else if (explSet.method == "RungeKutta") {
-
-        // Check if an 'order' int is provided
+        // Check if an 'order' int is provided for Runge-Kutta method
         if (explicitNode["RungeKutta"]["order"].IsScalar()) {
             explSet.RungeKutta_order = explicitNode["RungeKutta"]["order"].as<int>();
         }
-        // If 'order' is not provided, check if all 'coefficients' are available
+        // If 'order' is not provided, check if coefficients are available
         else if (explicitNode["RungeKutta"]["coefficients"]["a"].IsSequence()
             && explicitNode["RungeKutta"]["coefficients"]["b"].IsSequence()
             && explicitNode["RungeKutta"]["coefficients"]["c"].IsSequence()) {
@@ -60,11 +84,11 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
 
             auto c = rkCoefsNode["c"].as<std::vector<double>>();
             explSet.RungeKutta_coefficients_c = Eigen::VectorXd::Map(c.data(), c.size());
-
         } else {
             throw std::runtime_error("Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
         }
     } else if (explSet.method == "AdamsBashforth") {
+        // Handle Adams-Bashforth case
         if (explicitNode["AdamsBashforth"]["max_order"].IsScalar()) {
             explSet.AdamsBashforth_max_order = explicitNode["AdamsBashforth"]["max_order"].as<int>();
         } else if (explicitNode["AdamsBashforth"]["coefficients_vector"].IsSequence()) {
@@ -81,6 +105,11 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
 }
 
 // Get Implicit solver settings
+/**
+ * @brief Retrieves the settings for implicit solvers.
+ * @return An `ImplicitSettings` structure containing the implicit solver settings.
+ * @throws std::runtime_error If the configuration for an implicit solver is invalid.
+ */
 Reader::ImplicitSettings Reader::getImplicitSettings() const {
     ImplicitSettings implSet;
     auto implicitNode = config["Implicit"];
@@ -92,7 +121,7 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
         implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
     }
     if (implSet.rhs_is_linear) {
-        //auto rhsNode = implicitNode["rhs_system"];
+        // Read rhs system settings for linear case
         if (implicitNode["rhs_system"]["A"].IsSequence()) {
             auto A_matrix = implicitNode["rhs_system"]["A"].as<std::vector<std::vector<double>>>();
             Eigen::MatrixXd A(A_matrix.size(), A_matrix[0].size());

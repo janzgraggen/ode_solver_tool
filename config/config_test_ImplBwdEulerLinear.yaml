@@ -1,5 +1,6 @@
 
 # General configuration ––––––––––––––––––––––––––––––––––––––––
+output_file: "output_test_ImplBwdEulerLinear.csvv"
 solver_type: "Implicit"  # Choose between "Implicit" or "Explicit"
 
 # OdeSolver settings

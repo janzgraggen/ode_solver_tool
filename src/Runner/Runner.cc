@@ -8,7 +8,7 @@
 #include "../Ode/AdamsBashforth.hh"
 #include "../Ode/BackwardEuler.hh"
 
-#include "../LinSysStruct.hh"
+#include "../Utils/LinSysStruct.hh"
 
 
 using str = std::string;

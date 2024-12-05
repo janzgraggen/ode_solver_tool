@@ -3,7 +3,7 @@
 //
 
 #include "OdeSolver.hh"
-#include "../LinSysStruct.hh"
+#include "../Utils/LinSysStruct.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;

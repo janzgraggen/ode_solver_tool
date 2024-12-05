@@ -6,7 +6,7 @@
 #include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
 #include <optional>
-#include "../LinSysStruct.hh"
+#include "../Utils/LinSysStruct.hh"
 
 using str = std::string;
 

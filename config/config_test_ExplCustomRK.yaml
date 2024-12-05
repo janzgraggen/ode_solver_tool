@@ -27,7 +27,7 @@ Explicit:
 
   # AdamsBashforth settings
   AdamsBashforth:
-    max_order: 4  # Choose between 1, 2, 3, 4
+    max_order:  # Choose between 1, 2, 3, 4
     #if NOT max_order
     #coefficients_vector:
 

@@ -57,7 +57,7 @@ Eigen::VectorXd Runner::run() {
         return Eigen::VectorXd();  // Return empty vector for failure
     } else {
         Solver->SetConfig(Rdr);
-        Eigen::VectorXd Result  = Solver->SolveODE(std::cout);
+        Eigen::VectorXd Result = Solver->SolveODE(std::cout);
         // Clean up
         delete Solver;  // Safely delete the dynamically allocated object
         Solver = nullptr;  // Best practice to avoid dangling pointers

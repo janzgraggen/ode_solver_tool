@@ -76,13 +76,14 @@ void RungeKutta::setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd
     this->a = a;
     this->b = b;
     this->c = c;
+    this->order = static_cast<int>(b.size());
 }
 
 void RungeKutta::SetConfig(const Reader& Rdr) {
     SetGlobalConfig(Rdr); // Call the base class method
 
     if (Rdr.getExplicitSettings().RungeKutta_order.has_value()) {
-        setOrderInput(Rdr.getExplicitSettings().RungeKutta_order.value());
+        setOrder(Rdr.getExplicitSettings().RungeKutta_order.value());
     } else if (Rdr.getExplicitSettings().RungeKutta_coefficients_a.has_value() &&
                Rdr.getExplicitSettings().RungeKutta_coefficients_b.has_value() &&
                Rdr.getExplicitSettings().RungeKutta_coefficients_c.has_value()) {

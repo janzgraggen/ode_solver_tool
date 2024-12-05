@@ -46,7 +46,6 @@ public:
      */
     void setOrder(int order);
 
-    void setOrderInput(int order);
     void setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c);
     /**
      * @brief Sets the coefficients for a user-defined Runge-Kutta method.

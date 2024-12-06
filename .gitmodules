@@ -9,3 +9,6 @@
 	path = yaml
 	url = https://github.com/jbeder/yaml-cpp
 	branch = master
+[submodule "muparser"]
+	path = muparser
+	url = https://github.com/beltoforion/muparser.git

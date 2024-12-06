@@ -21,6 +21,7 @@ endfunction()
 add_optional_library(GOOGLETEST googletest)
 add_optional_library(EIGEN eigen)
 add_optional_library(YAML yaml)
+add_optional_library(MUPARSER muparser)
 
 # Update submodules as needed
 set(GIT_EXECUTABLE "git")
@@ -45,11 +46,11 @@ file(GLOB_RECURSE CORE_SOURCES
 
 # Add main executable
 add_executable(main src/main.cc ${CORE_SOURCES})
-target_link_libraries(main eigen yaml-cpp::yaml-cpp)
+target_link_libraries(main eigen yaml-cpp::yaml-cpp muparser)
 
 # Add test executable
 add_executable(test test/test.cc ${CORE_SOURCES})
-target_link_libraries(test gtest_main gtest pthread eigen yaml-cpp)
+target_link_libraries(test gtest_main gtest pthread eigen yaml-cpp muparser)
 
 # Custom target to run tests
 add_custom_target(run_tests COMMAND ./test DEPENDS test)

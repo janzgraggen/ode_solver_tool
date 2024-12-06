@@ -101,7 +101,7 @@ void OdeSolver::SetGlobalConfig(const Reader& Rdr) {
     SetStepSize(Rdr.getOdeSettings().step_size);
     SetTimeInterval(Rdr.getOdeSettings().initial_time, Rdr.getOdeSettings().final_time);
     SetInitialValue(Rdr.getOdeSettings().initial_value);
-    SetRightHandSide(__f__); 
+    SetRightHandSide(Rdr.getFunction()); 
 }
 
 /**

@@ -6,16 +6,18 @@ solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 # Function configuration
 Dim: 3
 Function: 
-  f1: "0"
-  f2: "y1"
-  f3: "2.0 * t"
+  f1: "y1 +y2"
+  f2: "sqrt(y3)"
+  f3: "6.0 * t"
   
 # OdeSolver settings
 OdeSolver:
   step_size: 0.01
-  initial_time: 0.0
   final_time: 1.0
-  initial_value: [0.0, 1.0, 0.0]
+
+  ##### USE THESE FOR TESTION THE FUNCTION
+  initial_time: 1.0
+  initial_value: [2.5, 2.5, 2.0]
 
 
 # Explicit solver settings ––––––––––––––––––––––––––––––––––––––––

@@ -17,10 +17,35 @@ Eigen::VectorXd ODEFunction(const Eigen::VectorXd& y, double t) {
 
 int main() {
 
+    //// TESTING THE PARSING
+    Reader reader("../config/config_test.yaml");
+
+    
+    // std::cout << reader.getDim() << std::endl;
+    // std::cout << reader.getFunctionStringlist()[0] << std::endl;
+    // std::cout << reader.getFunctionStringlist()[1] << std::endl;
+    // std::cout << reader.getFunctionStringlist()[2] << std::endl;
+
+    f_TYPE f = reader.getFunction();
+    Eigen::VectorXd vec = reader.getOdeSettings().initial_value;  // Vector of size 3
+    double time = reader.getOdeSettings().initial_time;
+    std::cout << " herererer " << std::endl;
+    std::cout << f(vec, time) << std::endl;
+    std::cout << " dooonnneee" << std::endl;
+
+
+
     Runner runner("../config/config_test_ExplCustomRK.yaml");
 
     const Eigen::VectorXd finalSolution = runner.run();
     std::cout << finalSolution << std::endl;
+
+
+
+
+
+
+
     // Eigen::VectorXd initialValue(3);  // Vector of size 3
     // initialValue << 0.0, 1.0, 0.0;  // Initial values for y(0)
 

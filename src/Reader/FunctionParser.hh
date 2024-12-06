@@ -19,16 +19,17 @@ private:
 
 public:
     // Constructor
-    FunctionParser(const strList& functions);
+    FunctionParser(int n,const strList& functions);
 
     // Destructor
     ~FunctionParser() = default;
+
 
     // Evaluates the function at a given input
     Eigen::VectorXd evaluate(const Eigen::VectorXd& input);
 
     // Returns the callable function that takes t and y as input
-    f_TYPE getFunction() const;
+    f_TYPE getFunction();
 
     // Returns the number of functions (dimension of output)
     size_t dimension() const { return n; }

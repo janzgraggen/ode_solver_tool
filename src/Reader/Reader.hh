@@ -1,5 +1,5 @@
-#ifndef READER_HH
-#define READER_HH
+#ifndef __READER_HH__
+#define __READER_HH__
 
 #include <string>
 #include <vector>
@@ -14,6 +14,8 @@
  */
 
 using str = std::string;
+using strList = std::vector<std::string>;
+using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 
 /**
  * @class Reader
@@ -37,6 +39,10 @@ public:
      */
     str getSolverType() const;
     str getOutputFileName() const;
+    int getDim() const;
+    strList getFunctionStringlist() const;
+    f_TYPE getFunction() const;
+    
 
     /**
      * @struct OdeSettings
@@ -103,4 +109,4 @@ private:
     YAML::Node config; //!< The YAML configuration object.
 };
 
-#endif // READER_HH
+#endif // __READER_HH__

@@ -2,6 +2,13 @@
 output_file: "output_test_ExplRK4.csv"
 solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 
+# Function configuration
+Dim: 3
+Function: 
+  f1: "0"
+  f2: "y1"
+  f3: "2.0 * t"
+  
 # OdeSolver settings
 OdeSolver:
   step_size: 0.01

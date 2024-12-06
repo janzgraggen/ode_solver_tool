@@ -1,5 +1,5 @@
 #include "Reader.hh"
-
+#include "FunctionParser.hh"
 /**
  * @file Reader.cc
  * @brief Implements the `Reader` class that loads configuration from a YAML file for ODE solvers.
@@ -27,6 +27,32 @@ str Reader::getSolverType() const {
 str Reader::getOutputFileName() const {
     return config["output_file"].as<str>();
 }
+
+
+
+int Reader::getDim() const {
+    return config["Dim"].as<int>();
+}
+
+strList Reader::getFunctionStringlist() const {
+    strList fct_strings; // Ensure strList is properly initialized (e.g., vector<string> or custom type)
+    fct_strings.resize(getDim()); // Resize the list to hold all functions
+
+    for (int i = 0; i < getDim(); i++) {
+        // Construct the key as "f{i}" using string concatenation
+        std::string key = "f" + std::to_string(i+1);
+
+        // Retrieve and store the function string
+        fct_strings[i] = config["Function"][key].as<str>();
+    }
+    return fct_strings;
+}
+
+f_TYPE Reader::getFunction() const {
+    return FunctionParser(getFunctionStringlist()).getFunction();
+}
+
+
 
 // Get OdeSolver settings
 /**

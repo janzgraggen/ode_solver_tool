@@ -52,8 +52,8 @@ f_TYPE Reader::getFunction() const {
     return FunctionParser(getDim(),getFunctionStringlist()).getFunction();
 }
 
-bool Reader::getVerbosity() const {
-    return config["verbose"].as<bool>();
+int Reader::getVerbosity() const {
+    return config["verbose"].as<int>();
 }
 
 

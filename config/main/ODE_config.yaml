@@ -1,6 +1,6 @@
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output_test_ExplAB4.csv"
-solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
+output_file: "output_test_ExplAB4.csv" # Empty string or Nothing for no output file
+verbose: true
 
 # Function configuration
 Dim: 3
@@ -10,6 +10,7 @@ Function:
   f3: "2.0 * t"
   
 # OdeSolver settings
+solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 OdeSolver:
   step_size: 0.01
   initial_time: 0.0

@@ -1,5 +1,5 @@
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output_test_ExplABcustomCoef.csv"
+output_file: #"output_test_ExplABcustomCoef.csv" #Empty string or Nothing for no output file
 solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 
 # Function configuration

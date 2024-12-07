@@ -29,7 +29,6 @@ str Reader::getOutputFileName() const {
 }
 
 
-
 int Reader::getDim() const {
     return config["Dim"].as<int>();
 }
@@ -53,6 +52,9 @@ f_TYPE Reader::getFunction() const {
     return FunctionParser(getDim(),getFunctionStringlist()).getFunction();
 }
 
+bool Reader::getVerbosity() const {
+    return config["verbose"].as<bool>();
+}
 
 
 // Get OdeSolver settings

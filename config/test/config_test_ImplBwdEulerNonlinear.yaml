@@ -1,6 +1,6 @@
 
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output_test_ImplBwdEulerLinear.csv"
+output_file: #"output_test_ImplBwdEulerLinear.csv" #Empty string or Nothing for no output file
 solver_type: "Implicit"  # Choose between "Implicit" or "Explicit"
 
 # Function configuration

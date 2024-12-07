@@ -145,7 +145,7 @@ public:
      *
      * @param stream The output stream to which results are written.
      */
-    Eigen::VectorXd SolveODE(std::ostream& stream);
+    Eigen::VectorXd SolveODE();
 };
 
  #endif // ODESOLVER_HH

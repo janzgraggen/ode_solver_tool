@@ -36,6 +36,7 @@ public:
 
 private:
     std::ofstream file; /**< The file stream used for writing data. */
+        bool hasOutput;  /**< Flag to indicate if a file is available for writing. */
 };
 
 #endif // CSVWRITER_H

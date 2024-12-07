@@ -42,6 +42,7 @@ public:
     int getDim() const;
     strList getFunctionStringlist() const;
     f_TYPE getFunction() const;
+    bool getVerbosity() const;
     
 
     /**

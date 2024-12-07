@@ -142,7 +142,7 @@ f_TYPE OdeSolver::GetRightHandSide() const {
  * @param stream Output stream for intermediate results or logs.
  * @return The solution vector at the final time step.
  */
-Eigen::VectorXd OdeSolver::SolveODE(std::ostream& stream) {
+Eigen::VectorXd OdeSolver::SolveODE() {
     
     Eigen::VectorXd y = GetInitialValue();
     double t = GetInitialTime();

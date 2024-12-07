@@ -3,7 +3,6 @@
 //
 
 #include "OdeSolver.hh"
-#include "../config/config.hh"
 #include "../Writer/CSVWriter.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
@@ -144,6 +143,7 @@ f_TYPE OdeSolver::GetRightHandSide() const {
  * @return The solution vector at the final time step.
  */
 Eigen::VectorXd OdeSolver::SolveODE(std::ostream& stream) {
+    
     Eigen::VectorXd y = GetInitialValue();
     double t = GetInitialTime();
     CSVWriter writer(GetOutputFileName());

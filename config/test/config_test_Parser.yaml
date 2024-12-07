@@ -1,0 +1,47 @@
+# Function configuration
+Dim: 3
+Function: 
+  f1: "y1 +y2"
+  f2: "sqrt(y3)"
+  f3: "6.0 * t"
+  
+# OdeSolver settings
+OdeSolver:
+  ##### USE THESE FOR TESTION THE FUNCTION
+  initial_time: 1.0
+  initial_value: [2.5, 2.5, 4.0]
+
+##–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+  step_size: 0
+  final_time: 0
+output_file: 
+solver_type: 
+Explicit:
+  method: 
+  RungeKutta:
+    order:   
+    coefficients:
+      a: 
+        - 
+        - 
+        - 
+        - 
+      b: 
+      c: 
+  AdamsBashforth:
+    max_order: 
+    coefficients_vector: 
+Implicit:
+  method:   
+  rhs_is_linear: true 
+  linear_system_solver:  
+  rhs_system:         
+    A: 
+      - 
+      - 
+      - 
+    b: 
+  tolerance: 
+  max_iterations: 
+  root_finder:  
+  dx : 

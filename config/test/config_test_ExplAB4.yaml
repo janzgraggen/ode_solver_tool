@@ -1,0 +1,49 @@
+# General configuration ––––––––––––––––––––––––––––––––––––––––
+output_file: "output_test_ExplAB4.csv"
+solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
+
+# Function configuration
+Dim: 3
+Function: 
+  f1: "0"
+  f2: "y2"
+  f3: "2.0 * t"
+  
+# OdeSolver settings
+OdeSolver:
+  step_size: 0.01
+  initial_time: 0.0
+  final_time: 1.0
+  initial_value: [1.0, 1.0, 0.0]
+
+# Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Explicit:
+  method: "AdamsBashforth"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  RungeKutta:
+    order: # Choose between 1, 2, 3, 4 (Optional, leave empty if using coefficients)
+
+    coefficients:
+      a:
+      b:
+      c:
+
+  # AdamsBashforth settings
+  AdamsBashforth:
+    max_order: 4  # Choose between 1, 2, 3, 4
+    #if NOT max_order
+    #coefficients_vector:
+
+# Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Implicit:
+  method:  # Choose between "BackwardEuler" (or "CrankNicolson")
+  rhs_is_linear:
+  linear_system_solver:  # Choose between "GaussianElimination" (or "LU") (also needed for systems in RootFinder)
+  # if rhs is linear :y' = Ay + b
+  rhs_system:         
+    A:
+    b:
+  # if rhs is NOT linear 
+  tolerance:
+  max_iterations:
+  root_finder:  # Choose between "NewtonRaphson" (or "FixedPoint")
+  dx : # for NewtonRaphson (or methods that use numerical differentiation)  

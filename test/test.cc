@@ -4,9 +4,25 @@
 #include "../src/Reader/Reader.hh"
 #include "../src/Runner/Runner.hh"
 
+//// TESTING THE PARSING
+
+TEST(TestParsing, BasicTest){
+
+  Reader reader("../config/test/config_test_Parser.yaml");
+  f_TYPE f = reader.getFunction();
+  Eigen::VectorXd vec = reader.getOdeSettings().initial_value;  // Vector of size 3
+  double time = reader.getOdeSettings().initial_time;
+  Eigen::VectorXd parsresult =  f(vec, time);
+  Eigen::VectorXd expected(3);
+  expected << 5, 2, 6;
+
+  EXPECT_EQ(expected, parsresult);
+
+}
+
 TEST(TestReaderAndRunnerWithExplFwdEuler, BasicTest) {
   // Create the Runner object using the test config file
-  Runner runner("../config/config_test_ExplFwdEuler.yaml");
+  Runner runner("../config/test/config_test_ExplFwdEuler.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 
@@ -17,7 +33,7 @@ TEST(TestReaderAndRunnerWithExplFwdEuler, BasicTest) {
 
 TEST(TestReaderAndRunnerWithExplRK4, BasicTest) {
   // Create the Runner object using the test config file
-  Runner runner("../config/config_test_ExplRK4.yaml");
+  Runner runner("../config/test/config_test_ExplRK4.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 
@@ -28,7 +44,7 @@ TEST(TestReaderAndRunnerWithExplRK4, BasicTest) {
 
 TEST(TestReaderAndRunnerWithExplCustomRK, BasicTest) {
   // Create the Runner object using the test config file
-  Runner runner("../config/config_test_ExplCustomRK.yaml");
+  Runner runner("../config/test/config_test_ExplCustomRK.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 
@@ -39,7 +55,7 @@ TEST(TestReaderAndRunnerWithExplCustomRK, BasicTest) {
 
 TEST(TestReaderAndRunnerWithExplAB4, BasicTest) {
   // Create the Runner object using the test config file
-  Runner runner("../config/config_test_ExplAB4.yaml");
+  Runner runner("../config/test/config_test_ExplAB4.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 
@@ -50,7 +66,7 @@ TEST(TestReaderAndRunnerWithExplAB4, BasicTest) {
 
 TEST(TestReaderAndRunnerWithExplABcustomCoef, BasicTest) {
   // Create the Runner object using the test config file
-  Runner runner("../config/config_test_ExplABcustomCoef.yaml");
+  Runner runner("../config/test/config_test_ExplABcustomCoef.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 
@@ -61,7 +77,7 @@ TEST(TestReaderAndRunnerWithExplABcustomCoef, BasicTest) {
 
 TEST(TestReaderAndRunnerWithImplBwdEulerLinear, BasicTest) {
    // Create the Runner object using the test config file
-   Runner runner("../config/config_test_ImplBwdEulerLinear.yaml");
+   Runner runner("../config/test/config_test_ImplBwdEulerLinear.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 
@@ -71,7 +87,7 @@ TEST(TestReaderAndRunnerWithImplBwdEulerLinear, BasicTest) {
 
 TEST(TestReaderAndRunnerWithImplBwdEulerNonlinear, BasicTest) {
   // Create the Runner object using the test config file
-  Runner runner("../config/config_test_ImplBwdEulerNonlinear.yaml");
+  Runner runner("../config/test/config_test_ImplBwdEulerNonlinear.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 

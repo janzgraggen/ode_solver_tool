@@ -7,7 +7,7 @@ solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 Dim: 3
 Function: 
   f1: "0"
-  f2: "y1"
+  f2: "y2"
   f3: "2.0 * t"
   
 # OdeSolver settings

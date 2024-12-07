@@ -6,7 +6,7 @@ solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 Dim: 3
 Function: 
   f1: "0"
-  f2: "y1"
+  f2: "y2"
   f3: "2.0 * t"
   
 # OdeSolver settings
@@ -33,7 +33,6 @@ Explicit:
     #if NOT max_order
     #coefficients_vector:
 
-
 # Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Implicit:
   method:  # Choose between "BackwardEuler" (or "CrankNicolson")
@@ -47,5 +46,4 @@ Implicit:
   tolerance:
   max_iterations:
   root_finder:  # Choose between "NewtonRaphson" (or "FixedPoint")
-  dx : # for NewtonRaphson (or methods that use numerical differentiation)
-  
+  dx : # for NewtonRaphson (or methods that use numerical differentiation)  

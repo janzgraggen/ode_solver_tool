@@ -34,7 +34,6 @@ int Reader::getDim() const {
 }
 
 strList Reader::getFunctionStringlist() const {
-    std::cout << "Dimension (getDim()): " << getDim() << std::endl;
     strList fct_strings; // Ensure strList is properly initialized (e.g., vector<string> or custom type)
     fct_strings.resize(getDim()); // Resize the list to hold all functions
 

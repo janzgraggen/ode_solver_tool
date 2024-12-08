@@ -3,6 +3,7 @@ project(PCSC-project)
 
 set(CMAKE_CXX_STANDARD 17)
 
+
 # Function to handle library options and subdirectory addition
 function(add_optional_library LIB_NAME LIB_DIR)
     option(${LIB_NAME} "activate ${LIB_NAME} support" ON)
@@ -17,11 +18,8 @@ function(add_optional_library LIB_NAME LIB_DIR)
     endif()
 endfunction()
 
-# Check directories of submodules
-add_optional_library(GOOGLETEST googletest)
-add_optional_library(EIGEN eigen)
-add_optional_library(YAML yaml)
-add_optional_library(MUPARSER muparser)
+## Override ENABLE_OPENMP build option of muparser.(?: muparser is missing things to build with OpenMP)
+set(ENABLE_OPENMP OFF CACHE BOOL "Override muparser submodule build option ENABLE_OPENMP to OFF" FORCE)
 
 # Update submodules as needed
 set(GIT_EXECUTABLE "git")
@@ -37,6 +35,13 @@ if(GIT_SUBMODULE)
         message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
     endif()
 endif()
+
+# Check directories of submodules
+add_optional_library(GOOGLETEST googletest)
+add_optional_library(EIGEN eigen)
+add_optional_library(YAML yaml)
+add_optional_library(MUPARSER muparser)
+
 
 # Collect core sources
 file(GLOB_RECURSE CORE_SOURCES

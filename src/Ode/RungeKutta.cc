@@ -91,7 +91,6 @@ void RungeKutta::SetConfig(const Reader& Rdr) {
             Rdr.getExplicitSettings().RungeKutta_coefficients_a.value(),
             Rdr.getExplicitSettings().RungeKutta_coefficients_b.value(),
             Rdr.getExplicitSettings().RungeKutta_coefficients_c.value());
-            std::cout << "Coefficients set" << std::endl;
     } else {
         throw std::invalid_argument("Invalid RungeKutta settings");
     }

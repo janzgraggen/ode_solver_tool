@@ -46,6 +46,7 @@ Eigen::VectorXd LUSolve::Solve() {
         return lu.solve(b);
     } else {
         // Throw an error if the matrix is singular
-        throw std::runtime_error("Matrix is singular, cannot solve.");
+        logger.error("Matrix is singular, cannot solve.");
+        return Eigen::VectorXd(); // Return an empty vector
     }
 }

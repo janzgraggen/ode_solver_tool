@@ -2,6 +2,7 @@
 // Created by janzgraggen on 27/11/2024.
 //
 #include "NewtonRaphson.hh"
+#include "../LinSysSolver/LinSysSolver.hh"
 #include "../LinSysSolver/GaussElimSolve.hh"
 #include "../LinSysSolver/LUSolve.hh"
 #include <iostream>
@@ -66,66 +67,49 @@ Eigen::MatrixXd NewtonRaphson::NumericalJacobian(Eigen::VectorXd& x) {
     return J;
 }
 
-// Solve function
+
 Eigen::VectorXd NewtonRaphson::Solve() {
     Eigen::VectorXd x = getInitialGuess();
-    Eigen::VectorXd Fx = callF(x); 
+    Eigen::VectorXd Fx = callF(x);
+    
+    // Declare a local pointer to the solver
+    LinSysSolver* solver = nullptr;
+    // Allocate solver based on the linear system solver string
     if (GetLinearSystemSolver() == "GaussianElimination") {
-        GaussElimSolve solver(logger);
-
-        while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
-            Eigen::MatrixXd J = NumericalJacobian(x);
-
-            try {
-                solver.SetA(J);
-                solver.SetB(-Fx);
-
-                Eigen::VectorXd delta = solver.Solve();
-                x += delta;
-
-                Fx = callF(x);
-                setIterationCount(getIterationCount() + 1);
-            
-            } catch (std::exception& e) {
-                std::cerr << "Error during solving: " << e.what() << std::endl;
-                break;
-            }
-        }
-        
-
-        if (getIterationCount() == getMaxIterations()) {
-            std::cerr << "Newton-Raphson did not converge within the maximum number of iterations." << std::endl;
-        }
-
+        solver = new GaussElimSolve(logger);
     } else if (GetLinearSystemSolver() == "LU") {
-        LUSolve solver(logger);
-
-        while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
-            Eigen::MatrixXd J = NumericalJacobian(x);
-
-            try {
-                solver.SetA(J);
-                solver.SetB(-Fx);
-
-                Eigen::VectorXd delta = solver.Solve();
-                x += delta;
-
-                Fx = callF(x);
-                setIterationCount(getIterationCount() + 1);
-            
-            } catch (std::exception& e) {
-                std::cerr << "Error during solving: " << e.what() << std::endl;
-                break;
-            }
-        }
-        
-
-        if (getIterationCount() == getMaxIterations()) {
-            std::cerr << "Newton-Raphson did not converge within the maximum number of iterations." << std::endl;
-        }
+        solver = new LUSolve(logger);
     } else {
-        std::cerr << "Invalid linear system solver" << std::endl;
+        logger.error("Invalid linear system solver: " + GetLinearSystemSolver());
+        return x;
     }
+
+    while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
+        Eigen::MatrixXd J = NumericalJacobian(x);
+
+        try {
+            solver->SetA(J);
+            solver->SetB(-Fx);
+
+            Eigen::VectorXd delta = solver->Solve();
+            x += delta;
+
+            Fx = callF(x);
+            setIterationCount(getIterationCount() + 1);
+
+        } catch (std::exception& e) {
+            logger.error("Error during solving: " + str(e.what()));
+            break;
+        }
+    }
+
+    if (getIterationCount() == getMaxIterations()) {
+        logger.warning("Newton-Raphson did not converge within the maximum number of iterations.");
+    }
+
+    // Clean up solver to prevent memory leaks
+    delete solver;
+    solver = nullptr;
 
     return x;
 }

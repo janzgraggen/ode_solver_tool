@@ -21,7 +21,7 @@
  * @brief Type definition for a function that takes an Eigen vector as input and returns an Eigen vector.
  */
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
-
+using str = std::string;
 class RootFinder {
 /* ------------------------------------------------------------------------ */
 /* Members                                                                  */
@@ -88,6 +88,20 @@ public:
      * 
      * @param tol The tolerance value.
      */
+    virtual void SetLinearSystemSolver(str solver) = 0;
+
+    /** 
+     * @brief Sets the tolerance for convergence.
+     * 
+     * @param tol The tolerance value.
+     */
+    virtual str GetLinearSystemSolver() const = 0;
+
+    /** 
+     * @brief Sets the tolerance for convergence.
+     * 
+     * @param tol The tolerance value.
+     */
     void setTolerance(double tol);
 
     /** 
@@ -117,6 +131,7 @@ public:
      * @return The current iteration count.
      */
     int getIterationCount() const;
+
 
     /** 
      * @brief Gets the tolerance for convergence.
@@ -176,19 +191,6 @@ public:
      * @return The solution to the root-finding problem as an Eigen::VectorXd.
      */
     virtual Eigen::VectorXd Solve() = 0;
-
-protected:
-    /** 
-     * @brief Logs a step in the root-finding process.
-     * 
-     * This method can be overridden to provide custom logging of each step of the iteration.
-     * 
-     * @param iteration The current iteration number.
-     * @param currentSolution The current solution as an Eigen::VectorXd.
-     * @param currentError The error in the current solution.
-     */
-    virtual void logStep(int iteration, const Eigen::VectorXd& currentSolution, double currentError);
-
 };
 
 #endif //__ROOT_FINDER__HH__

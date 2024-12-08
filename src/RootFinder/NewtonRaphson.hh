@@ -27,9 +27,9 @@ public:
 
     // Setter and getter for dx
     void setDx(double dx);
-    void SetLinearSystemSolver(str solver);
+    void SetLinearSystemSolver(str solver) override;
     double getDx() const;
-    str GetLinearSystemSolver() const;
+    str GetLinearSystemSolver() const override;
 
     // Numerical Jacobian computation
     Eigen::MatrixXd NumericalJacobian(Eigen::VectorXd& x);

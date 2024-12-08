@@ -11,7 +11,7 @@ Function:
   f3: "2.0 * t"
   
 # OdeSolver settings
-solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
+solver_type: "Implicit"  # Choose between "Implicit" or "Explicit"
 OdeSolver:
   step_size: 0.01
   initial_time: 0.0

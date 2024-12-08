@@ -3,7 +3,7 @@
 //
 #include "RootFinder.hh"
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
-
+using str = std::string;
 /**
  * @file RootFinder.cc
  * @brief Implementation of the RootFinder class that provides a base for solving root-finding problems.
@@ -152,20 +152,4 @@ std::string RootFinder::getStatus() const {
  */
 Eigen::VectorXd RootFinder::callF(Eigen::VectorXd y1) {
     return F(y1);
-}
-
-// ------------------------------------------------------------------------ //
-// Logging and Output
-// ------------------------------------------------------------------------ //
-
-/**
- * @brief Logs a step in the root-finding process. This can be overridden for custom logging.
- * 
- * @param iteration The current iteration number.
- * @param currentSolution The current solution as an Eigen::VectorXd.
- * @param currentError The error in the current solution.
- */
-void RootFinder::logStep(int iteration, const Eigen::VectorXd& currentSolution, double currentError) {
-    // Default log output (this can be overridden in derived classes)
-    std::cout << "Iteration " << iteration << ": Error = " << currentError << std::endl;
 }

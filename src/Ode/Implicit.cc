@@ -116,14 +116,20 @@ void Implicit::SetRightHandSide(const f_TYPE& f) {
  * @throws std::runtime_error if an invalid root finder method is specified.
  */
 Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
+    RootFinder* solver = nullptr;
     if (GetRootFinder() == "NewtonRaphson") {
-        NewtonRaphson solver(logger,makeFstep(y, t));
-        solver.setInitialGuess(y);
-        solver.SetLinearSystemSolver(GetLinearSystemSolver());
-        return solver.Solve();
+        solver = new NewtonRaphson(logger,makeFstep(y, t));
+        solver->setInitialGuess(y);
+        solver->SetLinearSystemSolver(GetLinearSystemSolver());
+        return solver->Solve();
     } else {
-        throw std::runtime_error("Invalid root finder method: " + GetRootFinder());
+        logger.error("Invalid root finder method: " + GetRootFinder());
+        return Eigen::VectorXd(); // Return an empty vector
     }
+
+    // Clean up resources
+    delete solver;
+    solver = nullptr;
 }
 
 /**

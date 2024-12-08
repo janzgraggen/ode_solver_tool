@@ -17,6 +17,9 @@ function(add_optional_library LIB_NAME LIB_DIR)
     endif()
 endfunction()
 
+## Override ENABLE_OPENMP build option of muparser.(?: muparser is missing things to build with OpenMP)
+set(ENABLE_OPENMP OFF CACHE BOOL "Override muparser submodule build option ENABLE_OPENMP to OFF" FORCE)
+
 # Check directories of submodules
 add_optional_library(GOOGLETEST googletest)
 add_optional_library(EIGEN eigen)

@@ -24,14 +24,19 @@ Runner::~Runner() {}
 //run method
 
 Eigen::VectorXd Runner::run() {
+    Logger logger = Logger(Rdr.getVerbosity());
     OdeSolver* Solver = nullptr;
+    logger.debug("debug message");
+    logger.info("info message");
+    logger.warning("warning message");
+    logger.error("error message");
     if (Rdr.getSolverType() == "Explicit") {
         if (Rdr.getExplicitSettings().method == "ForwardEuler") {
-            Solver = new FwdEuler();
+            Solver = new FwdEuler(logger);
         } else if (Rdr.getExplicitSettings().method == "RungeKutta") {
-            Solver = new RungeKutta();
+            Solver = new RungeKutta(logger);
         } else if (Rdr.getExplicitSettings().method == "AdamsBashforth") {
-            Solver = new AdamsBashforth();
+            Solver = new AdamsBashforth(logger);
         } else {
             std::cout << "Invalid explicit solver method" << std::endl;
             return Eigen::VectorXd();  // Return empty vector for failure
@@ -40,7 +45,7 @@ Eigen::VectorXd Runner::run() {
     } else if (Rdr.getSolverType() == "Implicit") {
 
         if (Rdr.getImplicitSettings().method == "BackwardEuler") {
-            Solver = new BackwardEuler();
+            Solver = new BackwardEuler(logger);
         } else {
             std::cout << "Invalid implicit solver method" << std::endl;
             return Eigen::VectorXd();  // Return empty vector for failure

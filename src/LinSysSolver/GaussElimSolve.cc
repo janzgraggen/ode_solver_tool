@@ -4,6 +4,9 @@
 
 #include "GaussElimSolve.hh"
 
+GaussElimSolve::GaussElimSolve(Logger& logger_) : LinSysSolver(logger_) {}
+
+
 /**
  * @brief Solves the linear system of equations \( Ax = b \) using Gaussian elimination.
  *

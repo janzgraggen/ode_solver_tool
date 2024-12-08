@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cmath> 
 #include <stdexcept>
+#include "../Logger/Logger.hh"
 
 /**
  * @file RootFinder.hh
@@ -54,16 +55,19 @@ private:
     /** @brief Last computed solution. */
     Eigen::VectorXd lastSolution;
 
+
 /* ------------------------------------------------------------------------ */
 /* Methods                                                                  */
 /* ------------------------------------------------------------------------ */
 public:
+    /** @brief Logger object for logging messages. */
+    Logger logger;
     /**
      * @brief Constructor to initialize the root-finding process with a given function.
      * 
      * @param F Function to find the root of.
      */
-    RootFinder(F_TYPE F);
+    RootFinder(Logger& logger_,F_TYPE F);
 
     /**
      * @brief Constructor to initialize the root-finding process with a given function, tolerance, and maximum iterations.
@@ -72,7 +76,7 @@ public:
      * @param tol The tolerance for the solution.
      * @param maxIter The maximum number of iterations allowed.
      */
-    RootFinder(F_TYPE F, double tol, int maxIter);
+    RootFinder(Logger& logger_,F_TYPE F, double tol, int maxIter);
 
     /** 
      * @brief Destructor for cleaning up resources (if necessary).

@@ -16,7 +16,7 @@ public:
     /**
      * @brief Default constructor for the LUSolve class.
      */
-    LUSolve();
+    LUSolve(Logger& logger_); 
 
     /**
      * @brief Destructor for the LUSolve class.

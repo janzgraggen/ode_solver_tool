@@ -4,7 +4,7 @@
 
 #include "ForwardEuler.hh"
 
-FwdEuler::FwdEuler() {}
+FwdEuler::FwdEuler(Logger& logger_) : Explicit(logger_) {}
 FwdEuler::~FwdEuler() {}
 
 void FwdEuler::SetConfig(const Reader& Rdr) {

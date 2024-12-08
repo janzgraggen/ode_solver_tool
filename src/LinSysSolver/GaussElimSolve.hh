@@ -16,6 +16,11 @@
 class GaussElimSolve : public LinSysSolver {
 public:
     /**
+     * @brief Default constructor for GaussElimSolve.
+     */
+
+    GaussElimSolve(Logger& logger_);
+    /**
      * @brief Default destructor for GaussElimSolve.
      *
      * Ensures proper cleanup of resources, though no specific resources are allocated

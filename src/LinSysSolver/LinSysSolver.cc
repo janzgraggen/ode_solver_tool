@@ -16,7 +16,7 @@
 /**
  * @brief Default constructor for the LinSysSolver class.
  */
-LinSysSolver::LinSysSolver() {}
+LinSysSolver::LinSysSolver(Logger& logger_) : logger(logger_) {}
 
 // Destructor
 /**

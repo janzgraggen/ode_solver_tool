@@ -26,6 +26,8 @@ using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)>;
  */
 class BackwardEuler : public Implicit {
 public:
+
+    explicit BackwardEuler(Logger& logger_);
     /**
      * @brief Computes the function \( F(y_1, y_0, t_0) \) for the Backward Euler method.
      *

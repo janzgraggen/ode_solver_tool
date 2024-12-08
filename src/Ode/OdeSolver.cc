@@ -12,7 +12,7 @@ using str = std::string;
  *
  * Initializes the step size, initial time, and final time to zero.
  */
-OdeSolver::OdeSolver() : stepSize(0.0), initialTime(0.0), finalTime(0.0) {}
+OdeSolver::OdeSolver(Logger& logger_) : logger(logger_), stepSize(0.0), initialTime(0.0), finalTime(0.0) {}
 
 /**
  * @brief Virtual destructor for OdeSolver.

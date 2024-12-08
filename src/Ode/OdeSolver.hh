@@ -8,6 +8,7 @@
 #include <Eigen/Dense>
 #include <functional>
 #include "../src/Reader/Reader.hh"
+#include "../Logger/Logger.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 using str = std::string;
@@ -30,10 +31,11 @@ protected: //need protedted to be able do assign different functions (linear/non
     f_TYPE f_rhs; ///< The right-hand side function of the ODE.
 
 public:
+    Logger logger; ///< The logger object for logging messages. 
     /**
      * @brief Default constructor for the OdeSolver class.
      */
-    OdeSolver();
+    OdeSolver(Logger& logger_);
 
     /**
      * @brief Virtual destructor for the OdeSolver class.

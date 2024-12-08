@@ -9,7 +9,7 @@
 
 class FwdEuler : public Explicit {
 public:
-    FwdEuler();
+    FwdEuler(Logger& logger_);
     ~FwdEuler();
 
     void SetConfig(const Reader& Rdr) override;

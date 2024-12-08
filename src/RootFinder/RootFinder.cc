@@ -14,8 +14,8 @@ using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
  * 
  * @param F_in The function to be used for finding the root. It should take an Eigen::VectorXd and return an Eigen::VectorXd.
  */
-RootFinder::RootFinder(F_TYPE F_in)
-    : tolerance(1e-6), maxIterations(1000), iterationCount(0), converged(false), status("Not started"), F(F_in) {
+RootFinder::RootFinder(Logger& logger_ ,F_TYPE F_in)
+    : logger(logger_), tolerance(1e-6), maxIterations(1000), iterationCount(0), converged(false), status("Not started"), F(F_in) {
 }
 
 /**
@@ -25,8 +25,8 @@ RootFinder::RootFinder(F_TYPE F_in)
  * @param tol Custom tolerance for the root-finding process.
  * @param maxIter Custom maximum number of iterations allowed.
  */
-RootFinder::RootFinder(F_TYPE F_in, double tol, int maxIter)
-    : RootFinder(F_in) {  // Delegates to the first constructor
+RootFinder::RootFinder(Logger& logger_, F_TYPE F_in, double tol, int maxIter)
+    : RootFinder(logger_, F_in) {  // Delegates to the first constructor
     setTolerance(tol);    // Set custom tolerance
     setMaxIterations(maxIter);  // Set custom maximum iterations
 }

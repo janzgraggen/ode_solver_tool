@@ -4,6 +4,7 @@
 
 #include "Explicit.hh"
 
+Explicit::Explicit(Logger& logger_) : OdeSolver(logger_) {}
 // Eigen::VectorXd Explicit::SolveODE(std::ostream& stream) {
 //     Eigen::VectorXd y = GetInitialValue();  // Vector initialization.
 //     double t = GetInitialTime();

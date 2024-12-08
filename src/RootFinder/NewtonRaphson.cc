@@ -9,13 +9,13 @@
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
 using str = std::string;
 // Default constructor
-NewtonRaphson::NewtonRaphson(F_TYPE F_in)
-    : RootFinder(F_in), dx(1e-6) {  // Default step size dx set to 1e-6
+NewtonRaphson::NewtonRaphson(Logger& logger_ ,F_TYPE F_in)
+    : RootFinder(logger_,F_in), dx(1e-6) {  // Default step size dx set to 1e-6
 }
 
 // Parameterized constructor
-NewtonRaphson::NewtonRaphson(F_TYPE F_in, double tol, double dx, int maxIter)
-    : RootFinder(F_in), dx(dx){ // Use provided dx
+NewtonRaphson::NewtonRaphson(Logger& logger_,F_TYPE F_in, double tol, double dx, int maxIter)
+    : RootFinder(logger_,F_in), dx(dx){ // Use provided dx
     setTolerance(tol);
     setMaxIterations(maxIter);
 }
@@ -71,7 +71,7 @@ Eigen::VectorXd NewtonRaphson::Solve() {
     Eigen::VectorXd x = getInitialGuess();
     Eigen::VectorXd Fx = callF(x); 
     if (GetLinearSystemSolver() == "GaussianElimination") {
-        GaussElimSolve solver;
+        GaussElimSolve solver(logger);
 
         while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
             Eigen::MatrixXd J = NumericalJacobian(x);
@@ -98,7 +98,7 @@ Eigen::VectorXd NewtonRaphson::Solve() {
         }
 
     } else if (GetLinearSystemSolver() == "LU") {
-        LUSolve solver;
+        LUSolve solver(logger);
 
         while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
             Eigen::MatrixXd J = NumericalJacobian(x);

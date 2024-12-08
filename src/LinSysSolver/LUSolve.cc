@@ -13,7 +13,7 @@
 /**
  * @brief Default constructor for the LUSolve class.
  */
-LUSolve::LUSolve() = default;
+LUSolve::LUSolve(Logger& logger_) : LinSysSolver(logger_) {};
 
 // Destructor
 /**

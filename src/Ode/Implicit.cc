@@ -24,6 +24,8 @@ using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
  */
 using str = std::string;
 
+
+Implicit::Implicit(Logger& logger_): OdeSolver(logger_) {}
 /**
  * @brief Checks if the right-hand side function is linear.
  * @return `true` if the right-hand side is linear, `false` otherwise.
@@ -115,7 +117,7 @@ void Implicit::SetRightHandSide(const f_TYPE& f) {
  */
 Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
     if (GetRootFinder() == "NewtonRaphson") {
-        NewtonRaphson solver(makeFstep(y, t));
+        NewtonRaphson solver(logger,makeFstep(y, t));
         solver.setInitialGuess(y);
         solver.SetLinearSystemSolver(GetLinearSystemSolver());
         return solver.Solve();

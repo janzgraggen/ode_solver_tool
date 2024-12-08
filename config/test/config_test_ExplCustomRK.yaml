@@ -1,6 +1,6 @@
 # General configuration ––––––––––––––––––––––––––––––––––––––––
 output_file: #"output_test_ExplCustomRK.csv" #Empty string or Nothing for no output file
-solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
+verbosity_level: 2    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
 
 # Function configuration
 Dim: 3
@@ -8,8 +8,9 @@ Function:
   f1: "0"
   f2: "y2"
   f3: "2.0 * t"
-
+  
 # OdeSolver settings
+solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
 OdeSolver:
   step_size: 0.01
   initial_time: 0.0

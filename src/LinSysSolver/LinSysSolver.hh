@@ -5,6 +5,7 @@
 #define __LIN_SYS_SOLVER_HH__
 
 #include <Eigen/Dense>
+#include "../Logger/Logger.hh"
 
 /**
  * @class LinSysSolver
@@ -19,12 +20,12 @@ class LinSysSolver {
 private:
     Eigen::MatrixXd A;  //!< The coefficient matrix \( A \) in the system \( Ax = b \).
     Eigen::VectorXd b;  //!< The right-hand side vector \( b \) in the system \( Ax = b \).
-
 public:
+    Logger logger;  //!< The logger object for logging messages.
     /**
      * @brief Default constructor for LinSysSolver.
      */
-    LinSysSolver();
+    LinSysSolver(Logger& logger_);
 
     /**
      * @brief Virtual destructor for LinSysSolver.

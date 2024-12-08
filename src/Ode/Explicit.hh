@@ -23,6 +23,8 @@ public:
      */
     ~Explicit() override = default;
 
+    Explicit(Logger& logger_);
+
     /**
      * @brief Solves the ODE using an explicit method.
      *

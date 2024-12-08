@@ -7,16 +7,17 @@
 #include <iostream>
 
 
-AdamsBashforth::AdamsBashforth() {}
-AdamsBashforth::AdamsBashforth(int maxOrder) : maxOrder(maxOrder), customCoefficients(Eigen::VectorXd()) {
+AdamsBashforth::AdamsBashforth(Logger& logger_) : Explicit(logger_) {}
+AdamsBashforth::AdamsBashforth(Logger& logger_,int maxOrder) : Explicit(logger_) ,maxOrder(maxOrder), customCoefficients(Eigen::VectorXd()) {
     if (maxOrder < 1 || maxOrder > 4) {
         throw std::invalid_argument("Supported orders are 1 through 4.");
     }
     coefficients = generateCoefficients(1); // Start with order 1 coefficients
 }
 
-AdamsBashforth::AdamsBashforth(const Eigen::VectorXd customCoefficients)
-    : maxOrder(customCoefficients.size()),
+AdamsBashforth::AdamsBashforth(Logger& logger_,const Eigen::VectorXd customCoefficients)
+    : Explicit(logger_),
+      maxOrder(customCoefficients.size()),
       customCoefficients(customCoefficients),
       coefficients(generateCoefficients(1)) {}
 

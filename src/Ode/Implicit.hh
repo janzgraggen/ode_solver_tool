@@ -56,6 +56,8 @@ private:
     str root_finder; //!< Name of the root-finder to use for nonlinear systems.
 
 public:
+
+    Implicit(Logger& logger_);
     /**
      * @brief Default virtual destructor for Implicit class.
      */

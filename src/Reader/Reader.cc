@@ -53,7 +53,7 @@ f_TYPE Reader::getFunction() const {
 }
 
 int Reader::getVerbosity() const {
-    return config["verbose"].as<int>();
+    return config["verbosity_level"].as<int>();
 }
 
 

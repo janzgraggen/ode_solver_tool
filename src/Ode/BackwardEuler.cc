@@ -11,6 +11,7 @@
  * @brief Alias for a callable object that computes \( F(y) \), typically for root-finding or solving implicit equations.
  */
 
+BackwardEuler::BackwardEuler(Logger& logger_) : Implicit(logger_) {}
 /**
  * @brief Computes the function \( F(y_1, y_0, t_0) \) for the Backward Euler method.
  *
@@ -98,12 +99,12 @@ Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
 
     // Solve the linear system based on the chosen solver
     if (GetLinearSystemSolver() == "GaussianElimination") {
-        GaussElimSolve solver;
+        GaussElimSolve solver(logger);
         solver.SetA(A);
         solver.SetB(b);
         return solver.Solve();
     } else if (GetLinearSystemSolver() == "LU") {
-        LUSolve solver;
+        LUSolve solver(logger);
         solver.SetA(A);
         solver.SetB(b);
         return solver.Solve();

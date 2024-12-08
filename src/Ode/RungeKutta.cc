@@ -8,20 +8,20 @@
 /**
  * @brief Default constructor for Runge-Kutta methods.
  */
-RungeKutta::RungeKutta() {}
+RungeKutta::RungeKutta(Logger& logger_) : Explicit(logger_) {};
  
 /**
  * @brief Constructor for predefined Runge-Kutta methods by order.
  */
-RungeKutta::RungeKutta(const int order) : order(order) {
+RungeKutta::RungeKutta(Logger& logger_,const int order) : Explicit(logger_), order(order) {
     setOrder(order);
 }
 
 /**
  * @brief Constructor for user-defined Runge-Kutta coefficients.
  */
-RungeKutta::RungeKutta(const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c)
-    : a(a), b(b), c(c), order(static_cast<int>(b.size())) {}
+RungeKutta::RungeKutta(Logger& logger_,const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c)
+    : Explicit(logger_),a(a), b(b), c(c), order(static_cast<int>(b.size())) {}
 
 /**
  * @brief Sets the coefficients for a predefined Runge-Kutta method.

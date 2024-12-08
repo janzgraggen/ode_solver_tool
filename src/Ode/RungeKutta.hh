@@ -22,13 +22,13 @@ public:
     /**
      * @brief Default constructor for Runge-Kutta methods.
      */
-    RungeKutta();
+    explicit RungeKutta(Logger& logger_);
 
     /**
      * @brief Constructor for predefined Runge-Kutta methods by order.
      * @param order The order of the Runge-Kutta method (1, 2, 3, or 4).
      */
-    explicit RungeKutta(int order);
+    explicit RungeKutta(Logger& logger_,int order);
 
     /**
      * @brief Constructor for user-defined Runge-Kutta coefficients.
@@ -37,7 +37,7 @@ public:
      * @param c Nodes (time fractions).
      * @throws std::invalid_argument if has invalid settings
      */
-    RungeKutta(const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c);
+    RungeKutta(Logger& logger_,const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c);
 
     /**
      * @brief Sets the coefficients for a predefined Runge-Kutta method.

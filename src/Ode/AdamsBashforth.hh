@@ -32,9 +32,9 @@ public:
   * @brief Constructor for Adams-Bashforth methods by order.
   * @param maxOrder The maximum order of the Adams-Bashforth method (1, 2, 3, or 4).
   */
- explicit AdamsBashforth();
- explicit AdamsBashforth(int maxOrder);
- explicit AdamsBashforth(Eigen::VectorXd customCoefficients);
+ explicit AdamsBashforth(Logger& logger_);
+ explicit AdamsBashforth(Logger& logger_,int maxOrder);
+ explicit AdamsBashforth(Logger& logger_,Eigen::VectorXd customCoefficients);
 
  void SetMaxOrder(int maxOrder);
  void SetCustomCoefficients(Eigen::VectorXd customCoefficients);

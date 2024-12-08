@@ -4,19 +4,10 @@
 #include <iostream>
 #include <string>
 
-// Enum to define different verbosity levels
-enum class Verbosity {
-    Silent = 0,  // No output
-    Error,       // Error messages only
-    Warning,     // Error and warning messages
-    Info,        // Error, warning, and info messages
-    Debug        // Error, warning, info, and debug messages
-};
-
 class Logger {
 public:
-    // Constructor to set the verbosity level
-    explicit Logger(Verbosity verbosity);
+    // Constructor to set the verbosity level using an integer
+    explicit Logger(int verbosity);
 
     // Method to log error messages
     void error(const std::string& message) const;
@@ -31,7 +22,12 @@ public:
     void debug(const std::string& message) const;
 
 private:
-    Verbosity verbosity;  // Current verbosity level
+    int verbosity;  // Current verbosity level as an integer
+    static const int Silent = 0;
+    static const int Error = 1;
+    static const int Warning = 2;
+    static const int Info = 3;
+    static const int Debug = 4;
 };
 
 #endif // LOGGER_HH

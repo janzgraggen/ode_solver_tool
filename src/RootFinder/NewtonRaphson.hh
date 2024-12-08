@@ -17,10 +17,10 @@ private:
 public:
     // Constructors (need because additional dx argument to initialize)
     // Default constructor using std::function for flexibility
-    NewtonRaphson(F_TYPE F_in);
+    NewtonRaphson(Logger& logger_,F_TYPE F_in);
 
     // Parameterized constructor using std::function for flexibility
-    NewtonRaphson(F_TYPE F_in, double tol, double dx, int maxIter);
+    NewtonRaphson(Logger& logger_,F_TYPE F_in, double tol, double dx, int maxIter);
 
     // Destructor
     virtual ~NewtonRaphson();

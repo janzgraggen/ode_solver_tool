@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(PCSC-project)
 
 set(CMAKE_CXX_STANDARD 17)
-
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libraries as static" FORCE)
 
 # Function to handle library options and subdirectory addition
 function(add_optional_library LIB_NAME LIB_DIR)

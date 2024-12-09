@@ -1,7 +1,4 @@
 #include "Runner.hh"
-#include <iostream>
-#include <memory>
-#include <typeinfo>
 
 #include "../Ode/ForwardEuler.hh"
 #include "../Ode/RungeKutta.hh"

@@ -2,6 +2,9 @@
 // Created by janzgraggen on 28/11/2024.
 //
 
+#ifndef IMPLICIT_HH
+#define IMPLICIT_HH
+
 #include "OdeSolver.hh"
 #include "../Utils/LinSysStruct.hh"
 
@@ -164,3 +167,5 @@ public:
 
 
 };
+
+#endif // IMPLICIT_HH

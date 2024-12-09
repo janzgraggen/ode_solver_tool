@@ -12,7 +12,7 @@
  * @class AdamsBashforth
  * @brief A class to solve systems of ordinary differential equations (ODEs) using the Adams-Bashforth method with Eigen::VectorXd.
  */
-class AdamsBashforth final : public Explicit {
+class AdamsBashforth : public Explicit {
 private:
  int maxOrder; ///< Maximum order of the Adams-Bashforth method.
  Eigen::VectorXd coefficients; ///< Coefficients for the current order of the method.
@@ -34,7 +34,7 @@ public:
   */
  explicit AdamsBashforth(Logger& logger_);
  explicit AdamsBashforth(Logger& logger_,int maxOrder);
- explicit AdamsBashforth(Logger& logger_,Eigen::VectorXd customCoefficients);
+ explicit AdamsBashforth(Logger& logger_,const Eigen::VectorXd& customCoefficients);
 
  void SetMaxOrder(int maxOrder);
  void SetCustomCoefficients(Eigen::VectorXd customCoefficients);

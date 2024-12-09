@@ -6,9 +6,6 @@
 
 #include <Eigen/Dense>
 #include <functional>
-#include <iostream>
-#include <cmath> 
-#include <stdexcept>
 #include "../Logger/Logger.hh"
 
 /**

@@ -4,8 +4,6 @@
 #ifndef ODESOLVER_HH
 #define ODESOLVER_HH
 
-#include <iostream>
-#include <Eigen/Dense>
 #include <functional>
 #include "../src/Reader/Reader.hh"
 #include "../Logger/Logger.hh"

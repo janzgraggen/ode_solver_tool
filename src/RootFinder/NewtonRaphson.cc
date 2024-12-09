@@ -5,7 +5,6 @@
 #include "../LinSysSolver/LinSysSolver.hh"
 #include "../LinSysSolver/GaussElimSolve.hh"
 #include "../LinSysSolver/LUSolve.hh"
-#include <iostream>
 
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
 using str = std::string;

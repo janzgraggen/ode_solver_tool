@@ -4,22 +4,23 @@
 
 #include "AdamsBashforth.hh"
 #include <stdexcept>
-#include <iostream>
+#include <utility>
 
 
 AdamsBashforth::AdamsBashforth(Logger& logger_) : Explicit(logger_) {}
-AdamsBashforth::AdamsBashforth(Logger& logger_,int maxOrder) : Explicit(logger_) ,maxOrder(maxOrder), customCoefficients(Eigen::VectorXd()) {
+
+AdamsBashforth::AdamsBashforth(Logger& logger_, const int maxOrder) : Explicit(logger_) , maxOrder(maxOrder), customCoefficients(Eigen::VectorXd()) {
     if (maxOrder < 1 || maxOrder > 4) {
         throw std::invalid_argument("Supported orders are 1 through 4.");
     }
     coefficients = generateCoefficients(1); // Start with order 1 coefficients
 }
 
-AdamsBashforth::AdamsBashforth(Logger& logger_,const Eigen::VectorXd customCoefficients)
+AdamsBashforth::AdamsBashforth(Logger& logger_,const Eigen::VectorXd& customCoefficients)
     : Explicit(logger_),
       maxOrder(customCoefficients.size()),
-      customCoefficients(customCoefficients),
-      coefficients(generateCoefficients(1)) {}
+      coefficients(generateCoefficients(1)),
+      customCoefficients(customCoefficients) {}
 
 Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
     switch (order) {
@@ -32,7 +33,7 @@ Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
     }
 }
 
-void AdamsBashforth::SetMaxOrder(int maxOrder) {
+void AdamsBashforth::SetMaxOrder(const int maxOrder) {
     if (maxOrder < 1 || maxOrder > 4) {
         throw std::invalid_argument("Supported orders are 1 through 4.");
     }
@@ -40,7 +41,7 @@ void AdamsBashforth::SetMaxOrder(int maxOrder) {
 }
 
 void AdamsBashforth::SetCustomCoefficients(Eigen::VectorXd customCoefficients) {
-    this->customCoefficients = customCoefficients;
+    this->customCoefficients = std::move(customCoefficients);
 }
 
 
@@ -69,10 +70,10 @@ Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
     }
 
     // Determine the current order based on available history
-    const int currentOrder = static_cast<int>(history.size()) + 1;
 
     // Update coefficients dynamically if not using a custom vector
-    if (customCoefficients.size() != 0 && currentOrder == customCoefficients.size()) {
+    if (const int currentOrder = static_cast<int>(history.size()) + 1;
+        customCoefficients.size() != 0 && currentOrder == customCoefficients.size()) {
         coefficients = customCoefficients;
     } else if (currentOrder <= 4) {
         coefficients = generateCoefficients(currentOrder);

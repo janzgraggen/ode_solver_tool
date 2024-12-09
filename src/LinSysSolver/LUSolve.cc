@@ -1,5 +1,4 @@
 #include "LUSolve.hh"
-#include <stdexcept> // For runtime_error
 
 /**
  * @class LUSolve

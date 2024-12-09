@@ -1,7 +1,4 @@
 #include <iostream>
-#include "Ode/AdamsBashforth.hh"
-#include "Ode/ForwardEuler.hh"
-#include "Ode/RungeKutta.hh"
 #include "Reader/Reader.hh"
 #include "Runner/Runner.hh"
 

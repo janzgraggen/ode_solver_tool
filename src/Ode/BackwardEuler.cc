@@ -91,11 +91,12 @@ void BackwardEuler::SetConfig(const Reader& Rdr) {
  */
 Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
     // Create \( I - hA \)
-    Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(GetRhsSystem().A.rows(), GetRhsSystem().A.cols());
-    Eigen::MatrixXd A = identity - GetStepSize() * GetRhsSystem().A;
+  const Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(
+        GetRhsSystem().A.rows(), GetRhsSystem().A.cols());
+    const Eigen::MatrixXd A = identity - GetStepSize() * GetRhsSystem().A;
 
     // Create \( b + hy \)
-    Eigen::VectorXd b = GetStepSize() * GetRhsSystem().b + y;
+    const Eigen::VectorXd b = GetStepSize() * GetRhsSystem().b + y;
 
     // Solve the linear system based on the chosen solver
     if (GetLinearSystemSolver() == "GaussianElimination") {

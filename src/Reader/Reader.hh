@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
 #include <optional>
 #include "../Utils/LinSysStruct.hh"

@@ -1,6 +1,14 @@
-//
-// Created by [Your Name] on [Date].
-//
+/**
+ * @file BackwardEuler.hh
+ * @brief Header file for the BackwardEuler class.
+ *
+ * This header defines the `BackwardEuler` class, which implements the Backward Euler method
+ * for solving systems of ordinary differential equations (ODEs). It supports linear and implicit solvers.
+ * The method is built on top of the `Implicit` class and offers flexibility with configuration reading.
+ *
+ * Author: janzgraggen
+ * Date: 27/11/2024
+ */
 
 #include "BackwardEuler.hh"
 #include "../LinSysSolver/GaussElimSolve.hh"
@@ -11,7 +19,12 @@
  * @brief Alias for a callable object that computes \( F(y) \), typically for root-finding or solving implicit equations.
  */
 
+/**
+ * @brief Constructor for BackwardEuler, initializes with the logger.
+ * @param logger_ Logger instance to log messages.
+ */
 BackwardEuler::BackwardEuler(Logger& logger_) : Implicit(logger_) {}
+
 /**
  * @brief Computes the function \( F(y_1, y_0, t_0) \) for the Backward Euler method.
  *
@@ -37,7 +50,7 @@ Eigen::VectorXd BackwardEuler::F(Eigen::VectorXd y1, Eigen::VectorXd y0, double 
  * @brief Generates a callable object representing \( F(y_1) \) for root-finding.
  *
  * This method creates a function \( F \) where \( y_0 \) and \( t_0 \) are fixed parameters.
- * The returned function can be used with solvers like Newton-Raphson to find \( y_1 \).
+ * The returned function can be used with root-finding solvers like Newton-Raphson.
  *
  * @param y0 Solution vector at the current time step.
  * @param t0 Current time.
@@ -50,7 +63,7 @@ F_TYPE BackwardEuler::makeFstep(Eigen::VectorXd y0, double t0) {
 /**
  * @brief Configures the Backward Euler solver based on settings from a configuration reader.
  *
- * This method reads settings such as:
+ * Reads configuration settings such as:
  * - Whether the right-hand side is linear.
  * - The solver to use for linear systems or root-finding.
  * - Additional parameters like the RHS system or global configurations.
@@ -79,8 +92,8 @@ void BackwardEuler::SetConfig(const Reader& Rdr) {
  * (I - hA)y_1 = hy_0 + b
  * \]
  * is solved, where:
- * - \( A \) is the matrix from the linear RHS system.
- * - \( b \) is the vector from the linear RHS system.
+ * - \( A \) is the matrix representing the system's linear terms.
+ * - \( b \) is the vector from the system's right-hand side.
  *
  * This method uses the configured linear solver to compute \( y_1 \).
  *
@@ -90,15 +103,15 @@ void BackwardEuler::SetConfig(const Reader& Rdr) {
  * @throws std::runtime_error If the configured linear solver is invalid.
  */
 Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
-    // Create \( I - hA \)
-  const Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(
+    // Construct the matrix \( I - hA \)
+    const Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(
         GetRhsSystem().A.rows(), GetRhsSystem().A.cols());
     const Eigen::MatrixXd A = identity - GetStepSize() * GetRhsSystem().A;
 
-    // Create \( b + hy \)
+    // Construct the vector \( b + hy \)
     const Eigen::VectorXd b = GetStepSize() * GetRhsSystem().b + y;
 
-    // Solve the linear system based on the chosen solver
+    // Solve the system according to the configured solver
     if (GetLinearSystemSolver() == "GaussianElimination") {
         GaussElimSolve solver(logger);
         solver.SetA(A);

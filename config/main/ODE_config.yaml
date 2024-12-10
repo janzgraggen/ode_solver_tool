@@ -4,7 +4,7 @@ verbosity_level: 3    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
 
 # Function configuration
 Dim: 3
-Function: 
+Function: ## limited by muparser supported functions
   f1: "0"
   f2: "y2"
   f3: "2.0 * t"

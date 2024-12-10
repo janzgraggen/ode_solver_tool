@@ -1,16 +1,20 @@
-# ODE Solver Project
+```
+ _____ ____  _____ _____     _             
+|     |    \|   __|   __|___| |_ _ ___ ___
+|  |  |  |  |   __|__   | . | | | | -_|  _|
+|_____|____/|_____|_____|___|_|\_/|___|_|
+
+by Jan Zgraggen and Nathan Kabas Kuroiwa
+```
 
 ## General Information
 
-This project is dedicated to solving systems of ordinary differential equations (ODEs) of the form \( f: \mathbb{R}^n \to \mathbb{R}^n \). It offers a flexible framework for solving ODEs based on user-defined equations and configurations.
+Welcome to our **MATH-458: Programming Concepts in Scientific Computing** course project!
+It is dedicated to solving systems of ordinary differential equations (ODEs) of the form
+$$ \frac{dy}{dt} = f(t, y),$$ where we want to find $$\quad y(t) \in \mathbb{R}^n,$$
+given $$\quad f : \mathbb{R} \times \mathbb{R}^n \to \mathbb{R}^n \text{ and } \quad y(t_0)=y_0 \in \mathbb{R}^n.$$
 
-### Authors:
-- Jan Zgraggen 
-- Natan ...
-
-
-### Course:
-- This project was developed as part of EPFL's Math 458: PCSC course.
+It offers a flexible framework for solving ODEs based on user-defined equations and configurations.
 
 ---
 
@@ -19,13 +23,12 @@ This project is dedicated to solving systems of ordinary differential equations 
 ### Supported ODE Solvers
 - **Explicit Methods**:
   - Forward Euler
-  - Runge-Kutta (4th order)
-  - Adams-Bashforth (up to 3rd order)
+  - Runge-Kutta
+  - Adams-Bashforth
 - **Implicit Methods**:
   - Backward Euler
-  - Crank-Nicolson
 
-### Numerical Subroutines
+### Numerical Subroutines (for implicit methods)
 - **Linear System Solvers**:
   - Gaussian Elimination
   - LU Decomposition
@@ -38,31 +41,27 @@ This project is dedicated to solving systems of ordinary differential equations 
 ## Getting Started
 
 ### Dependencies
-To build and run the project, ensure the following libraries are installed:
+In this project, the following libraries are used:
 - [Eigen](https://eigen.tuxfamily.org)
 - [GoogleTest](https://github.com/google/googletest)
 - [muParser](https://beltoforion.de/en/muparser/)
 - [YAML-CPP](https://github.com/jbeder/yaml-cpp)
 
-If the dependencies are not automatically managed by CMake, initialize the submodules as follows:
+Dependencies should automatically be managed by CMake. If that's not the case please initialize the submodules as 
+follows:
 ```bash
 git submodule update --init --recursive
 ```
-Here is the content formatted as a complete README document:
 
----
+### Build Instructions
 
-# ODE Solver Project
-
-## Build Instructions
-
-### Create a build directory and navigate to it:
+Create a build directory and navigate to it:
 ```bash
 mkdir build
 cd build
 ```
 
-### Use CMake to configure and build the project:
+Use CMake to configure and build the project:
 ```bash
 cmake ..
 cmake --build .
@@ -84,7 +83,8 @@ cmake --build .
 
 ## Configuration Logic
 
-The configuration file (`ODE_config.yaml`) is structured into sections for flexible and user-friendly setup:
+The configuration file (`ODE_config.yaml`) is structured into sections for flexible and user-friendly setup. Many
+examples of configurations can be found in `config/test` for additional help!
 
 ### General Configuration
 - `output_file`: Path to the output file. Leave empty or set to `null` for no output.
@@ -92,7 +92,8 @@ The configuration file (`ODE_config.yaml`) is structured into sections for flexi
 
 ### Function Configuration
 - `Dim`: Number of dimensions for the ODE system.
-- `Function`: Define the functions \( f_1, f_2, \dots, f_n \) using expressions supported by `muParser`.
+- `Function`: Define the functions $$ f_1, f_2, \dots, f_n $$ using expressions supported by `muParser` (quite standard
+syntax). Please provide as many functions as there are dimensions, and refer to values of the vector y by `y1, ..., yn`.
 
 ### ODE Solver Settings
 - `solver_type`: Choose either `"Explicit"` or `"Implicit"`.
@@ -102,34 +103,55 @@ The configuration file (`ODE_config.yaml`) is structured into sections for flexi
   - `final_time`: End time of the simulation.
   - `initial_value`: List of initial values for the ODE system.
 
-### Explicit Solver Settings (if `solver_type = "Explicit"`)
+### Explicit Solver Settings (if `solver_type: "Explicit"`)
 - `method`: Choose from `"ForwardEuler"`, `"RungeKutta"`, or `"AdamsBashforth"`.
 - `RungeKutta`:
-  - `order`: Specify the order (1, 2, 3, 4) or leave empty.
-  - `coefficients`: Define custom Runge-Kutta coefficients (`a`, `b`, `c`) if needed.
+  - `order`: Specify the order (1, 2, 3, 4) or leave empty to use custom coefficients.
+  - `coefficients`: If needed, define custom Runge-Kutta coefficients (`a`, `b`, `c`) from a Butcher tableau (a:
+interactions, b: weights, c: intermediate steps).
+
+More documentation about the Runge-Kutta methods [here](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods).
+
 - `AdamsBashforth`:
   - `max_order`: Maximum order (1 to 4).
   - `coefficients_vector`: Specify coefficients if `max_order` is not used.
 
-### Implicit Solver Settings (if `solver_type = "Implicit"`)
-- `method`: Choose from `"BackwardEuler"` or `"CrankNicolson"`.
-- `rhs_is_linear`: Boolean to specify if the RHS is linear.
+For the Adams-Bashforth method, one should note that lower orders are used until having a large enough history for
+higher orders, such that only one initial vector is sufficient. More documentation about the Adams-Bashforth methods
+[here](https://en.wikipedia.org/wiki/Linear_multistep_method#Adams%E2%80%93Bashforth_methods).
+
+### Implicit Solver Settings (if `solver_type: "Implicit"`)
+- `method`: Choose `"BackwardEuler"`.
+- `rhs_is_linear`: Boolean to specify if the Right Hand Side (RHS) function is linear.
 - `linear_system_solver`: Choose from `"GaussianElimination"` or `"LU"`.
 - **Linear RHS**:
-  - `rhs_system`: Define the system matrix \( A \) and vector \( b \).
+  - `rhs_system`: Define the system matrix A and vector b such that $$ f = A y + b $$
 - **Nonlinear RHS**:
   - `tolerance`: Convergence tolerance for iterative methods.
   - `max_iterations`: Maximum number of iterations.
-  - `root_finder`: Choose from `"NewtonRaphson"` or `"FixedPoint"`.
+  - `root_finder`: Choose `"NewtonRaphson"`.
   - `dx`: Step size for numerical differentiation (used in `NewtonRaphson`).
-
-Refer to example configurations in the `config` folder for additional guidance.
 
 ---
 
 ## Retrieving Output
 
-Simulation results are saved in CSV format and can be found in the output directory. You can customize the output location and format through the configuration file.
+Simulation results at each time steps are saved in CSV format and can be found in the output directory.
+
+If there is no 
+output directory, one will be generated on first run. Once this is done, you can customize the output location in later
+runs by creating new folders inside this directory and specifying the right path in the configuration file.
+
+---
+
+## Doxygen Documentation
+
+The Doxyfile necessary to generate an .html is included in the repository. An `html` folder containing the `index.html` 
+is generated from building the project. Otherwise, it is also possible to run the command:
+the project.
+   ```bash
+   cmake --build . --target doc_doxygen
+   ```
 
 ---
 

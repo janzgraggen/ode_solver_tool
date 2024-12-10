@@ -1,30 +1,61 @@
-//
-// Created by natha on 27/11/2024.
-//
+/**
+ * @file RungeKutta.cc
+ * @brief Implementation of the RungeKutta class for solving ODEs using explicit Runge-Kutta methods.
+ *
+ * This source file contains the implementation of the RungeKutta class, which extends the Explicit class
+ * to provide various explicit Runge-Kutta methods for solving ordinary differential equations (ODEs).
+ *
+ * The class supports predefined methods by order (e.g., Euler, midpoint, classical Runge-Kutta) and
+ * user-defined coefficients. It also integrates seamlessly with the Reader class for configuration.
+ *
+ * Author: natha
+ * Date: 27/11/2024
+ */
 
 #include "RungeKutta.hh"
 
-
 /**
  * @brief Default constructor for Runge-Kutta methods.
+ *
+ * Initializes a Runge-Kutta solver with default settings, inheriting from the Explicit class.
+ *
+ * @param logger_ A reference to the Logger object for logging messages.
  */
-RungeKutta::RungeKutta(Logger& logger_) : Explicit(logger_) {};
- 
+RungeKutta::RungeKutta(Logger& logger_) : Explicit(logger_) {}
+
 /**
  * @brief Constructor for predefined Runge-Kutta methods by order.
+ *
+ * Initializes a Runge-Kutta solver with coefficients based on the specified method order.
+ *
+ * @param logger_ A reference to the Logger object for logging messages.
+ * @param order The order of the predefined Runge-Kutta method (e.g., 1 for Euler, 4 for classical Runge-Kutta).
  */
-RungeKutta::RungeKutta(Logger& logger_,const int order) : Explicit(logger_), order(order) {
+RungeKutta::RungeKutta(Logger& logger_, const int order) : Explicit(logger_), order(order) {
     setOrder(order);
 }
 
 /**
  * @brief Constructor for user-defined Runge-Kutta coefficients.
+ *
+ * Allows the user to specify custom coefficients for the Runge-Kutta method.
+ *
+ * @param logger_ A reference to the Logger object for logging messages.
+ * @param a The matrix of stage coefficients (Butcher tableau).
+ * @param b The vector of weights for the linear combination of stages.
+ * @param c The vector of nodes (time points) for the stages.
  */
-RungeKutta::RungeKutta(Logger& logger_,const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c)
-    : Explicit(logger_),a(a), b(b), c(c), order(static_cast<int>(b.size())) {}
+RungeKutta::RungeKutta(Logger& logger_, const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c)
+    : Explicit(logger_), a(a), b(b), c(c), order(static_cast<int>(b.size())) {}
 
 /**
  * @brief Sets the coefficients for a predefined Runge-Kutta method.
+ *
+ * Configures the Runge-Kutta solver with standard coefficients based on the specified method order.
+ * Throws an exception if the order is unsupported.
+ *
+ * @param order The desired order of the Runge-Kutta method.
+ * @throw std::invalid_argument If the specified order is not supported.
  */
 void RungeKutta::setOrder(const int order) {
     if (order == 1) {
@@ -72,6 +103,15 @@ void RungeKutta::setOrder(const int order) {
     this->order = order;
 }
 
+/**
+ * @brief Sets custom coefficients for the Runge-Kutta method.
+ *
+ * Updates the coefficients with user-defined values and sets the method order accordingly.
+ *
+ * @param a The matrix of stage coefficients (Butcher tableau).
+ * @param b The vector of weights for the linear combination of stages.
+ * @param c The vector of nodes (time points) for the stages.
+ */
 void RungeKutta::setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd& b, const Eigen::VectorXd& c) {
     this->a = a;
     this->b = b;
@@ -79,6 +119,14 @@ void RungeKutta::setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd
     this->order = static_cast<int>(b.size());
 }
 
+/**
+ * @brief Configures the Runge-Kutta solver using a Reader object.
+ *
+ * Loads the solver configuration, including method order or custom coefficients, from the Reader.
+ *
+ * @param Rdr The Reader object containing the configuration settings.
+ * @throw std::invalid_argument If the configuration is invalid or incomplete.
+ */
 void RungeKutta::SetConfig(const Reader& Rdr) {
     SetGlobalConfig(Rdr); // Call the base class method
 
@@ -98,6 +146,9 @@ void RungeKutta::SetConfig(const Reader& Rdr) {
 
 /**
  * @brief Computes a single step of the Runge-Kutta method.
+ *
+ * Advances the solution by one step using the Runge-Kutta integration formula.
+ *
  * @param y The current state vector \( y_n \).
  * @param t The current time \( t_n \).
  * @return The updated state vector \( y_{n+1} \).

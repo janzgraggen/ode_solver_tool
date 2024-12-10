@@ -1,13 +1,25 @@
-#include "Reader.hh"
-#include "FunctionParser.hh"
 /**
  * @file Reader.cc
  * @brief Implements the `Reader` class that loads configuration from a YAML file for ODE solvers.
+ *
+ * This source file contains the implementation of the `Reader` class, which loads ODE solver configurations
+ * from a YAML file. It parses solver types, function strings, and solver parameters while supporting
+ * explicit and implicit solver configurations. The class integrates seamlessly with the `FunctionParser`
+ * and YAML parsing library to provide a structured way to read and apply solver configurations.
+ *
+ * Author: [Your Name]
+ * Date: [YYYY-MM-DD]
  */
 
-// Constructor to load the YAML file
+#include "Reader.hh"
+#include "FunctionParser.hh"
+
 /**
- * @brief Constructs a `Reader` object and loads the specified YAML file.
+ * @brief Constructs a `Reader` object and loads the specified YAML configuration file.
+ *
+ * Loads the YAML configuration file provided by `filename`. If the file cannot be opened or parsed,
+ * a `std::runtime_error` is thrown.
+ *
  * @param filename The path to the YAML configuration file.
  * @throws std::runtime_error If the file cannot be opened or parsed.
  */
@@ -15,93 +27,129 @@ Reader::Reader(const str& filename) {
     config = YAML::LoadFile(filename);
 }
 
-// General configuration method to get the solver type
 /**
  * @brief Retrieves the solver type specified in the configuration.
+ *
+ * Reads the `solver_type` entry from the YAML configuration file.
+ *
  * @return A string indicating the solver type (e.g., "Implicit" or "Explicit").
  */
 str Reader::getSolverType() const {
     return config["solver_type"].as<str>();
 }
 
+/**
+ * @brief Retrieves the output filename specified in the configuration.
+ *
+ * Reads the `output_file` entry from the YAML configuration file.
+ *
+ * @return A string representing the output filename.
+ */
 str Reader::getOutputFileName() const {
     return config["output_file"].as<str>();
 }
 
-
+/**
+ * @brief Retrieves the dimension of the system from the configuration.
+ *
+ * Reads the `Dim` entry from the YAML configuration file, representing the number of state variables.
+ *
+ * @return An integer representing the dimension of the system.
+ */
 int Reader::getDim() const {
     return config["Dim"].as<int>();
 }
 
+/**
+ * @brief Retrieves the list of function strings for the system from the configuration.
+ *
+ * Constructs a list of function strings stored under the `Function` section in the YAML file.
+ *
+ * @return A `strList` containing function strings corresponding to the dimension of the system.
+ */
 strList Reader::getFunctionStringlist() const {
-    strList fct_strings; // Ensure strList is properly initialized (e.g., vector<string> or custom type)
-    fct_strings.resize(getDim()); // Resize the list to hold all functions
+    strList fct_strings;
+    fct_strings.resize(getDim());
 
     for (int i = 0; i < getDim(); i++) {
-        // Construct the key as "f{i}" using string concatenation
-        std::string key = "f" + std::to_string(i+1);
-
-        // Retrieve and store the function string
+        std::string key = "f" + std::to_string(i + 1);
         fct_strings[i] = config["Function"][key].as<str>();
     }
     return fct_strings;
 }
 
+/**
+ * @brief Returns a callable function that evaluates the stored functions dynamically.
+ *
+ * Constructs and returns a callable `f_TYPE` that uses the `FunctionParser` to bind and evaluate
+ * functions dynamically based on the configuration's state and time input.
+ *
+ * @return A callable `f_TYPE` lambda function that evaluates the functions given a state vector `y` and time `t`.
+ */
 f_TYPE Reader::getFunction() const {
-    return FunctionParser(getDim(),getFunctionStringlist()).getFunction();
+    return FunctionParser(getDim(), getFunctionStringlist()).getFunction();
 }
 
+/**
+ * @brief Retrieves the verbosity level from the configuration.
+ *
+ * Reads the `verbosity_level` entry in the YAML configuration file.
+ *
+ * @return An integer representing the verbosity level.
+ */
 int Reader::getVerbosity() const {
     return config["verbosity_level"].as<int>();
 }
 
-
-// Get OdeSolver settings
 /**
- * @brief Retrieves the general settings for the ODE solver.
- * @return An `OdeSettings` structure containing the ODE solver settings.
+ * @brief Retrieves the general settings for the ODE solver from the configuration.
+ *
+ * Parses the `OdeSolver` section of the YAML file and constructs an `OdeSettings` structure.
+ *
+ * @return An `OdeSettings` structure containing solver parameters like step size and initial values.
  */
 Reader::OdeSettings Reader::getOdeSettings() const {
     OdeSettings odeSolverSettings;
     auto odeSolverNode = config["OdeSolver"];
 
-    // Read values directly from the YAML node
     odeSolverSettings.step_size = odeSolverNode["step_size"].as<double>();
     odeSolverSettings.initial_time = odeSolverNode["initial_time"].as<double>();
     odeSolverSettings.final_time = odeSolverNode["final_time"].as<double>();
 
-    // Read the initial value as an Eigen::VectorXd
     auto initial_value = odeSolverNode["initial_value"].as<std::vector<double>>();
     odeSolverSettings.initial_value = Eigen::VectorXd::Map(initial_value.data(), initial_value.size());
 
     return odeSolverSettings;
 }
 
-// Get Explicit solver settings
 /**
- * @brief Retrieves the settings for explicit solvers.
- * @return An `ExplicitSettings` structure containing the explicit solver settings.
+ * @brief Retrieves the settings for explicit solvers from the configuration.
+ *
+ * Parses the `Explicit` section of the YAML configuration and sets up the solver parameters
+ * for explicit solvers, including support for different methods like Forward Euler, Runge-Kutta,
+ * and Adams-Bashforth.
+ *
+ * @return An `ExplicitSettings` structure containing explicit solver parameters.
  * @throws std::runtime_error If the configuration for an explicit solver is invalid.
  */
 Reader::ExplicitSettings Reader::getExplicitSettings() const {
     ExplicitSettings explSet;
     auto explicitNode = config["Explicit"];
     explSet.method = explicitNode["method"].as<str>();
+
     if (explSet.method == "ForwardEuler") {
-        // Handle ForwardEuler case (currently empty).
+        // Currently no specific configuration for Forward Euler method.
     } else if (explSet.method == "RungeKutta") {
-        // Check if an 'order' int is provided for Runge-Kutta method
         if (explicitNode["RungeKutta"]["order"].IsScalar()) {
             explSet.RungeKutta_order = explicitNode["RungeKutta"]["order"].as<int>();
-        }
-        // If 'order' is not provided, check if coefficients are available
-        else if (explicitNode["RungeKutta"]["coefficients"]["a"].IsSequence()
-            && explicitNode["RungeKutta"]["coefficients"]["b"].IsSequence()
-            && explicitNode["RungeKutta"]["coefficients"]["c"].IsSequence()) {
+        } else if (explicitNode["RungeKutta"]["coefficients"]["a"].IsSequence()
+                && explicitNode["RungeKutta"]["coefficients"]["b"].IsSequence()
+                && explicitNode["RungeKutta"]["coefficients"]["c"].IsSequence()) {
             auto rkCoefsNode = explicitNode["RungeKutta"]["coefficients"];
 
             auto a = rkCoefsNode["a"].as<std::vector<std::vector<double>>>();
             Eigen::MatrixXd a_matrix(a.size(), a[0].size());
+
             for (size_t i = 0; i < a.size(); ++i) {
                 a_matrix.row(i) = Eigen::VectorXd::Map(a[i].data(), a[i].size());
             }
@@ -116,7 +164,6 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
             throw std::runtime_error("Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
         }
     } else if (explSet.method == "AdamsBashforth") {
-        // Handle Adams-Bashforth case
         if (explicitNode["AdamsBashforth"]["max_order"].IsScalar()) {
             explSet.AdamsBashforth_max_order = explicitNode["AdamsBashforth"]["max_order"].as<int>();
         } else if (explicitNode["AdamsBashforth"]["coefficients_vector"].IsSequence()) {
@@ -132,24 +179,28 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
     return explSet;
 }
 
-// Get Implicit solver settings
 /**
- * @brief Retrieves the settings for implicit solvers.
- * @return An `ImplicitSettings` structure containing the implicit solver settings.
+ * @brief Retrieves the settings for implicit solvers from the configuration.
+ *
+ * Parses the `Implicit` section of the YAML configuration, constructing an `ImplicitSettings` structure
+ * with support for both linear and nonlinear solver configurations.
+ *
+ * @return An `ImplicitSettings` structure containing implicit solver parameters.
  * @throws std::runtime_error If the configuration for an implicit solver is invalid.
  */
 Reader::ImplicitSettings Reader::getImplicitSettings() const {
     ImplicitSettings implSet;
     auto implicitNode = config["Implicit"];
+
     if (implicitNode["method"].IsScalar()
-    && implicitNode["rhs_is_linear"].IsScalar()
-    && implicitNode["linear_system_solver"].IsScalar()) {
+        && implicitNode["rhs_is_linear"].IsScalar()
+        && implicitNode["linear_system_solver"].IsScalar()) {
         implSet.method = implicitNode["method"].as<str>();
         implSet.rhs_is_linear = implicitNode["rhs_is_linear"].as<bool>();
         implSet.linear_system_solver = implicitNode["linear_system_solver"].as<str>();
     }
+
     if (implSet.rhs_is_linear) {
-        // Read rhs system settings for linear case
         if (implicitNode["rhs_system"]["A"].IsSequence()) {
             auto A_matrix = implicitNode["rhs_system"]["A"].as<std::vector<std::vector<double>>>();
             Eigen::MatrixXd A(A_matrix.size(), A_matrix[0].size());
@@ -165,16 +216,16 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
         } else {
             throw std::runtime_error("Invalid rhs system settings: A is not provided.");
         }
+
         if (implicitNode["rhs_system"]["b"].IsSequence()) {
             auto b = implicitNode["rhs_system"]["b"].as<std::vector<double>>();
             implSet.rhs_system->b = Eigen::VectorXd::Map(b.data(), b.size());
         }
     } else {
-        // Handle non-linear cases
         if (implicitNode["tolerance"].IsScalar()
-        && implicitNode["max_iterations"].IsScalar()
-        && implicitNode["root_finder"].IsDefined()
-        && implicitNode["dx"].IsScalar()) {
+            && implicitNode["max_iterations"].IsScalar()
+            && implicitNode["root_finder"].IsDefined()
+            && implicitNode["dx"].IsScalar()) {
             implSet.tolerance = implicitNode["tolerance"].as<double>();
             implSet.max_iterations = implicitNode["max_iterations"].as<int>();
             implSet.dx = implicitNode["dx"].as<double>();

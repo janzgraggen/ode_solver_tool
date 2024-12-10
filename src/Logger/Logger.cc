@@ -12,36 +12,62 @@
 
 #include "Logger.hh"
 
-// Constructor to initialize the logging verbosity level.
-// @param verbosity An integer representing the desired logging verbosity.
+/**
+ * @brief Constructs a `Logger` instance and sets the logging verbosity level.
+ *
+ * The constructor initializes the logging instance with a specified verbosity level.
+ *
+ * @param verbosity An integer representing the desired logging verbosity.
+ *                  Higher values correspond to more verbose logging levels.
+ */
 Logger::Logger(int verbosity) : verbosity(verbosity) {}
 
-// Log error messages, only if the verbosity level is >= Error.
-// @param message The error message to be logged.
+/**
+ * @brief Logs error messages.
+ *
+ * Logs error messages only if the verbosity level is greater than or equal to the `Error` level.
+ *
+ * @param message The error message to be logged.
+ */
 void Logger::error(const std::string& message) const {
     if (verbosity >= Error) {
         std::cerr << "[ERROR]: " << message << std::endl;
     }
 }
 
-// Log warning messages, only if the verbosity level is >= Warning.
-// @param message The warning message to be logged.
+/**
+ * @brief Logs warning messages.
+ *
+ * Logs warning messages only if the verbosity level is greater than or equal to the `Warning` level.
+ *
+ * @param message The warning message to be logged.
+ */
 void Logger::warning(const std::string& message) const {
     if (verbosity >= Warning) {
         std::cout << "[WARNING]: " << message << std::endl;
     }
 }
 
-// Log informational messages, only if the verbosity level is >= Info.
-// @param message The informational message to be logged.
+/**
+ * @brief Logs informational messages.
+ *
+ * Logs informational messages only if the verbosity level is greater than or equal to the `Info` level.
+ *
+ * @param message The informational message to be logged.
+ */
 void Logger::info(const std::string& message) const {
     if (verbosity >= Info) {
         std::cout << "[INFO]: " << message << std::endl;
     }
 }
 
-// Log debug messages, only if the verbosity level is >= Debug.
-// @param message The debug message to be logged.
+/**
+ * @brief Logs debug messages.
+ *
+ * Logs debug messages only if the verbosity level is greater than or equal to the `Debug` level.
+ *
+ * @param message The debug message to be logged.
+ */
 void Logger::debug(const std::string& message) const {
     if (verbosity >= Debug) {
         std::cout << "[DEBUG]: " << message << std::endl;

@@ -24,9 +24,9 @@ Explicit:
     order: # Choose between 1, 2, 3, 4 (Optional, leave empty if using coefficients)
 
     coefficients:
-      a:
-      b:
-      c:
+      a: # Interactions, provide k rows of k-sized vectors
+      b: # Weights, provide k-sized vector
+      c: # Intermediate steps, provide k-sized vector
 
   # AdamsBashforth settings
   AdamsBashforth:
@@ -37,7 +37,7 @@ Explicit:
 # Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Implicit:
   method:  # Choose between "BackwardEuler" (or "CrankNicolson")
-  rhs_is_linear:
+  rhs_is_linear: # Bool
   linear_system_solver:  # Choose between "GaussianElimination" (or "LU") (also needed for systems in RootFinder)
   # if rhs is linear :y' = Ay + b
   rhs_system:         
@@ -46,5 +46,5 @@ Implicit:
   # if rhs is NOT linear 
   tolerance:
   max_iterations:
-  root_finder:  # Choose between "NewtonRaphson" (or "FixedPoint")
-  dx : # for NewtonRaphson (or methods that use numerical differentiation)  
+  root_finder:  # Choose "NewtonRaphson"
+  dx : # for NewtonRaphson (or other methods that use numerical differentiation)

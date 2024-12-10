@@ -1,25 +1,60 @@
+/**
+* @file Runner.hh
+ * @brief Defines the `Runner` class responsible for orchestrating the ODE solvers based on a configuration file.
+ *
+ * This header file contains the definition of the `Runner` class, which:
+ * - Reads a configuration file to determine solver types and methods.
+ * - Uses the `Reader` class to handle YAML parsing for extracting solver settings.
+ * - Provides a `run` method to dynamically create and execute the appropriate ODE solver.
+ *
+ * The `Runner` class encapsulates the interactions with the configuration and solver classes,
+ * ensuring the selected ODE solvers are correctly configured and executed while maintaining
+ * proper memory management and logging.
+ *
+ * @author: janzgraggen
+ * @date: 27/11/2024
+ */
+
 #ifndef RUNNER_HH
 #define RUNNER_HH
 
-#include "../Reader/Reader.hh"  // Assuming Reader is responsible for reading YAML
+#include "../Reader/Reader.hh"  // Header for the Reader class, responsible for reading YAML configuration
 #include <string>
 
 class Runner {
 private:
+    /** @brief Configuration file containing solver parameters and methods. */
     std::string config_file;
-    Reader Rdr;  // Assuming Reader can handle the YAML parsing
+
+    /** @brief Reader instance responsible for parsing the configuration YAML file. */
+    Reader Rdr;
 
 public:
-    //constructor
+    /**
+     * @brief Constructor for the Runner class.
+     *
+     * Initializes the Runner instance with a given configuration file.
+     *
+     * @param config_file The path to the configuration file containing ODE solver parameters.
+     */
     Runner(const std::string& config_file);
 
-    //destructor 
+    /**
+     * @brief Destructor for the Runner class.
+     *
+     * Cleans up any resources when the Runner instance is destroyed.
+     */
     ~Runner();
 
-    //run method
+    /**
+     * @brief Main method to run the ODE solver.
+     *
+     * Reads the solver type and method from the configuration file, dynamically creates
+     * the corresponding solver instance, configures it, and then executes the solver.
+     *
+     * @return Eigen::VectorXd The computed result of solving the ODE.
+     */
     Eigen::VectorXd run();
-
 };
-
 
 #endif // RUNNER_HH

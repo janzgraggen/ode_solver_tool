@@ -1,6 +1,30 @@
+/**
+ * @file FunctionParser.cc
+ * @brief Implementation of the FunctionParser class for parsing and evaluating mathematical functions.
+ *
+ * This source file contains the implementation of the FunctionParser class, which supports parsing,
+ * evaluating, and retrieving mathematical functions represented as strings. The class utilizes the
+ * muParser library to handle mathematical expressions and integrates with the Eigen library for vector
+ * operations. It provides functionality to bind variables dynamically and evaluate multiple functions
+ * efficiently while ensuring proper error handling.
+ *
+ * Author: janzgraggen
+ */
+
 #include "FunctionParser.hh"
 #include <stdexcept>
 
+ /**
+  * @brief Constructor for the FunctionParser class.
+  * 
+  * Initializes the FunctionParser with a specified dimension `n` and a list of functions.
+  * Sets up the parsers for each function, binds variables to shared storage, and parses the provided
+  * mathematical expressions.
+  *
+  * @param n Number of functions to parse and evaluate.
+  * @param functions A list of strings representing mathematical functions.
+  * @throws std::invalid_argument if `n` is zero or the number of provided functions does not match `n`.
+  */
 FunctionParser::FunctionParser(int n, const strList& functions)
     : f_i(functions), n(n) {
     if (n == 0) {
@@ -10,19 +34,16 @@ FunctionParser::FunctionParser(int n, const strList& functions)
         throw std::invalid_argument("The number of functions does not match the specified dimension (n).");
     }
 
-    // std::cout << "Number of functions (n): " << n << std::endl;
-    // std::cout << "FunctionParser initiated" << std::endl;
-
     // Initialize shared variables for parsers
-    variables.resize(n + 1); // First variable for t, rest for y1, ..., yn
+    variables.resize(n + 1); // First variable for time 't', the rest for y1, ..., yn
     parsers.resize(n);
 
     for (size_t i = 0; i < n; ++i) {
-        // std::cout << "Initializing parser for function: " << functions[i] << std::endl;
-
-        parsers[i].DefineVar("t", &variables[0]); // Time variable
+        // Define the "t" variable for time binding
+        parsers[i].DefineVar("t", &variables[0]);
+        // Define the y1, ..., yn variables for dynamic binding
         for (size_t j = 0; j < n; ++j) {
-            parsers[i].DefineVar("y" + std::to_string(j + 1), &variables[j + 1]); // y1, ..., yn
+            parsers[i].DefineVar("y" + std::to_string(j + 1), &variables[j + 1]);
         }
 
         try {
@@ -30,47 +51,44 @@ FunctionParser::FunctionParser(int n, const strList& functions)
         } catch (const mu::Parser::exception_type& e) {
             throw std::invalid_argument("Error in parsing function: " + std::string(e.GetMsg()));
         }
-
-        // std::cout << "Parser " << i << " initialized successfully.\n";
     }
 }
 
+/**
+ * @brief Evaluates the stored functions given an input vector.
+ *
+ * Takes an input vector containing time `t` and state variables `y1, ..., yn` and evaluates the stored
+ * functions by binding each value to the shared parser variables. It then returns an output vector of
+ * evaluated functions.
+ *
+ * @param input An Eigen::VectorXd containing input values [t, y1, ..., yn].
+ * @return Eigen::VectorXd containing the evaluated functions.
+ * @throws std::invalid_argument if the input vector size does not match `n + 1`.
+ * @throws std::runtime_error if an error occurs during function evaluation.
+ */
 Eigen::VectorXd FunctionParser::evaluate(const Eigen::VectorXd& input) {
-    // std::cout << "FunctionParser::evaluate() called" << std::endl;
-    
     if (input.size() != n + 1) {
         throw std::invalid_argument("Input vector size must be " + std::to_string(n + 1) + ".");
     }
 
-    // Assign input to variables
-    variables[0] = input[0]; // t
+    // Bind input values to the shared variables
+    variables[0] = input[0]; // Time 't'
     for (size_t i = 1; i <= n; ++i) {
-        variables[i] = input[i]; // y1, y2, ..., yn
+        variables[i] = input[i]; // State variables y1, y2, ..., yn
     }
 
-    // Debugging: Print out the variables before evaluation
-    // std::cout << "Variables for evaluation: ";
-    // for (size_t i = 0; i <= n; ++i) {
-    //     std::cout << variables[i] << " ";
-    // }
-    // std::cout << std::endl;
-
-    // Evaluate each function
+    // Evaluate each function and store the results
     Eigen::VectorXd output(n);
     for (size_t i = 0; i < n; ++i) {
         try {
-            // Debugging: Print the expression being evaluated
-            // std::cout << "Evaluating function " << i + 1 << ": " << f_i[i] << std::endl;
-
-            // Define variables in the parser (this is crucial to bind them correctly)
-            parsers[i].DefineVar("t", &variables[0]);  // Make sure t is defined
+            // Bind the "t" variable
+            parsers[i].DefineVar("t", &variables[0]);
+            // Bind y1, ..., yn dynamically
             for (size_t j = 0; j < n; ++j) {
-                parsers[i].DefineVar("y" + std::to_string(j + 1), &variables[j + 1]);  // y1, y2, ..., yn
+                parsers[i].DefineVar("y" + std::to_string(j + 1), &variables[j + 1]);
             }
 
             output[i] = parsers[i].Eval();
-
-            // std::cout << "Function " << i + 1 << " evaluated to: " << output[i] << std::endl;
         } catch (const mu::Parser::exception_type& e) {
             throw std::runtime_error("Error during evaluation: " + std::string(e.GetMsg()));
         }
@@ -78,64 +96,47 @@ Eigen::VectorXd FunctionParser::evaluate(const Eigen::VectorXd& input) {
     return output;
 }
 
+/**
+ * @brief Returns a lambda function to evaluate functions dynamically.
+ *
+ * Generates a lambda that captures the parsers and shared variables by value. The lambda takes time
+ * `t` and state vector `y` as inputs, updates the shared variables, and evaluates the stored functions.
+ *
+ * @return f_TYPE A lambda function that evaluates the functions given a state vector `y` and time `t`.
+ * @throws std::invalid_argument if the input state vector `y` size does not match `n`.
+ * @throws std::runtime_error if an error occurs during function evaluation.
+ */
 f_TYPE FunctionParser::getFunction() {
-    // std::cout << "FunctionParser::getFunction() called" << std::endl;
-
-    // Capture required data by value
     auto parsers_copy = parsers;
     auto n_copy = n;
 
     return [parsers_copy, n_copy, variables = this->variables](const Eigen::VectorXd& y, double t) mutable {
-        // std::cout << "Lambda function called with t: " << t << " and y: ";
-        // for (int i = 0; i < n_copy; ++i) {
-        //     std::cout << y[i] << " ";
-        // }
-        // std::cout << std::endl;
-
         if (y.size() != n_copy) {
             throw std::invalid_argument("Input vector y size must be " + std::to_string(n_copy) + ".");
         }
 
-        // Combine t and y into a single vector
+        // Combine time `t` and state variables `y` into a single input vector
         Eigen::VectorXd input(n_copy + 1);
-        input[0] = t; // Assign t to the first position
-        input.tail(n_copy) = y; // Assign y1, ..., yn to the rest of the vector
+        input[0] = t;
+        input.tail(n_copy) = y;
 
-        // Debugging: Print combined input vector
-        // std::cout << "Combined input vector for evaluation: ";
-        // for (int i = 0; i < input.size(); ++i) {
-        //     std::cout << input[i] << " ";
-        // }
-        // std::cout << std::endl;
-
-        // Update shared variables for the lambda
-        variables[0] = t; // Time variable
+        // Update shared variables with time and state values
+        variables[0] = t;
         for (size_t i = 1; i <= n_copy; ++i) {
-            variables[i] = input[i]; // y1, y2, ..., yn
+            variables[i] = input[i];
         }
 
-        // Debugging: Print updated variables
-        // std::cout << "Variables updated in lambda: ";
-        // for (size_t i = 0; i <= n_copy; ++i) {
-        //     std::cout << variables[i] << " ";
-        // }
-        // std::cout << std::endl;
-
-        // Define variables in the parser (this is crucial to bind them correctly)
         for (size_t i = 0; i < n_copy; ++i) {
-            parsers_copy[i].DefineVar("t", &variables[0]);  // Ensure t is defined
+            parsers_copy[i].DefineVar("t", &variables[0]);
             for (size_t j = 0; j < n_copy; ++j) {
-                parsers_copy[i].DefineVar("y" + std::to_string(j + 1), &variables[j + 1]);  // y1, y2, ..., yn
+                parsers_copy[i].DefineVar("y" + std::to_string(j + 1), &variables[j + 1]);
             }
         }
 
-        // Evaluate the function
         Eigen::VectorXd output(n_copy);
         for (size_t i = 0; i < n_copy; ++i) {
             try {
-                // std::cout << "Evaluating function " << i + 1 << ": " << parsers_copy[i].GetExpr() << std::endl;  // Print the expression
                 output[i] = parsers_copy[i].Eval();
-                // std::cout << "Function " << i + 1 << " evaluated to: " << output[i] << std::endl;
             } catch (const mu::Parser::exception_type& e) {
                 throw std::runtime_error("Error during evaluation: " + std::string(e.GetMsg()));
             }

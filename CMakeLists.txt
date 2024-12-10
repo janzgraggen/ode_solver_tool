@@ -59,3 +59,30 @@ target_link_libraries(test gtest_main gtest pthread eigen yaml-cpp muparser)
 
 # Custom target to run tests
 add_custom_target(run_tests COMMAND ./test DEPENDS test)
+
+# -------------------------------------------------------------------------------
+# Option to activate documentation generation
+option(DOCUMENTATION "Activate documentation" ON)
+
+if (DOCUMENTATION)
+    # Automatically find Doxygen executable
+    find_package(Doxygen REQUIRED)
+
+    if (DOXYGEN_FOUND)
+        message(STATUS "Doxygen found: ${DOXYGEN_EXECUTABLE}")
+
+        # Define the Doxyfile path
+        set(DOXYFILE "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile")
+
+        # Define a custom target to generate documentation
+        add_custom_target(doc_doxygen ALL
+                COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMENT "Generating API documentation with Doxygen"
+                VERBATIM
+        )
+    else()
+        message(WARNING "Doxygen was not found on your system.")
+    endif()
+
+endif(DOCUMENTATION)

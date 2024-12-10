@@ -1,31 +1,27 @@
-//
-// Created by janzgraggen on 28/11/2024.
-//
+/**
+ * @file Implicit.cc
+ * @brief Implementation of the `Implicit` base class for implicit ODE solvers.
+ *
+ * This file provides the implementation of the `Implicit` class, which serves as a base
+ * for implicit numerical methods for solving ordinary differential equations (ODEs).
+ * It includes functionality for handling linear and nonlinear systems, root finding,
+ * and configuration management.
+ *
+ * Author: janzgraggen
+ * Date: 28/11/2024
+ */
 
 #include "Implicit.hh"
 #include "../RootFinder/RootFinder.hh"
 #include "../RootFinder/NewtonRaphson.hh"
 
-
-/**
- * @typedef f_TYPE
- * @brief Alias for a function representing the ODE right-hand side.
- *
- * Represents a function \( f(y, t) \) where:
- * - `Eigen::VectorXd` is the state vector \( y \).
- * - `double` is the current time \( t \).
- * - Returns an `Eigen::VectorXd` as the result.
- */
+// Type alias definitions for function types and strings
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
-
-/**
- * @typedef str
- * @brief Alias for a standard string type.
- */
 using str = std::string;
 
+// Constructor
+Implicit::Implicit(Logger& logger_) : OdeSolver(logger_) {}
 
-Implicit::Implicit(Logger& logger_): OdeSolver(logger_) {}
 /**
  * @brief Checks if the right-hand side function is linear.
  * @return `true` if the right-hand side is linear, `false` otherwise.
@@ -110,6 +106,10 @@ void Implicit::SetRightHandSide(const f_TYPE& f) {
 
 /**
  * @brief Advances the solution for nonlinear systems using the root finder.
+ *
+ * This method uses the root-finding algorithm specified in the configuration
+ * to solve the nonlinear implicit relationship.
+ *
  * @param y Current solution vector.
  * @param t Current time.
  * @return The solution vector at the next time step.
@@ -118,24 +118,25 @@ void Implicit::SetRightHandSide(const f_TYPE& f) {
 Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
     RootFinder* solver = nullptr;
     if (GetRootFinder() == "NewtonRaphson") {
-        solver = new NewtonRaphson(logger,makeFstep(y, t));
+        solver = new NewtonRaphson(logger, makeFstep(y, t));
         solver->setInitialGuess(y);
         solver->SetLinearSystemSolver(GetLinearSystemSolver());
-        return solver->Solve();
+        Eigen::VectorXd solution = solver->Solve();
+
+        // Clean up resources
+        delete solver;
+        return solution;
     } else {
         logger.error("Invalid root finder method: " + GetRootFinder());
         return Eigen::VectorXd(); // Return an empty vector
     }
-
-    // Clean up resources
-    delete solver;
-    solver = nullptr;
 }
 
 /**
  * @brief Advances the solution by one time step.
  *
- * Determines whether to use linear or nonlinear methods based on the system configuration.
+ * This method determines whether to use linear or nonlinear methods based on
+ * the system configuration and calls the appropriate step function.
  *
  * @param y Current solution vector.
  * @param t Current time.

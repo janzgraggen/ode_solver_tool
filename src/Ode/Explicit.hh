@@ -1,6 +1,15 @@
-//
-// Created by natha on 25/11/2024.
-//
+/**
+* @file Explicit.hh
+ * @brief Header file for the Explicit class.
+ *
+ * This header defines the `Explicit` class, which serves as a base for explicit
+ * numerical methods to solve ordinary differential equations (ODEs).
+ * Derived classes must implement specific explicit schemes by overriding the
+ * appropriate methods. The class builds upon the functionality of `OdeSolver`.
+ *
+ * Author: natha
+ * Date: 25/11/2024
+ */
 
 #ifndef EXPLICIT_HH
 #define EXPLICIT_HH
@@ -11,29 +20,31 @@
  * @class Explicit
  * @brief A base class for explicit numerical methods for solving ODEs.
  *
- * This class extends `ODE_Solver` to provide a structure for explicit methods,
- * where derived classes implement the step logic for updating the solution.
+ * The `Explicit` class is a foundation for implementing numerical methods
+ * that use explicit schemes. These schemes calculate the state of a system
+ * at the next time step using only information from the current time step.
+ *
+ * This class inherits from `OdeSolver` and is intended to be subclassed.
+ * Derived classes should implement the `Step` method to define the explicit
+ * time-stepping algorithm.
  */
 class Explicit : public OdeSolver {
 public:
-    /**
-     * @brief Default virtual destructor for the Explicit class.
-     *
-     * Ensures proper cleanup in derived classes.
-     */
-    ~Explicit() override = default;
+  /**
+   * @brief Default virtual destructor for the Explicit class.
+   *
+   * Ensures proper cleanup in derived classes.
+   */
+  ~Explicit() override = default;
 
-    Explicit(Logger& logger_);
-
-    /**
-     * @brief Solves the ODE using an explicit method.
-     *
-     * Encapsulates the loop for integrating the ODE from the initial time to the final time
-     * using the step logic defined in derived classes. Writes the results to the given output stream.
-     *
-     * @param stream The output stream to write results (e.g., `std::cout` or a file stream).
-     */
-    //Eigen::VectorXd SolveODE(std::ostream& stream) override;
+  /**
+   * @brief Constructs the Explicit solver.
+   *
+   * Initializes the solver with a logger for recording messages and errors.
+   *
+   * @param logger_ A `Logger` object used for debugging and logging.
+   */
+  Explicit(Logger& logger_);
 };
 
 #endif // EXPLICIT_HH

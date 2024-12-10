@@ -1,6 +1,5 @@
 #include "FunctionParser.hh"
 #include <stdexcept>
-#include <iostream>
 
 FunctionParser::FunctionParser(int n, const strList& functions)
     : f_i(functions), n(n) {

@@ -1,6 +1,15 @@
-//
-// Created by janzgraggen on 28/11/2024.
-//
+/**
+ * @file Implicit.hh
+ * @brief Header file for the `Implicit` base class for ODE solvers.
+ *
+ * This file defines the `Implicit` class, providing a framework for solving
+ * ordinary differential equations (ODEs) using implicit numerical methods.
+ * It supports both linear and nonlinear systems and includes abstractions
+ * for root finding and linear system solving.
+ *
+ * Author: janzgraggen
+ * Date: 28/11/2024
+ */
 
 #ifndef IMPLICIT_HH
 #define IMPLICIT_HH
@@ -8,7 +17,7 @@
 #include "OdeSolver.hh"
 #include "../Utils/LinSysStruct.hh"
 
-/** 
+/**
  * @typedef f_TYPE
  * @brief Type definition for a function representing the ODE right-hand side.
  *
@@ -19,7 +28,7 @@
  */
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 
-/** 
+/**
  * @typedef F_TYPE
  * @brief Type definition for a function representing a root-finding function.
  *
@@ -29,7 +38,7 @@ using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
  */
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)>;
 
-/** 
+/**
  * @typedef str
  * @brief Alias for a standard string type.
  */
@@ -44,7 +53,6 @@ using str = std::string;
  * solver methods tailored to their requirements.
  */
 class Implicit : public OdeSolver {
-
 private:
     bool rhs_is_linear; //!< Flag indicating if the right-hand side function is linear.
     str linear_system_solver; //!< Name of the linear system solver to use.
@@ -125,7 +133,7 @@ public:
      *
      * Determines if the provided right-hand side function is linear,
      * and configures the solver accordingly.
-     * 
+     *
      * @param f The right-hand side function \( f(y, t) \).
      */
     void SetRightHandSide(const f_TYPE& f) override;
@@ -148,9 +156,9 @@ public:
 
     /**
      * @brief Creates a function \( F \) for a nonlinear step.
-     * 
+     *
      * This method is abstract and must be implemented by derived classes.
-     * 
+     *
      * @param y0 Initial solution vector.
      * @param t0 Initial time.
      * @return A function \( F(y) \) for root-finding or solving.
@@ -164,8 +172,6 @@ public:
      * @return The solution vector at the next time step.
      */
     Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;
-
-
 };
 
 #endif // IMPLICIT_HH

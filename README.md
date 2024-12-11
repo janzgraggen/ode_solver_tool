@@ -9,10 +9,13 @@ by Jan Zgraggen and Nathan Kabas Kuroiwa
 
 ## General Information
 
-Welcome to our **MATH-458: Programming Concepts in Scientific Computing** course project!
-It is dedicated to solving systems of ordinary differential equations (ODEs) of the form
-$$ \frac{dy}{dt} = f(t, y),$$ where we want to find $$\quad y(t) \in \mathbb{R}^n,$$
-given $$\quad f : \mathbb{R} \times \mathbb{R}^n \to \mathbb{R}^n \text{ and } \quad y(t_0)=y_0 \in \mathbb{R}^n.$$
+Welcome to our ODE-Solver Project!
+
+> Note: The project is part of the **MATH-458: Programming Concepts in Scientific Computing** course at EPFL (Fall semester 2024) thaught by Guillaume Anciaux.
+
+Built using C++, the project is dedicated to solving systems of ordinary differential equations (ODEs) of the form
+$\frac{dy}{dt} = f(t,y)$ , where we want to find $$\quad y(t) \in \mathbb{R}^n,$$
+given $$\quad f : \mathbb{R} \times \mathbb{R}^n \to \mathbb{R}^n \text{ and } \quad y(t_0)=y_0 \in \mathbb{R}^n $$.
 
 It offers a flexible framework for solving ODEs based on user-defined equations and configurations.
 
@@ -34,7 +37,6 @@ It offers a flexible framework for solving ODEs based on user-defined equations 
   - LU Decomposition
 - **Root-Finding**:
   - Newton-Raphson Method
-  - Fixed-Point Iteration
 
 ---
 
@@ -83,8 +85,7 @@ cmake --build .
 
 ## Configuration Logic
 
-The configuration file (`ODE_config.yaml`) is structured into sections for flexible and user-friendly setup. Many
-examples of configurations can be found in `config/test` for additional help!
+The configuration file (`ODE_config.yaml`) is structured into sections for flexible and user-friendly setup. Examples of configurations (which we used for testing) can be found in `config/test` for additional help!
 
 ### General Configuration
 - `output_file`: Path to the output file. Leave empty or set to `null` for no output.
@@ -126,6 +127,10 @@ higher orders, such that only one initial vector is sufficient. More documentati
 - `linear_system_solver`: Choose from `"GaussianElimination"` or `"LU"`.
 - **Linear RHS**:
   - `rhs_system`: Define the system matrix A and vector b such that $$ f = A y + b $$
+
+  > Note: If rha_is_linear is set to true, a right hand side (rhs) system has to be provided. (As opposed to setting the function via function definition). 
+  If a Linear function is desired to be computed with rootfinding rather than linear system solving, `rhs_is_linear` is set to false, the function is passed as above (cf. function configuration) and nonlinear settings apply.
+
 - **Nonlinear RHS**:
   - `tolerance`: Convergence tolerance for iterative methods.
   - `max_iterations`: Maximum number of iterations.
@@ -140,7 +145,7 @@ Simulation results at each time steps are saved in CSV format and can be found i
 
 If there is no 
 output directory, one will be generated on first run. Once this is done, you can customize the output location in later
-runs by creating new folders inside this directory and specifying the right path in the configuration file.
+runs by creating new folders inside this directory and specifying the right path in the configuration file. Or overwriting the current file by keepint the outputfilename the same. 
 
 ---
 

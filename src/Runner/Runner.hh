@@ -19,6 +19,7 @@
 #define RUNNER_HH
 
 #include "../Reader/Reader.hh"  // Header for the Reader class, responsible for reading YAML configuration
+#include "../Ode/OdeSolver.hh"  // Header for the OdeSolver class, the base class for ODE solvers
 #include <string>
 
 class Runner {
@@ -30,6 +31,7 @@ private:
     Reader Rdr;
 
 public:
+    Logger* logger;  // Logger instance for logging messages
     /**
      * @brief Constructor for the Runner class.
      *
@@ -37,7 +39,7 @@ public:
      *
      * @param config_file The path to the configuration file containing ODE solver parameters.
      */
-    Runner(const std::string& config_file);
+    Runner(Logger& logger_ , const std::string& config_file);
 
     /**
      * @brief Destructor for the Runner class.

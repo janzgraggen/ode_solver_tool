@@ -13,6 +13,7 @@
 
 #include "Reader.hh"
 #include "FunctionParser.hh"
+#include "../Logger/Logger.hh"
 
 /**
  * @brief Constructs a `Reader` object and loads the specified YAML configuration file.
@@ -23,7 +24,7 @@
  * @param filename The path to the YAML configuration file.
  * @throws std::runtime_error If the file cannot be opened or parsed.
  */
-Reader::Reader(const str& filename) {
+Reader::Reader(Logger& logger_,const str& filename) : logger(&logger_) {
     config = YAML::LoadFile(filename);
 }
 
@@ -101,6 +102,11 @@ int Reader::getVerbosity() const {
     return config["verbosity_level"].as<int>();
 }
 
+
+void Reader::setLoggerVerbosity() {
+    logger->setVerbosity(getVerbosity());
+}
+
 /**
  * @brief Retrieves the general settings for the ODE solver from the configuration.
  *
@@ -161,7 +167,8 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
             auto c = rkCoefsNode["c"].as<std::vector<double>>();
             explSet.RungeKutta_coefficients_c = Eigen::VectorXd::Map(c.data(), c.size());
         } else {
-            throw std::runtime_error("Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
+            logger->error("{in Reader::getExplicitSettings()} Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
+            //throw std::runtime_error("Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
         }
     } else if (explSet.method == "AdamsBashforth") {
         if (explicitNode["AdamsBashforth"]["max_order"].IsScalar()) {
@@ -170,7 +177,7 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
             auto v = explicitNode["AdamsBashforth"]["coefficients_vector"].as<std::vector<double>>();
             explSet.AdamsBashforth_coefficients_vector = Eigen::VectorXd::Map(v.data(), v.size());
         } else {
-            throw std::runtime_error("Invalid AdamsBashforth settings: Either 'maxOrder' or 'coefficients_vector' must be provided.");
+            logger->error("{in Reader::getExplicitSettings()} Invalid AdamsBashforth settings: Either 'maxOrder' or 'coefficients_vector' must be provided.");
         }
     } else {
         throw std::runtime_error("Invalid solver method: " + explSet.method);

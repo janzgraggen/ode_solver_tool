@@ -28,7 +28,7 @@ using str = std::string;
  *
  * @param logger_ Reference to the `Logger` object.
  */
-OdeSolver::OdeSolver(Logger& logger_) : logger(logger_), stepSize(0.0), initialTime(0.0), finalTime(0.0) {}
+OdeSolver::OdeSolver(Logger& logger_) : logger(&logger_), stepSize(0.0), initialTime(0.0), finalTime(0.0) {}
 
 /**
  * @brief Virtual destructor for OdeSolver.
@@ -137,9 +137,17 @@ void OdeSolver::SetInitialValue(const Eigen::VectorXd& y0) {
  */
 void OdeSolver::SetGlobalConfig(const Reader& Rdr) {
     SetOutputFileName(Rdr.getOutputFileName());
-    SetStepSize(Rdr.getOdeSettings().step_size);
-    SetTimeInterval(Rdr.getOdeSettings().initial_time, Rdr.getOdeSettings().final_time);
-    SetInitialValue(Rdr.getOdeSettings().initial_value);
+    if (Rdr.getOdeSettings().step_size <= 0.0  || Rdr.getOdeSettings().step_size > (Rdr.getOdeSettings().final_time - Rdr.getOdeSettings().initial_time)) {
+        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid step size: " + std::to_string(Rdr.getOdeSettings().step_size));
+    } else {
+        SetStepSize(Rdr.getOdeSettings().step_size);
+    }
+    if (Rdr.getOdeSettings().initial_time >= Rdr.getOdeSettings().final_time) {
+        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid time interval: [" + std::to_string(Rdr.getOdeSettings().initial_time) + ", " + std::to_string(Rdr.getOdeSettings().final_time) + "]");
+    } else {
+        SetTimeInterval(Rdr.getOdeSettings().initial_time, Rdr.getOdeSettings().final_time);
+        SetInitialValue(Rdr.getOdeSettings().initial_value);
+    }
     SetRightHandSide(Rdr.getFunction());
 }
 

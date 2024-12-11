@@ -21,7 +21,7 @@
  *
  * @param logger_ Reference to a Logger object.
  */
-LinSysSolver::LinSysSolver(Logger& logger_) : logger(logger_) {}
+LinSysSolver::LinSysSolver(Logger& logger_) : logger(&logger_) {}
 
 /**
  * @brief Virtual destructor for the LinSysSolver class.

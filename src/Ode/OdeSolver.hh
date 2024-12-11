@@ -46,7 +46,7 @@ protected: // Protected access to allow assignment of different right-hand side 
     f_TYPE f_rhs; ///< The right-hand side function of the ODE system.
 
 public:
-    Logger logger; ///< The logger object for logging messages and solver activities.
+    Logger* logger; ///< Pointer to the logger object for logging messages and solver activities.
 
     /**
      * @brief Default constructor for the OdeSolver class.

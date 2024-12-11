@@ -32,7 +32,7 @@ private:
     Eigen::VectorXd b;  //!< Right-hand side vector \( b \) for the system \( Ax = b \).
 
 public:
-    Logger logger;  //!< Logger object for logging system messages.
+    Logger* logger;  //!< Pointer to logger object for logging system messages.
 
     /**
      * @brief Default constructor for LinSysSolver.

@@ -19,7 +19,7 @@ OdeSolver:
 
 # Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Explicit:
-  method: "AdamsBashforth"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  method: "RungeKutta"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
   RungeKutta:
     order: # Choose between 1, 2, 3, 4 (Optional, leave empty if using coefficients)
 

@@ -113,16 +113,17 @@ Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
 
     // Solve the system according to the configured solver
     if (GetLinearSystemSolver() == "GaussianElimination") {
-        GaussElimSolve solver(logger);
+        GaussElimSolve solver(*logger);
         solver.SetA(A);
         solver.SetB(b);
         return solver.Solve();
     } else if (GetLinearSystemSolver() == "LU") {
-        LUSolve solver(logger);
+        LUSolve solver(*logger);
         solver.SetA(A);
         solver.SetB(b);
         return solver.Solve();
     } else {
         throw std::runtime_error("Invalid linear system solver: " + GetLinearSystemSolver());
+        logger->error("Invalid linear system solver: " + GetLinearSystemSolver());
     }
 }

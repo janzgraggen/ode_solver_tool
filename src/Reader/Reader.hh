@@ -6,6 +6,7 @@
 #include <yaml-cpp/yaml.h>
 #include <optional>
 #include "../Utils/LinSysStruct.hh"
+#include "../Logger/Logger.hh"
 
 using str = std::string;
 using strList = std::vector<std::string>;
@@ -30,6 +31,7 @@ using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
  */
 class Reader {
 public:
+    Logger *logger; //!< The logger object for logging messages and solver activities.
 
     /**
      * @brief Constructs a `Reader` object and loads the specified YAML configuration file.
@@ -40,7 +42,7 @@ public:
      *
      * @throws std::runtime_error If the file cannot be opened or parsed.
      */
-    Reader(const str& filename);
+    Reader(Logger& logger,const str& filename);
 
     /**
      * @brief Retrieves the solver type specified in the configuration.
@@ -85,6 +87,9 @@ public:
      * @return An integer representing the verbosity level.
      */
     int getVerbosity() const;
+
+    void setLoggerVerbosity();
+
 
     /**
      * @struct OdeSettings

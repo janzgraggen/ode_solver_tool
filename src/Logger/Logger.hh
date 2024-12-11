@@ -65,6 +65,8 @@ public:
      */
     void debug(const std::string& message) const;
 
+    void setVerbosity(int verbosity_);
+
 private:
     int verbosity;  //!< Current verbosity level of logging.
     static const int Silent = 0;  //!< Logging level for silent mode.

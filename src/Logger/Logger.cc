@@ -31,7 +31,9 @@ Logger::Logger(int verbosity) : verbosity(verbosity) {}
  */
 void Logger::error(const std::string& message) const {
     if (verbosity >= Error) {
-        std::cerr << "[ERROR]: " << message << std::endl;
+        std::string  error_msg = "[ERROR]: " + message;
+        //std::cerr << error_msg << std::endl;
+        throw std::runtime_error(error_msg);
     }
 }
 
@@ -72,4 +74,8 @@ void Logger::debug(const std::string& message) const {
     if (verbosity >= Debug) {
         std::cout << "[DEBUG]: " << message << std::endl;
     }
+}
+
+void Logger::setVerbosity(int verbosity_) {
+    this->verbosity = verbosity_;
 }

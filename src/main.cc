@@ -26,8 +26,10 @@
  * @return Exit status of the program (0 for successful execution).
  */
 int main() {
+    try {
     // Create a Runner instance using the configuration file for system parameters
-    Runner runner("../config/main/ODE_config.yaml");
+    Logger* loggerPtr = new Logger(0);
+    Runner runner(*loggerPtr, "../config/main/ODE_config.yaml");
 
     // Run the solver and get the final computed solution
     const Eigen::VectorXd finalSolution = runner.run();
@@ -40,4 +42,9 @@ int main() {
     }
 
     return 0;
+
+    } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
 }

@@ -21,12 +21,13 @@
 #include "../Ode/RungeKutta.hh"
 #include "../Ode/AdamsBashforth.hh"
 #include "../Ode/BackwardEuler.hh"
+#include "../Logger/Logger.hh"
 
 using str = std::string;
 
 // Constructor
-Runner::Runner(const std::string& config_file) :
-    config_file(config_file), Rdr(config_file) {}
+Runner::Runner(Logger& logger_, const std::string& config_file) :
+    config_file(config_file), Rdr(logger_, config_file) , logger(&logger_){}
 
 /**
  * @brief Destructor for the Runner class.
@@ -47,52 +48,53 @@ Runner::~Runner() {}
  * @return Eigen::VectorXd The result of solving the ODE.
  */
 Eigen::VectorXd Runner::run() {
-    Logger logger = Logger(Rdr.getVerbosity());
+    Rdr.setLoggerVerbosity();
     OdeSolver* Solver = nullptr;
 
     // Determine solver type and method from the configuration
     if (Rdr.getSolverType() == "Explicit") {
         if (Rdr.getExplicitSettings().method == "ForwardEuler") {
-            Solver = new FwdEuler(logger);
-            logger.info("Forward Euler solver instance created");
+            Solver = new FwdEuler(*logger);
+            logger->info("{in Runner::run()} Forward Euler solver instance created");
         } else if (Rdr.getExplicitSettings().method == "RungeKutta") {
-            Solver = new RungeKutta(logger);
-            logger.info("Runge-Kutta solver instance created");
+            Solver = new RungeKutta(*logger);
+            logger->info("{in Runner::run()} Runge-Kutta solver instance created");
         } else if (Rdr.getExplicitSettings().method == "AdamsBashforth") {
-            Solver = new AdamsBashforth(logger);
-            logger.info("Adams-Bashforth solver instance created");
+            Solver = new AdamsBashforth(*logger);
+            logger->info("{in Runner::run()} Adams-Bashforth solver instance created");
         } else {
-            logger.info("Invalid explicit solver method");
+            logger->info("{in Runner::run()} Invalid explicit solver method: Rdr.getExplicitSettings().method returned:" + Rdr.getExplicitSettings().method);
             return Eigen::VectorXd();  // Return empty vector for failure
         }
 
     } else if (Rdr.getSolverType() == "Implicit") {
         if (Rdr.getImplicitSettings().method == "BackwardEuler") {
-            Solver = new BackwardEuler(logger);
+            Solver = new BackwardEuler(*logger);
+            logger->info("{in Runner::run()} Backward Euler solver instance created");
         } else {
-            logger.info("Invalid implicit solver method");
+            logger->info("{in Runner::run()} Invalid implicit solver method: Rdr.getImplicitSettings().method returned:" + Rdr.getImplicitSettings().method);
             return Eigen::VectorXd();  // Return empty vector for failure
         }
     } else {
-        logger.error("Invalid solver type");
+        logger->error("{in Runner::run()} Invalid solver type: Rdr.getSolverType() returned:" + Rdr.getSolverType());
         return Eigen::VectorXd();  // Return empty vector for failure
     }
 
     // Check if solver instance creation was successful
     if (Solver == nullptr) {
-        logger.error("Solver instance not created");
+        logger->error("{in Runner::run()} Solver instance creation failed");
         delete Solver;
         return Eigen::VectorXd();  // Return empty vector for failure
     } else {
         Solver->SetConfig(Rdr);
-        logger.info("Solver configured successfully");
+        logger->info("{in Runner::run()} Solver configured successfully");
 
         Eigen::VectorXd Result = Solver->SolveODE();
-        logger.info("Solving completed successfully");
+        logger->info("{in Runner::run()} Solving completed successfully");
 
         // Clean up dynamically allocated memory
         delete Solver;  // Safely delete the solver instance
-        logger.info("Solver instance deleted for clean up");
+        logger->info("{in Runner::run()} Solver instance deleted for clean up");
         Solver = nullptr;  // Best practice to avoid dangling pointers
 
         return Result;

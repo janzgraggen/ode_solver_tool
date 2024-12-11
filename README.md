@@ -14,7 +14,7 @@ Welcome to our ODE-Solver Project!
 > Note: The project is part of the **MATH-458: Programming Concepts in Scientific Computing** course at EPFL (Fall semester 2024) thaught by Guillaume Anciaux.
 
 Built using C++, the project is dedicated to solving systems of ordinary differential equations (ODEs) of the form
-$\frac{dy}{dt} = f(t,y)$ , where we want to find $$\quad y(t) \in \mathbb{R}^n,$$
+$$\frac{dy}{dt} = f(t,y),$$ where we want to find $$\quad y(t) \in \mathbb{R}^n,$$
 given $$\quad f : \mathbb{R} \times \mathbb{R}^n \to \mathbb{R}^n \text{ and } \quad y(t_0)=y_0 \in \mathbb{R}^n $$.
 
 It offers a flexible framework for solving ODEs based on user-defined equations and configurations.

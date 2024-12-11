@@ -60,7 +60,7 @@ public:
      *
      * @param dx The step size to be set.
      */
-    void setDx(double dx);
+    void setDx(double dx) override;
 
     /**
      * @brief Sets the linear system solver to be used during the Newton-Raphson iterations.
@@ -74,7 +74,7 @@ public:
      *
      * @return The current step size `dx`.
      */
-    double getDx() const;
+    double getDx() const override;
 
     /**
      * @brief Retrieves the name of the selected linear system solver.

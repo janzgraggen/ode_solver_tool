@@ -80,7 +80,32 @@ void BackwardEuler::SetConfig(const Reader& Rdr) {
         SetRhsSystem(settings.rhs_system.value());
     } else {
         SetRootFinder(settings.root_finder.value());
+    } 
+
+    if (! GetRhsIsLinear() && 
+    settings.tolerance.has_value() &&
+    settings.max_iterations.has_value()) {
+        SetTolerance(settings.tolerance.value());
+        SetMaxIterations(settings.max_iterations.value());
+        if (GetTolerance() > 1e-6) {
+            logger->warning("{in BackwardEuler::SetConfig()} Big tolerance, result might be not precise: " + std::to_string(GetTolerance()));
+        }if (GetMaxIterations() < 50 ) {
+            logger->warning("{in BackwardEuler::SetConfig()} Small number of iterations, result might be not precise: " + std::to_string(GetMaxIterations()));
+        }if (GetMaxIterations() > 1e6) {
+            logger->warning("{in BackwardEuler::SetConfig()} Big number of iterations, possibly long run time: " + std::to_string(GetMaxIterations()));
+        }
+        if (settings.dx.has_value() && GetRootFinder() == "NewtonRaphson") {
+            SetDx(settings.dx.value());
+            if (GetDx() > 1e-3) {
+                logger->warning("{in BackwardEuler::SetConfig()} Big dx, result might be not precise: " + std::to_string(GetDx()));
+            }
+        } else {
+            logger->warning("{in BackwardEuler::SetConfig()} Missing parameter for root finder. Using default value.");
+        }
+    } else {
+        logger->warning("{in BackwardEuler::SetConfig()} Missing parameter for nonlinear solver. Using default values.");
     }
+    
 
     // Call the base class method to set global configurations. (After potential linear system setup -> SetRhsSystem based on it)
     SetGlobalConfig(Rdr);
@@ -126,5 +151,6 @@ Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
         return solver.Solve();
     } else {
         logger->error("{in BackwardEuler::LinStep()} Invalid linear system solver, GetLinearSystemSolver() returns: " + GetLinearSystemSolver());
+        return Eigen::VectorXd();
     }
 }

@@ -62,7 +62,7 @@ NewtonRaphson::~NewtonRaphson() {}
  *
  * @param dx The new step size value.
  */
-void NewtonRaphson::setDx(double dx) {
+void NewtonRaphson::setDx(double dx){
     this->dx = dx;
 }
 

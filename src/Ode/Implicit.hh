@@ -65,7 +65,9 @@ private:
     LinearSystem rhs_system;
 
     str root_finder; //!< Name of the root-finder to use for nonlinear systems.
-
+    double tol; //!< Tolerance for root-finding algorithms.
+    int max_iter; //!< Maximum number of iterations for root-finding.
+    double dx; //!< Step size for numerical differentiation.
 public:
 
     Implicit(Logger& logger_);
@@ -100,7 +102,43 @@ public:
      */
     LinearSystem GetRhsSystem() const;
 
+    /**
+     * @brief Retrieves the tolerance for root-finding algorithms.
+     * @return The tolerance value as a double.
+     */
+    double GetTolerance() const;
+
+    /**
+     * @brief Retrieves the maximum number of iterations for root-finding.
+     * @return The maximum number of iterations as an integer.
+     */
+    int GetMaxIterations() const;
+
+    /**
+     * @brief Retrieves the step size for numerical differentiation.
+     * @return The step size value as a double.
+     */
+    double GetDx() const;
+
     // Setters
+
+    /**
+     * @brief Sets the step size for numerical differentiation.
+     * @param dx The step size value to set.
+     */
+    void SetDx(double dx);
+
+    /**
+     * @brief Sets the number of iterations for root-finding.
+     * @param max_iter The maximum number of iterations to set.
+     */
+    void SetMaxIterations(int max_iter);
+
+    /**
+     * @brief Sets the tolerance for root-finding algorithms.
+     * @param tol The tolerance value to set.
+     */
+    void SetTolerance(double tol); 
 
     /**
      * @brief Sets the linearity flag of the right-hand side function.

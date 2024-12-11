@@ -110,6 +110,21 @@ public:
      * @param iter The iteration count to be updated.
      */
     void setIterationCount(int iter);
+    
+    /**
+     * @brief Retrieves the step size for numerical differentiation. (implemented in derived classes that require it)
+     *
+     * @return The current iteration count.
+     */
+    virtual void setDx(double dx) = 0;
+
+
+    /**
+     * @brief Retrieves the step size for numerical differentiation. (implemented in derived classes that require it)
+     *
+     * @return The current iteration count.
+     */
+    virtual double getDx() const = 0;
 
     /**
      * @brief Retrieves the number of iterations executed so far.

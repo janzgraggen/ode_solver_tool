@@ -1,16 +1,16 @@
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output_test_ExplAB4.csv" # Empty string or Nothing for no output file
-verbosity_level: 3    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
+output_file: #"output_test_ImplBwdEulerLinear.csv" #Empty string or Nothing for no output file
+verbosity_level: 2    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
 
 # Function configuration
 Dim: 3
-Function: ## limited by muparser supported functions
+Function: 
   f1: "0"
   f2: "y2"
   f3: "2.0 * t"
   
 # OdeSolver settings
-solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
+solver_type: "Implicit"  # Choose between "Implicit" or "Explicit"
 OdeSolver:
   step_size: 0.01
   initial_time: 0.0
@@ -19,32 +19,34 @@ OdeSolver:
 
 # Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Explicit:
-  method: "RungeKutta"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  method:  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  #if method is "RungeKutta"
   RungeKutta:
-    order: # Choose between 1, 2, 3, 4 (Optional, leave empty if using coefficients)
-
+    order:  # Choose between 1, 2, 3, 4
+    #if not order
     coefficients:
-      a: # Interactions, provide k rows of k-sized vectors
-      b: # Weights, provide k-sized vector
-      c: # Intermediate steps, provide k-sized vector
+      a:
+      b:
+      c:
 
-  # AdamsBashforth settings
+  #if method is "AdamsBashforth"
   AdamsBashforth:
-    max_order: 4  # Choose between 1, 2, 3, 4
+    max_order: # Choose between 1, 2, 3, 4
     #if NOT max_order
-    #coefficients_vector:
+    coefficients_vector:
+
 
 # Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Implicit:
-  method:  # Choose between "BackwardEuler" (or "CrankNicolson")
-  rhs_is_linear: # Bool
-  linear_system_solver:  # Choose between "GaussianElimination" (or "LU") (also needed for systems in RootFinder)
+  method: "BackwardEuler"  # Choose between "BackwardEuler" (or "CrankNicolson")
+  rhs_is_linear: false
+  linear_system_solver: "GaussianElimination"  # Choose between "GaussianElimination"  "LU"  (also needed for systems in RootFinding)
   # if rhs is linear :y' = Ay + b
   rhs_system:         
     A:
     b:
   # if rhs is NOT linear 
-  tolerance:
-  max_iterations:
-  root_finder:  # Choose "NewtonRaphson"
-  dx : # for NewtonRaphson (or other methods that use numerical differentiation)
+  tolerance: 0.01
+  max_iterations: 50
+  root_finder: "NewtonRaphson"  # Choose between "NewtonRaphson" (or "FixedPoint")
+  dx : 0.0001 # for NewtonRaphson (or methods that use numerical differentiation)

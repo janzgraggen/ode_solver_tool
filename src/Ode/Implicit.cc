@@ -20,7 +20,7 @@ using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 using str = std::string;
 
 // Constructor
-Implicit::Implicit(Logger& logger_) : OdeSolver(logger_) {}
+Implicit::Implicit(Logger& logger_) : OdeSolver(logger_), tol(0.0), max_iter(0), dx(1e-6) {}
 
 /**
  * @brief Checks if the right-hand side function is linear.
@@ -60,6 +60,58 @@ str Implicit::GetRootFinder() const {
  */
 LinearSystem Implicit::GetRhsSystem() const {
     return rhs_system;
+}
+
+
+/**
+ * @brief Retrieves the tolerance for root-finding algorithms.
+ * @return The tolerance value as a double.
+ */
+double Implicit::GetTolerance() const {
+    return tol;   
+}
+
+/**
+ * @brief Retrieves the maximum number of iterations for root-finding.
+ * @return The maximum number of iterations as an integer.
+ */
+
+int Implicit::GetMaxIterations() const {
+    return max_iter;
+
+}
+
+/**
+ * @brief Retrieves the step size for numerical differentiation.
+ * @return The step size value as a double.
+ */
+double Implicit::GetDx() const {
+    return dx;
+}
+
+/**
+ * @brief Sets the step size for numerical differentiation.
+ * @param dx The step size value to set.
+ */
+void Implicit::SetDx(double dx) {
+    this->dx = dx;
+}
+
+/**
+ * @brief Sets the number of iterations for root-finding.
+ * @param max_iter The maximum number of iterations to set.
+ */
+void Implicit::SetMaxIterations(int max_iter) {
+    this->max_iter = max_iter;
+}
+
+/**
+ * @brief Sets the tolerance for root-finding algorithms.
+ * @param tol The tolerance value to set.
+ */
+
+void Implicit::SetTolerance(double tol) {
+    this->tol = tol;
 }
 
 /**
@@ -121,6 +173,20 @@ Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
         solver = new NewtonRaphson(*logger, makeFstep(y, t));
         solver->setInitialGuess(y);
         solver->SetLinearSystemSolver(GetLinearSystemSolver());
+        
+        if (GetTolerance() && GetMaxIterations()) { //< they are initialized to 0
+            solver->setTolerance(GetTolerance());
+            solver->setMaxIterations(GetMaxIterations());
+            if (GetDx() && GetRootFinder() == "NewtonRaphson") {
+                solver->setDx(GetDx());
+            } else {
+                logger->warning("{in Implicit::NonLinStep()} Missing parameter for nonlinear solver: dx. Using default values.");
+            }
+
+        } else {
+            logger->warning("{in Implicit::NonLinStep()} Missing parameter for nonlinear solver. Using default values.");
+        }
+        
         Eigen::VectorXd solution = solver->Solve();
 
         // Clean up resources

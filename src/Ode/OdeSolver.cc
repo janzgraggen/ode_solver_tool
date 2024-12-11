@@ -16,6 +16,7 @@
 
 #include "OdeSolver.hh"
 #include "../Writer/CSVWriter.hh"
+#include "../Utils/SettingsStruct.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
 using str = std::string;
@@ -137,16 +138,21 @@ void OdeSolver::SetInitialValue(const Eigen::VectorXd& y0) {
  */
 void OdeSolver::SetGlobalConfig(const Reader& Rdr) {
     SetOutputFileName(Rdr.getOutputFileName());
-    if (Rdr.getOdeSettings().step_size <= 0.0  || Rdr.getOdeSettings().step_size > (Rdr.getOdeSettings().final_time - Rdr.getOdeSettings().initial_time)) {
-        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid step size: " + std::to_string(Rdr.getOdeSettings().step_size));
+    OdeSettings settings = Rdr.getOdeSettings();
+    if (settings.step_size <= 0.0  || settings.step_size > (settings.final_time - settings.initial_time)) {
+        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid step size: " + std::to_string(settings.step_size));
     } else {
-        SetStepSize(Rdr.getOdeSettings().step_size);
+        SetStepSize(settings.step_size);
     }
-    if (Rdr.getOdeSettings().initial_time >= Rdr.getOdeSettings().final_time) {
-        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid time interval: [" + std::to_string(Rdr.getOdeSettings().initial_time) + ", " + std::to_string(Rdr.getOdeSettings().final_time) + "]");
+    if (settings.initial_time >= settings.final_time) {
+        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid time interval: [" + std::to_string(settings.initial_time) + ", " + std::to_string(settings.final_time) + "]");
     } else {
-        SetTimeInterval(Rdr.getOdeSettings().initial_time, Rdr.getOdeSettings().final_time);
-        SetInitialValue(Rdr.getOdeSettings().initial_value);
+        SetTimeInterval(settings.initial_time, settings.final_time);
+        SetInitialValue(settings.initial_value);
+    }
+    int iters = std::floor((settings.final_time- settings.initial_time)/settings.step_size);
+    if (iters > 1e6) {
+        logger->warning("{in OdeSolver::SetGlobalConfig()} Large number of steps: " + std::to_string(iters));
     }
     SetRightHandSide(Rdr.getFunction());
 }

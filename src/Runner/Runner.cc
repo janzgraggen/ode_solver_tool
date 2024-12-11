@@ -52,31 +52,34 @@ Eigen::VectorXd Runner::run() {
     OdeSolver* Solver = nullptr;
 
     // Determine solver type and method from the configuration
-    if (Rdr.getSolverType() == "Explicit") {
-        if (Rdr.getExplicitSettings().method == "ForwardEuler") {
+    str SolverType = Rdr.getSolverType();
+    if (SolverType == "Explicit") {
+        str methodName = Rdr.getExplicitSettings().method; 
+        if (methodName == "ForwardEuler") {
             Solver = new FwdEuler(*logger);
             logger->info("{in Runner::run()} Forward Euler solver instance created");
-        } else if (Rdr.getExplicitSettings().method == "RungeKutta") {
+        } else if (methodName == "RungeKutta") {
             Solver = new RungeKutta(*logger);
             logger->info("{in Runner::run()} Runge-Kutta solver instance created");
-        } else if (Rdr.getExplicitSettings().method == "AdamsBashforth") {
+        } else if (methodName == "AdamsBashforth") {
             Solver = new AdamsBashforth(*logger);
             logger->info("{in Runner::run()} Adams-Bashforth solver instance created");
         } else {
-            logger->info("{in Runner::run()} Invalid explicit solver method: Rdr.getExplicitSettings().method returned:" + Rdr.getExplicitSettings().method);
+            logger->error("{in Runner::run()} Invalid explicit solver method: Rdr.getExplicitSettings().method returned:" + methodName);
             return Eigen::VectorXd();  // Return empty vector for failure
         }
 
-    } else if (Rdr.getSolverType() == "Implicit") {
-        if (Rdr.getImplicitSettings().method == "BackwardEuler") {
+    } else if (SolverType == "Implicit") {
+        str methodName = Rdr.getImplicitSettings().method; 
+        if (methodName == "BackwardEuler") {
             Solver = new BackwardEuler(*logger);
             logger->info("{in Runner::run()} Backward Euler solver instance created");
         } else {
-            logger->info("{in Runner::run()} Invalid implicit solver method: Rdr.getImplicitSettings().method returned:" + Rdr.getImplicitSettings().method);
+            logger->error("{in Runner::run()} Invalid implicit solver method: Rdr.getImplicitSettings().method returned:" + methodName);
             return Eigen::VectorXd();  // Return empty vector for failure
         }
     } else {
-        logger->error("{in Runner::run()} Invalid solver type: Rdr.getSolverType() returned:" + Rdr.getSolverType());
+        logger->error("{in Runner::run()} Invalid solver type: Rdr.getSolverType() returned:" + SolverType);
         return Eigen::VectorXd();  // Return empty vector for failure
     }
 

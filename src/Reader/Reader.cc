@@ -114,7 +114,7 @@ void Reader::setLoggerVerbosity() {
  *
  * @return An `OdeSettings` structure containing solver parameters like step size and initial values.
  */
-Reader::OdeSettings Reader::getOdeSettings() const {
+OdeSettings Reader::getOdeSettings() const {
     OdeSettings odeSolverSettings;
     auto odeSolverNode = config["OdeSolver"];
 
@@ -138,7 +138,7 @@ Reader::OdeSettings Reader::getOdeSettings() const {
  * @return An `ExplicitSettings` structure containing explicit solver parameters.
  * @throws std::runtime_error If the configuration for an explicit solver is invalid.
  */
-Reader::ExplicitSettings Reader::getExplicitSettings() const {
+ExplicitSettings Reader::getExplicitSettings() const {
     ExplicitSettings explSet;
     auto explicitNode = config["Explicit"];
     explSet.method = explicitNode["method"].as<str>();
@@ -168,7 +168,6 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
             explSet.RungeKutta_coefficients_c = Eigen::VectorXd::Map(c.data(), c.size());
         } else {
             logger->error("{in Reader::getExplicitSettings()} Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
-            //throw std::runtime_error("Invalid RungeKutta settings: Either 'order' or 'coefficients' must be provided.");
         }
     } else if (explSet.method == "AdamsBashforth") {
         if (explicitNode["AdamsBashforth"]["max_order"].IsScalar()) {
@@ -178,9 +177,10 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
             explSet.AdamsBashforth_coefficients_vector = Eigen::VectorXd::Map(v.data(), v.size());
         } else {
             logger->error("{in Reader::getExplicitSettings()} Invalid AdamsBashforth settings: Either 'maxOrder' or 'coefficients_vector' must be provided.");
+
         }
     } else {
-        throw std::runtime_error("Invalid solver method: " + explSet.method);
+        logger->error("{in Reader::getExplicitSettings()} Invalid solver method: " + explSet.method);
     }
 
     return explSet;
@@ -195,7 +195,7 @@ Reader::ExplicitSettings Reader::getExplicitSettings() const {
  * @return An `ImplicitSettings` structure containing implicit solver parameters.
  * @throws std::runtime_error If the configuration for an implicit solver is invalid.
  */
-Reader::ImplicitSettings Reader::getImplicitSettings() const {
+ImplicitSettings Reader::getImplicitSettings() const {
     ImplicitSettings implSet;
     auto implicitNode = config["Implicit"];
 
@@ -221,7 +221,7 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
             implSet.rhs_system = SysToSet;
 
         } else {
-            throw std::runtime_error("Invalid rhs system settings: A is not provided.");
+            logger->error("{in Reader::getImplicitSettings()} Invalid rhs system settings: A is not provided.");
         }
 
         if (implicitNode["rhs_system"]["b"].IsSequence()) {
@@ -238,7 +238,7 @@ Reader::ImplicitSettings Reader::getImplicitSettings() const {
             implSet.dx = implicitNode["dx"].as<double>();
             implSet.root_finder = implicitNode["root_finder"].as<str>();
         } else {
-            throw std::runtime_error("Invalid implicit nonlinear settings: missing entries.");
+            logger->error("{in Reader::getImplicitSettings()} Invalid nonlinear settings: missing entries.");
         }
     }
 

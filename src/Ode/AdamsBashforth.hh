@@ -40,7 +40,7 @@ private:
      * @return An Eigen::VectorXd containing the coefficients for the specified order.
      * @throws std::invalid_argument if the requested order is unsupported.
      */
-    [[nodiscard]] static Eigen::VectorXd generateCoefficients(int order);
+    Eigen::VectorXd generateCoefficients(int order);
 
 public:
     /**

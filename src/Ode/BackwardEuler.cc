@@ -14,6 +14,7 @@
 #include "../LinSysSolver/GaussElimSolve.hh"
 #include "../LinSysSolver/LUSolve.hh"
 
+
 /**
  * @typedef F_TYPE
  * @brief Alias for a callable object that computes \( F(y) \), typically for root-finding or solving implicit equations.
@@ -71,16 +72,17 @@ F_TYPE BackwardEuler::makeFstep(Eigen::VectorXd y0, double t0) {
  * @param Rdr A `Reader` object containing configuration settings.
  */
 void BackwardEuler::SetConfig(const Reader& Rdr) {
-    SetRhsIsLinear(Rdr.getImplicitSettings().rhs_is_linear);
-    SetLinearSystemSolver(Rdr.getImplicitSettings().linear_system_solver.value());
+    ImplicitSettings settings = Rdr.getImplicitSettings();
+    SetRhsIsLinear(settings.rhs_is_linear);
+    SetLinearSystemSolver(settings.linear_system_solver.value());
 
     if (GetRhsIsLinear()) {
-        SetRhsSystem(Rdr.getImplicitSettings().rhs_system.value());
+        SetRhsSystem(settings.rhs_system.value());
     } else {
-        SetRootFinder(Rdr.getImplicitSettings().root_finder.value());
+        SetRootFinder(settings.root_finder.value());
     }
 
-    // Call the base class method to set global configurations.
+    // Call the base class method to set global configurations. (After potential linear system setup -> SetRhsSystem based on it)
     SetGlobalConfig(Rdr);
 }
 
@@ -123,7 +125,6 @@ Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
         solver.SetB(b);
         return solver.Solve();
     } else {
-        throw std::runtime_error("Invalid linear system solver: " + GetLinearSystemSolver());
-        logger->error("Invalid linear system solver: " + GetLinearSystemSolver());
+        logger->error("{in BackwardEuler::LinStep()} Invalid linear system solver, GetLinearSystemSolver() returns: " + GetLinearSystemSolver());
     }
 }

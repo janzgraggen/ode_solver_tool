@@ -98,7 +98,7 @@ void RungeKutta::setOrder(const int order) {
         c = Eigen::VectorXd(4);
         c << 0, 0.5, 0.5, 1;
     } else {
-        throw std::invalid_argument("Unsupported order!");
+        logger->error("{in RungeKutta::setOrder()} Unsupported order: " + std::to_string(order));
     }
     this->order = order;
 }
@@ -129,18 +129,18 @@ void RungeKutta::setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd
  */
 void RungeKutta::SetConfig(const Reader& Rdr) {
     SetGlobalConfig(Rdr); // Call the base class method
-
-    if (Rdr.getExplicitSettings().RungeKutta_order.has_value()) {
-        setOrder(Rdr.getExplicitSettings().RungeKutta_order.value());
-    } else if (Rdr.getExplicitSettings().RungeKutta_coefficients_a.has_value() &&
-               Rdr.getExplicitSettings().RungeKutta_coefficients_b.has_value() &&
-               Rdr.getExplicitSettings().RungeKutta_coefficients_c.has_value()) {
+    ExplicitSettings settings = Rdr.getExplicitSettings();
+    if (settings.RungeKutta_order.has_value()) {
+        setOrder(settings.RungeKutta_order.value());
+    } else if (settings.RungeKutta_coefficients_a.has_value() &&
+               settings.RungeKutta_coefficients_b.has_value() &&
+               settings.RungeKutta_coefficients_c.has_value()) {
         setCoefficients(
-            Rdr.getExplicitSettings().RungeKutta_coefficients_a.value(),
-            Rdr.getExplicitSettings().RungeKutta_coefficients_b.value(),
-            Rdr.getExplicitSettings().RungeKutta_coefficients_c.value());
+            settings.RungeKutta_coefficients_a.value(),
+            settings.RungeKutta_coefficients_b.value(),
+            settings.RungeKutta_coefficients_c.value());
     } else {
-        throw std::invalid_argument("Invalid RungeKutta settings");
+        logger->error("{in RungeKutta::SetConfig()} Missing RungeKutta settings");
     }
 }
 

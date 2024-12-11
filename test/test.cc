@@ -8,7 +8,7 @@
 //// TESTING THE PARSING
 
 TEST(TestParsing, BasicTest){
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
   Reader reader(*loggerPtr, "../config/test/config_test_Parser.yaml");
   f_TYPE f = reader.getFunction();
   Eigen::VectorXd vec = reader.getOdeSettings().initial_value;  // Vector of size 3
@@ -23,7 +23,7 @@ TEST(TestParsing, BasicTest){
 }
 
 TEST(TestReaderAndRunnerWithExplFwdEuler, BasicTest) {
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
   // Create the Runner object using the test config file
   Runner runner(*loggerPtr, "../config/test/config_test_ExplFwdEuler.yaml");
 
@@ -36,7 +36,7 @@ TEST(TestReaderAndRunnerWithExplFwdEuler, BasicTest) {
 }
 
 TEST(TestReaderAndRunnerWithExplRK4, BasicTest) {
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
   // Create the Runner object using the test config file
   Runner runner(*loggerPtr, "../config/test/config_test_ExplRK4.yaml");
 
@@ -49,7 +49,7 @@ TEST(TestReaderAndRunnerWithExplRK4, BasicTest) {
 }
 
 TEST(TestReaderAndRunnerWithExplCustomRK, BasicTest) {
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
   // Create the Runner object using the test config file
   Runner runner(*loggerPtr, "../config/test/config_test_ExplCustomRK.yaml");
 
@@ -62,7 +62,7 @@ TEST(TestReaderAndRunnerWithExplCustomRK, BasicTest) {
 }
 
 TEST(TestReaderAndRunnerWithExplAB4, BasicTest) {
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
   // Create the Runner object using the test config file
   Runner runner(*loggerPtr, "../config/test/config_test_ExplAB4.yaml");
 
@@ -75,7 +75,7 @@ TEST(TestReaderAndRunnerWithExplAB4, BasicTest) {
 }
 
 TEST(TestReaderAndRunnerWithExplABcustomCoef, BasicTest) {
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
   // Create the Runner object using the test config file
   Runner runner(*loggerPtr, "../config/test/config_test_ExplABcustomCoef.yaml");
 
@@ -89,7 +89,7 @@ TEST(TestReaderAndRunnerWithExplABcustomCoef, BasicTest) {
 
 
 TEST(TestReaderAndRunnerWithImplBwdEulerLinear, BasicTest) {
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
    // Create the Runner object using the test config file
    Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinear.yaml");
 
@@ -101,7 +101,7 @@ TEST(TestReaderAndRunnerWithImplBwdEulerLinear, BasicTest) {
 }
 
 TEST(TestReaderAndRunnerWithImplBwdEulerNonlinear, BasicTest) {
-  Logger* loggerPtr = new Logger(0);
+  auto* loggerPtr = new Logger(0);
   // Create the Runner object using the test config file
   Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerNonlinear.yaml");
 
@@ -110,5 +110,17 @@ TEST(TestReaderAndRunnerWithImplBwdEulerNonlinear, BasicTest) {
   EXPECT_NEAR(finalSolution[0], 1.0, 0.00001); // Expected to remain constant
   EXPECT_NEAR(finalSolution[1], std::exp(1), std::exp(1)*0.01); // expected solution of dy/dt = y
   EXPECT_NEAR(finalSolution[2], 1.0, 1.0*0.0101); // expected solution of dy/dt = 2t
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithPlanetRK4, BasicTest) {
+  auto* loggerPtr = new Logger(0);
+  // Create the Runner object using the test config file
+  Runner runner(*loggerPtr, "../config/test/config_test_PlanetRK4.yaml");
+
+  const Eigen::VectorXd finalSolution = runner.run();
+
+  EXPECT_NEAR(finalSolution[0], 0.4, 0.01); // Expected to go back to initial
+  EXPECT_NEAR(finalSolution[2], 0.0, 0.01); // Because 2-pi periodic
   delete loggerPtr;
 }

@@ -1,0 +1,52 @@
+# General configuration ––––––––––––––––––––––––––––––––––––––––
+output_file: #"output_test_ExplRK4.csv" #Empty string or Nothing for no output file
+verbosity_level: 2    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
+
+# Function configuration
+Dim: 4
+Function: 
+  f1: "y3"
+  f2: "y4"
+  f3: "- y1 / ((y1^2 + y2^2)^1.5)"
+  f4: "- y2 / ((y1^2 + y2^2)^1.5)"
+  
+# OdeSolver settings
+solver_type: "Explicit"  # Choose between "Implicit" or "Explicit"
+OdeSolver:
+  step_size: 0.001
+  initial_time: 0.0
+  final_time: 6.28318531
+  initial_value: [0.4, 0.0, 0.0, 2]
+
+# Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Explicit:
+  method: "RungeKutta"  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  RungeKutta:
+    order: 4 # Choose between 1, 2, 3, 4 (Optional, leave empty if using coefficients)
+
+    coefficients:
+      a:
+      b:
+      c:
+
+  # AdamsBashforth settings
+  AdamsBashforth:
+    max_order:  # Choose between 1, 2, 3, 4
+    #if NOT max_order
+    #coefficients_vector:
+
+
+# Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Implicit:
+  method:  # Choose between "BackwardEuler" (or "CrankNicolson")
+  rhs_is_linear:
+  linear_system_solver:  # Choose between "GaussianElimination" (or "LU") (also needed for systems in RootFinding)
+  # if rhs is linear :y' = Ay + b
+  rhs_system:         
+    A:
+    b:
+  # if rhs is NOT linear 
+  tolerance:
+  max_iterations:
+  root_finder:  # Choose between "NewtonRaphson" (or "FixedPoint")
+  dx : # for NewtonRaphson (or methods that use numerical differentiation)

@@ -1,5 +1,5 @@
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output_test_ExplAB4.csv" # Empty string or Nothing for no output file
+output_file: "output_example_ExplAB4.csv" # Empty string or Nothing for no output file
 verbosity_level: 3    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
 
 # Function configuration

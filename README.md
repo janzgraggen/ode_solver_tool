@@ -207,7 +207,7 @@ The project is designed for extensibility through polymorphism:
 2. Use [GoogleTest](https://github.com/google/googletest) to verify your implementations:
    ```bash
    cd test
-   ./run_tests
+   ./test
    ```
 
 ---

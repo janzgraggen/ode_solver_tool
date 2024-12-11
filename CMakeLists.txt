@@ -57,9 +57,6 @@ target_link_libraries(main eigen yaml-cpp::yaml-cpp muparser)
 add_executable(test test/test.cc ${CORE_SOURCES})
 target_link_libraries(test gtest_main gtest pthread eigen yaml-cpp muparser)
 
-# Custom target to run tests
-add_custom_target(run_tests COMMAND ./test DEPENDS test)
-
 # -------------------------------------------------------------------------------
 # Option to activate documentation generation
 option(DOCUMENTATION "Activate documentation" ON)

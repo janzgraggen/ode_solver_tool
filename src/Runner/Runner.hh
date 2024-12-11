@@ -22,6 +22,15 @@
 #include "../Ode/OdeSolver.hh"  // Header for the OdeSolver class, the base class for ODE solvers
 #include <string>
 
+/**
+ * @class Runner
+ * @brief A class to configure and run ODE solvers based on a configuration file.
+ *
+ * The `Runner` class reads a configuration file to determine the solver type and method.
+ * It dynamically creates the corresponding ODE solver instance, configures it, and executes
+ * the solver to solve the ODE. The class interacts with the `Reader` class to parse the
+ * configuration file and the `Logger` class for logging messages.
+ */
 class Runner {
 private:
     /** @brief Configuration file containing solver parameters and methods. */

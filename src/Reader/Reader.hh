@@ -32,6 +32,11 @@ using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>;
  */
 class Reader {
 public:
+
+    /**
+     * @brief Default constructor for the `Reader` class.
+     * @param logger_ Reference to the `Logger` object.
+     */
     Logger *logger; //!< The logger object for logging messages and solver activities.
 
     /**

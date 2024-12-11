@@ -20,7 +20,7 @@
  *
  * Loads the YAML configuration file provided by `filename`. If the file cannot be opened or parsed,
  * a `std::runtime_error` is thrown.
- *
+ * @param logger_ Reference to the `Logger` object.
  * @param filename The path to the YAML configuration file.
  * @throws std::runtime_error If the file cannot be opened or parsed.
  */
@@ -103,6 +103,9 @@ int Reader::getVerbosity() const {
 }
 
 
+/**
+ * @brief Sets the logger verbosity level based on the configuration.
+ */
 void Reader::setLoggerVerbosity() {
     logger->setVerbosity(getVerbosity());
 }

@@ -23,9 +23,17 @@
 #include "../Ode/BackwardEuler.hh"
 #include "../Logger/Logger.hh"
 
-using str = std::string;
 
-// Constructor
+using str = std::string; //< Alias for string type
+
+/**
+ * @brief Constructor for the Runner class.
+ *
+ * Initializes a `Runner` instance with a given configuration file and logger.
+ *
+ * @param logger_ Reference to the Logger instance for logging messages.
+ * @param config_file The path to the configuration file containing ODE solver parameters.
+ */
 Runner::Runner(Logger& logger_, const std::string& config_file) :
     config_file(config_file), Rdr(logger_, config_file) , logger(&logger_){}
 

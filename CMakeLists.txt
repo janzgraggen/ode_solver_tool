@@ -42,7 +42,7 @@ add_optional_library(EIGEN eigen)
 add_optional_library(YAML yaml)
 add_optional_library(MUPARSER muparser)
 
-
+# -------------------------------------------------------------------------------
 # Collect core sources
 file(GLOB_RECURSE CORE_SOURCES
     "src/**/*.cc"
@@ -65,8 +65,8 @@ add_custom_target(run_tests COMMAND ./test DEPENDS test)
 option(DOCUMENTATION "Activate documentation" ON)
 
 if (DOCUMENTATION)
-    # Automatically find Doxygen executable
-    find_package(Doxygen REQUIRED)
+    # Try to find Doxygen executable
+    find_package(Doxygen)
 
     if (DOXYGEN_FOUND)
         message(STATUS "Doxygen found: ${DOXYGEN_EXECUTABLE}")
@@ -82,7 +82,6 @@ if (DOCUMENTATION)
                 VERBATIM
         )
     else()
-        message(WARNING "Doxygen was not found on your system.")
+        message(WARNING "Doxygen was not found on your system. Documentation will not be generated.")
     endif()
-
-endif(DOCUMENTATION)
+endif()

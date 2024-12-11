@@ -128,8 +128,8 @@ higher orders, such that only one initial vector is sufficient. More documentati
 - **Linear RHS**:
   - `rhs_system`: Define the system matrix A and vector b such that $$ f = A y + b $$
 
-  > Note: If rha_is_linear is set to true, a right hand side (rhs) system has to be provided. (As opposed to setting the function via function definition). 
-  If a Linear function is desired to be computed with rootfinding rather than linear system solving, `rhs_is_linear` is set to false, the function is passed as above (cf. function configuration) and nonlinear settings apply.
+  > Note: If rha_is_linear is set to true, a right hand side (rhs) system has to be provided. (As opposed to setting the
+function via function definition). If a Linear function is desired to be computed with rootfinding rather than linear system solving, `rhs_is_linear` is set to false, the function is passed as above (cf. function configuration) and nonlinear settings apply.
 
 - **Nonlinear RHS**:
   - `tolerance`: Convergence tolerance for iterative methods.
@@ -145,14 +145,15 @@ Simulation results at each time steps are saved in CSV format and can be found i
 
 If there is no 
 output directory, one will be generated on first run. Once this is done, you can customize the output location in later
-runs by creating new folders inside this directory and specifying the right path in the configuration file. Or overwriting the current file by keepint the outputfilename the same. 
+runs by creating new folders inside this directory and specifying the right path in the configuration file. Or you can
+overwrite the current file by keeping the output filename intact. 
 
 ---
 
 ## Doxygen Documentation
 
 The Doxyfile necessary to generate an .html is included in the repository. An `html` folder containing the `index.html` 
-is generated from building the project. Otherwise, it is also possible to run the command:
+is generated from building the project if you have Doxygen installed. Otherwise, it is also possible to run the command:
 the project.
    ```bash
    cmake --build . --target doc_doxygen

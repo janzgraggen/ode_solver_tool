@@ -19,7 +19,7 @@
 #define ODESOLVER_HH
 
 #include <functional>
-#include "../src/Reader/Reader.hh"
+#include "../Reader/Reader.hh"
 #include "../Logger/Logger.hh"
 
 using f_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&, double)>; ///< Alias for the ODE right-hand side function type.

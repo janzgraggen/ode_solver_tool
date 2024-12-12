@@ -39,6 +39,19 @@ It offers a flexible framework for solving ODEs based on user-defined equations 
   - Newton-Raphson Method
 
 ---
+## Doxygen Documentation
+
+The Doxyfile necessary to generate an .html is included in the repository. An `html` folder containing the `index.html`
+is generated from building the project if you have [Doxygen](https://www.doxygen.nl/download.html) installed.
+**Warning: our doxygen configuration uses the Graphviz package to generate UML diagrams**. If you don't have it, you can
+download it following instructions [here](https://graphviz.org/download/). Else, warning messages will be generated, and
+graphs won't show.
+
+If the `html` folder is not automatically generated, you can still run the command:
+   ```bash
+   cmake --build . --target doc_doxygen
+   ```
+---
 
 ## Getting Started
 
@@ -146,17 +159,7 @@ Simulation results at each time steps are saved in CSV format and can be found i
 If there is no 
 output directory, one will be generated on first run. Once this is done, you can customize the output location in later
 runs by creating new folders inside this directory and specifying the right path in the configuration file. Or you can
-overwrite the current file by keeping the output filename intact. 
-
----
-
-## Doxygen Documentation
-
-The Doxyfile necessary to generate an .html is included in the repository. An `html` folder containing the `index.html` 
-is generated from building the project if you have Doxygen installed. Otherwise, it is also possible to run the command:
-   ```bash
-   cmake --build . --target doc_doxygen
-   ```
+overwrite the current file by keeping the output filename intact.
 
 ---
 

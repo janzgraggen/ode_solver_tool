@@ -7,8 +7,6 @@
  * explicit and implicit solver configurations. The class integrates seamlessly with the `FunctionParser`
  * and YAML parsing library to provide a structured way to read and apply solver configurations.
  *
- * Author: [Your Name]
- * Date: [YYYY-MM-DD]
  */
 
 #include "Reader.hh"

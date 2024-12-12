@@ -127,8 +127,8 @@ void RungeKutta::setCoefficients(const Eigen::MatrixXd& a, const Eigen::VectorXd
  * @param Rdr The Reader object containing the configuration settings.
  * @throw std::invalid_argument If the configuration is invalid or incomplete.
  */
-void RungeKutta::SetConfig(const Reader& Rdr) {
-    SetGlobalConfig(Rdr); // Call the base class method
+void RungeKutta::setConfig(const Reader& Rdr) {
+    setGlobalConfig(Rdr); // Call the base class method
     ExplicitSettings settings = Rdr.getExplicitSettings();
     if (settings.RungeKutta_order.has_value()) {
         setOrder(settings.RungeKutta_order.value());
@@ -140,7 +140,7 @@ void RungeKutta::SetConfig(const Reader& Rdr) {
             settings.RungeKutta_coefficients_b.value(),
             settings.RungeKutta_coefficients_c.value());
     } else {
-        logger->error("{in RungeKutta::SetConfig()} Missing RungeKutta settings");
+        logger->error("{in RungeKutta::setConfig()} Missing RungeKutta settings");
     }
 }
 
@@ -153,7 +153,7 @@ void RungeKutta::SetConfig(const Reader& Rdr) {
  * @param t The current time \( t_n \).
  * @return The updated state vector \( y_{n+1} \).
  */
-Eigen::VectorXd RungeKutta::Step(const Eigen::VectorXd& y, double t) {
+Eigen::VectorXd RungeKutta::calcStep(const Eigen::VectorXd& y, double t) {
     const int n = y.size(); // Dimension of the state vector
     std::vector<Eigen::VectorXd> k(order, Eigen::VectorXd::Zero(n)); // Stage derivatives
 
@@ -162,7 +162,7 @@ Eigen::VectorXd RungeKutta::Step(const Eigen::VectorXd& y, double t) {
         for (int j = 0; j < i; ++j) {
             sum += a(i, j) * k[j];
         }
-        k[i] = GetRightHandSide()(y + GetStepSize() * sum, t + c[i] * GetStepSize());
+        k[i] = getRightHandSide()(y + getStepSize() * sum, t + c[i] * getStepSize());
     }
 
     Eigen::VectorXd increment = Eigen::VectorXd::Zero(n);
@@ -170,5 +170,5 @@ Eigen::VectorXd RungeKutta::Step(const Eigen::VectorXd& y, double t) {
         increment += b[i] * k[i];
     }
 
-    return y + GetStepSize() * increment;
+    return y + getStepSize() * increment;
 }

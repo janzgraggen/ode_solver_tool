@@ -97,10 +97,10 @@ Eigen::VectorXd Runner::run() {
         delete Solver;
         return Eigen::VectorXd();  // Return empty vector for failure
     } else {
-        Solver->SetConfig(Rdr);
+        Solver->setConfig(Rdr);
         logger->info("{in Runner::run()} Solver configured successfully");
 
-        Eigen::VectorXd Result = Solver->SolveODE();
+        Eigen::VectorXd Result = Solver->solveOde();
         logger->info("{in Runner::run()} Solving completed successfully");
 
         // Clean up dynamically allocated memory

@@ -68,13 +68,13 @@ public:
      * @param maxOrder The desired maximum order (1 to 4).
      * @throws std::invalid_argument if the provided order is unsupported.
      */
-    void SetMaxOrder(int maxOrder);
+    void setOrder(int maxOrder);
 
     /**
      * @brief Sets custom coefficients for the Adams-Bashforth method.
      * @param customCoefficients A vector containing custom coefficients.
      */
-    void SetCustomCoefficients(Eigen::VectorXd customCoefficients);
+    void setCustomCoefficients(Eigen::VectorXd customCoefficients);
 
     /**
      * @brief Configures the method based on provided settings from a `Reader` object.
@@ -83,7 +83,7 @@ public:
      * based on the `Reader`'s provided settings.
      * @param Rdr The `Reader` instance containing configuration details.
      */
-    void SetConfig(const Reader& Rdr) override;
+    void setConfig(const Reader& Rdr) override;
 
     /**
      * @brief Advances the solution using the Adams-Bashforth method.
@@ -93,7 +93,7 @@ public:
      * @param t The current time value.
      * @return The updated state vector after the integration step.
      */
-    Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;
+    Eigen::VectorXd calcStep(const Eigen::VectorXd& y, double t) override;
 };
 
 #endif // ADAMSBASHFORTH_HH

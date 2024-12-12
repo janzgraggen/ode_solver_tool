@@ -48,7 +48,7 @@ public:
   * @return Eigen::VectorXd The solution vector \( x \).
   * @throws std::runtime_error If the matrix \( A \) is singular.
   */
- Eigen::VectorXd Solve() override;
+ Eigen::VectorXd solveSys() override;
 };
 
 #endif // __LU_SOLVE_HH__

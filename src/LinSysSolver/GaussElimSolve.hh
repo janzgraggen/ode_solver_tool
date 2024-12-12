@@ -51,7 +51,7 @@ public:
   *
   * @return Eigen::VectorXd The computed solution vector \( x \).
   */
- Eigen::VectorXd Solve() override;
+ Eigen::VectorXd solveSys() override;
 };
 
 #endif // __GAUSSELIMSOLVE_HH__

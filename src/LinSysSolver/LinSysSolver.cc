@@ -37,7 +37,7 @@ LinSysSolver::~LinSysSolver() {}
  *
  * @param A The coefficient matrix to be set.
  */
-void LinSysSolver::SetA(const Eigen::MatrixXd& A) {
+void LinSysSolver::setA(const Eigen::MatrixXd& A) {
     this->A = A;
 }
 
@@ -48,7 +48,7 @@ void LinSysSolver::SetA(const Eigen::MatrixXd& A) {
  *
  * @param b The vector representing the right-hand side of the system.
  */
-void LinSysSolver::SetB(const Eigen::VectorXd& b) {
+void LinSysSolver::setB(const Eigen::VectorXd& b) {
     this->b = b;
 }
 
@@ -59,7 +59,7 @@ void LinSysSolver::SetB(const Eigen::VectorXd& b) {
  *
  * @return A constant reference to the coefficient matrix \( A \).
  */
-const Eigen::MatrixXd& LinSysSolver::GetA() const {
+const Eigen::MatrixXd& LinSysSolver::getA() const {
     return A;
 }
 
@@ -71,6 +71,6 @@ const Eigen::MatrixXd& LinSysSolver::GetA() const {
  *
  * @return A constant reference to the right-hand side vector \( b \).
  */
-const Eigen::VectorXd& LinSysSolver::GetB() const {
+const Eigen::VectorXd& LinSysSolver::getB() const {
     return b;
 }

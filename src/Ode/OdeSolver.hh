@@ -40,7 +40,7 @@ private:
     double initialTime; ///< The initial time of the simulation.
     double finalTime; ///< The final time of the simulation.
     Eigen::VectorXd initialValue; ///< The initial state vector of the system.
-    str OutputFileName; ///< The output file name for storing results.
+    str outputFileName; ///< The output file name for storing results.
 
 protected: // Protected access to allow assignment of different right-hand side functions in derived classes.
     f_TYPE f_rhs; ///< The right-hand side function of the ODE system.
@@ -68,7 +68,7 @@ public:
      *
      * @param h The step size value.
      */
-    void SetStepSize(double h);
+    void setStepSize(double h);
 
     /**
      * @brief Sets the output file name for storing the ODE solver results.
@@ -77,21 +77,21 @@ public:
      *
      * @param filename The desired output file name.
      */
-    void SetOutputFileName(const str& filename);
+    void setOutputFileName(const str& filename);
 
     /**
      * @brief Retrieves the output file name for the ODE solver.
      *
      * @return The filename where solver results are stored.
      */
-    [[nodiscard]] str GetOutputFileName() const;
+    [[nodiscard]] str getOutputFileName() const;
 
     /**
      * @brief Retrieves the step size currently in use by the ODE solver.
      *
      * @return The integration step size.
      */
-    [[nodiscard]] double GetStepSize() const;
+    [[nodiscard]] double getStepSize() const;
 
     /**
      * @brief Sets the time interval for the ODE solver.
@@ -101,7 +101,7 @@ public:
      * @param t0 The starting time.
      * @param t1 The ending time.
      */
-    void SetTimeInterval(double t0, double t1);
+    void setTimeInterval(double t0, double t1);
 
     /**
      * @brief Sets the global parameters for the ODE solver using a `Reader` object.
@@ -111,7 +111,7 @@ public:
      *
      * @param Rdr The `Reader` object containing solver parameters.
      */
-    virtual void SetGlobalConfig(const Reader& Rdr);
+    virtual void setGlobalConfig(const Reader& Rdr);
 
     /**
      * @brief Sets the specific solver configuration for ODE methods.
@@ -120,21 +120,21 @@ public:
      *
      * @param Rdr The `Reader` object containing method-specific configurations.
      */
-    virtual void SetConfig(const Reader& Rdr) = 0;
+    virtual void setConfig(const Reader& Rdr) = 0;
 
     /**
      * @brief Retrieves the initial time of the ODE solver.
      *
      * @return The initial time.
      */
-    [[nodiscard]] double GetInitialTime() const;
+    [[nodiscard]] double getInitialTime() const;
 
     /**
      * @brief Retrieves the final time of the ODE solver.
      *
      * @return The final time.
      */
-    [[nodiscard]] double GetFinalTime() const;
+    [[nodiscard]] double getFinalTime() const;
 
     /**
      * @brief Sets the initial state vector for the ODE solver.
@@ -143,14 +143,14 @@ public:
      *
      * @param y0 The initial state vector.
      */
-    void SetInitialValue(const Eigen::VectorXd& y0);
+    void setInitialValue(const Eigen::VectorXd& y0);
 
     /**
      * @brief Retrieves the initial state vector of the ODE solver.
      *
      * @return The initial state vector representing the solver's starting conditions.
      */
-    [[nodiscard]] Eigen::VectorXd GetInitialValue() const;
+    [[nodiscard]] Eigen::VectorXd getInitialValue() const;
 
     /**
      * @brief Sets the right-hand side function representing the system's ODEs.
@@ -159,14 +159,14 @@ public:
      *
      * @param f The right-hand side function as an `f_TYPE` lambda or function object.
      */
-    virtual void SetRightHandSide(const f_TYPE& f);
+    virtual void setRightHandSide(const f_TYPE& f);
 
     /**
      * @brief Retrieves the right-hand side function representing the system of ODEs.
      *
      * @return The system's right-hand side function.
      */
-    [[nodiscard]] f_TYPE GetRightHandSide() const;
+    [[nodiscard]] f_TYPE getRightHandSide() const;
 
     /**
      * @brief Computes a single step of the solver's integration process.
@@ -178,7 +178,7 @@ public:
      * @param t The current time.
      * @return The system state vector after performing one integration step.
      */
-    virtual Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) = 0;
+    virtual Eigen::VectorXd calcStep(const Eigen::VectorXd& y, double t) = 0;
 
     /**
      * @brief Solves the ODE system across the configured time interval.
@@ -188,7 +188,7 @@ public:
      *
      * @return The state vector of the system at the final time step.
      */
-    Eigen::VectorXd SolveODE();
+    Eigen::VectorXd solveOde();
 };
 
 #endif // ODESOLVER_HH

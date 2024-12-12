@@ -50,25 +50,25 @@ public:
      * @brief Sets the coefficient matrix \( A \).
      * @param A The coefficient matrix to be set.
      */
-    void SetA(const Eigen::MatrixXd& A);
+    void setA(const Eigen::MatrixXd& A);
 
     /**
      * @brief Sets the right-hand side vector \( b \).
      * @param b The vector representing the right-hand side of the system.
      */
-    void SetB(const Eigen::VectorXd& b);
+    void setB(const Eigen::VectorXd& b);
 
     /**
      * @brief Retrieves the coefficient matrix \( A \).
      * @return A constant reference to the coefficient matrix \( A \).
      */
-    const Eigen::MatrixXd& GetA() const;
+    const Eigen::MatrixXd& getA() const;
 
     /**
      * @brief Retrieves the right-hand side vector \( b \).
      * @return A constant reference to the right-hand side vector \( b \).
      */
-    const Eigen::VectorXd& GetB() const;
+    const Eigen::VectorXd& getB() const;
 
     /**
      * @brief Pure virtual method to solve the system \( Ax = b \).
@@ -78,7 +78,7 @@ public:
      *
      * @return Eigen::VectorXd The solution vector \( x \).
      */
-    virtual Eigen::VectorXd Solve() = 0;
+    virtual Eigen::VectorXd solveSys() = 0;
 };
 
 #endif // __LIN_SYS_SOLVER_HH__

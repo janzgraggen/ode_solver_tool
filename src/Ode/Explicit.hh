@@ -25,7 +25,7 @@
  * at the next time step using only information from the current time step.
  *
  * This class inherits from `OdeSolver` and is intended to be subclassed.
- * Derived classes should implement the `Step` method to define the explicit
+ * Derived classes should implement the `calcStep` method to define the explicit
  * time-stepping algorithm.
  */
 class Explicit : public OdeSolver {

@@ -51,11 +51,11 @@ str Reader::getOutputFileName() const {
 }
 
 /**
- * @brief Retrieves the dimension of the system from the configuration.
+ * @brief Retrieves the getDimension of the system from the configuration.
  *
  * Reads the `Dim` entry from the YAML configuration file, representing the number of state variables.
  *
- * @return An integer representing the dimension of the system.
+ * @return An integer representing the getDimension of the system.
  */
 int Reader::getDim() const {
     return config["Dim"].as<int>();
@@ -66,7 +66,7 @@ int Reader::getDim() const {
  *
  * Constructs a list of function strings stored under the `Function` section in the YAML file.
  *
- * @return A `strList` containing function strings corresponding to the dimension of the system.
+ * @return A `strList` containing function strings corresponding to the getDimension of the system.
  */
 strList Reader::getFunctionStringlist() const {
     strList fct_strings;

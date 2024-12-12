@@ -34,8 +34,8 @@ FwdEuler::~FwdEuler() {}
  *
  * @param Rdr A `Reader` object containing configuration settings.
  */
-void FwdEuler::SetConfig(const Reader& Rdr) {
-    SetGlobalConfig(Rdr);  // Call the base class method
+void FwdEuler::setConfig(const Reader& Rdr) {
+    setGlobalConfig(Rdr);  // Call the base class method
 }
 
 /**
@@ -54,7 +54,7 @@ void FwdEuler::SetConfig(const Reader& Rdr) {
  * @param t The current time.
  * @return The solution vector at the next time step.
  */
-Eigen::VectorXd FwdEuler::Step(const Eigen::VectorXd& y, double t) {
-    Eigen::VectorXd f = GetRightHandSide()(y, t);  // Call the vectorized RHS function
-    return y + GetStepSize() * f;  // Forward Euler step update
+Eigen::VectorXd FwdEuler::calcStep(const Eigen::VectorXd& y, double t) {
+    Eigen::VectorXd f = getRightHandSide()(y, t);  // Call the vectorized RHS function
+    return y + getStepSize() * f;  // Forward Euler step update
 }

@@ -30,7 +30,7 @@ Logger::Logger(int verbosity) : verbosity(verbosity) {}
  * @param message The error message to be logged.
  */
 void Logger::error(const std::string& message) const {
-    if (verbosity >= Error) {
+    if (verbosity >= err) {
         std::string  error_msg = "[ERROR]: " + message;
         //std::cerr << error_msg << std::endl;
         throw std::runtime_error(error_msg);
@@ -45,7 +45,7 @@ void Logger::error(const std::string& message) const {
  * @param message The warning message to be logged.
  */
 void Logger::warning(const std::string& message) const {
-    if (verbosity >= Warning) {
+    if (verbosity >= warn) {
         std::cout << "[WARNING]: " << message << std::endl;
     }
 }
@@ -58,7 +58,7 @@ void Logger::warning(const std::string& message) const {
  * @param message The informational message to be logged.
  */
 void Logger::info(const std::string& message) const {
-    if (verbosity >= Info) {
+    if (verbosity >= inf) {
         std::cout << "[INFO]: " << message << std::endl;
     }
 }
@@ -71,7 +71,7 @@ void Logger::info(const std::string& message) const {
  * @param message The debug message to be logged.
  */
 void Logger::debug(const std::string& message) const {
-    if (verbosity >= Debug) {
+    if (verbosity >= debg) {
         std::cout << "[DEBUG]: " << message << std::endl;
     }
 }

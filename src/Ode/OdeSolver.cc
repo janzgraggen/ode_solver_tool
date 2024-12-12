@@ -45,7 +45,7 @@ OdeSolver::~OdeSolver() = default;
  *
  * @param h The step size to be set for numerical integration.
  */
-void OdeSolver::SetStepSize(const double h) {
+void OdeSolver::setStepSize(const double h) {
     stepSize = h;
 }
 
@@ -56,8 +56,8 @@ void OdeSolver::SetStepSize(const double h) {
  *
  * @param filename The desired output file name.
  */
-void OdeSolver::SetOutputFileName(const str& filename) {
-    OutputFileName = filename;
+void OdeSolver::setOutputFileName(const str& filename) {
+    outputFileName = filename;
 }
 
 /**
@@ -67,8 +67,8 @@ void OdeSolver::SetOutputFileName(const str& filename) {
  *
  * @return The output filename as a string.
  */
-str OdeSolver::GetOutputFileName() const {
-    return OutputFileName;
+str OdeSolver::getOutputFileName() const {
+    return outputFileName;
 }
 
 /**
@@ -78,7 +78,7 @@ str OdeSolver::GetOutputFileName() const {
  *
  * @return The step size.
  */
-double OdeSolver::GetStepSize() const {
+double OdeSolver::getStepSize() const {
     return stepSize;
 }
 
@@ -90,7 +90,7 @@ double OdeSolver::GetStepSize() const {
  * @param t0 The initial time of the interval.
  * @param t1 The final time of the interval.
  */
-void OdeSolver::SetTimeInterval(const double t0, const double t1) {
+void OdeSolver::setTimeInterval(const double t0, const double t1) {
     initialTime = t0;
     finalTime = t1;
 }
@@ -102,7 +102,7 @@ void OdeSolver::SetTimeInterval(const double t0, const double t1) {
  *
  * @return The initial time.
  */
-double OdeSolver::GetInitialTime() const {
+double OdeSolver::getInitialTime() const {
     return initialTime;
 }
 
@@ -113,7 +113,7 @@ double OdeSolver::GetInitialTime() const {
  *
  * @return The final time.
  */
-double OdeSolver::GetFinalTime() const {
+double OdeSolver::getFinalTime() const {
     return finalTime;
 }
 
@@ -124,7 +124,7 @@ double OdeSolver::GetFinalTime() const {
  *
  * @param y0 The initial state vector represented as an Eigen vector.
  */
-void OdeSolver::SetInitialValue(const Eigen::VectorXd& y0) {
+void OdeSolver::setInitialValue(const Eigen::VectorXd& y0) {
     initialValue = y0;
 }
 
@@ -136,25 +136,25 @@ void OdeSolver::SetInitialValue(const Eigen::VectorXd& y0) {
  *
  * @param Rdr The `Reader` object containing the ODE configuration.
  */
-void OdeSolver::SetGlobalConfig(const Reader& Rdr) {
-    SetOutputFileName(Rdr.getOutputFileName());
+void OdeSolver::setGlobalConfig(const Reader& Rdr) {
+    setOutputFileName(Rdr.getOutputFileName());
     OdeSettings settings = Rdr.getOdeSettings();
     if (settings.step_size <= 0.0  || settings.step_size > (settings.final_time - settings.initial_time)) {
-        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid step size: " + std::to_string(settings.step_size));
+        logger->error("{in OdeSolver::setGlobalConfig()} Invalid step size: " + std::to_string(settings.step_size));
     } else {
-        SetStepSize(settings.step_size);
+        setStepSize(settings.step_size);
     }
     if (settings.initial_time >= settings.final_time) {
-        logger->error("{in OdeSolver::SetGlobalConfig()} Invalid time interval: [" + std::to_string(settings.initial_time) + ", " + std::to_string(settings.final_time) + "]");
+        logger->error("{in OdeSolver::setGlobalConfig()} Invalid time interval: [" + std::to_string(settings.initial_time) + ", " + std::to_string(settings.final_time) + "]");
     } else {
-        SetTimeInterval(settings.initial_time, settings.final_time);
-        SetInitialValue(settings.initial_value);
+        setTimeInterval(settings.initial_time, settings.final_time);
+        setInitialValue(settings.initial_value);
     }
     int iters = std::floor((settings.final_time- settings.initial_time)/settings.step_size);
     if (iters > 1e6) {
-        logger->warning("{in OdeSolver::SetGlobalConfig()} Large number of steps: " + std::to_string(iters));
+        logger->warning("{in OdeSolver::setGlobalConfig()} Large number of steps: " + std::to_string(iters));
     }
-    SetRightHandSide(Rdr.getFunction());
+    setRightHandSide(Rdr.getFunction());
 }
 
 /**
@@ -164,7 +164,7 @@ void OdeSolver::SetGlobalConfig(const Reader& Rdr) {
  *
  * @return The initial value as an Eigen vector.
  */
-Eigen::VectorXd OdeSolver::GetInitialValue() const {
+Eigen::VectorXd OdeSolver::getInitialValue() const {
     return initialValue;
 }
 
@@ -175,7 +175,7 @@ Eigen::VectorXd OdeSolver::GetInitialValue() const {
  *
  * @param f The right-hand side function represented as an `f_TYPE` lambda or function object.
  */
-void OdeSolver::SetRightHandSide(const f_TYPE& f) {
+void OdeSolver::setRightHandSide(const f_TYPE& f) {
     f_rhs = f;
 }
 
@@ -186,7 +186,7 @@ void OdeSolver::SetRightHandSide(const f_TYPE& f) {
  *
  * @return The system's right-hand side function.
  */
-f_TYPE OdeSolver::GetRightHandSide() const {
+f_TYPE OdeSolver::getRightHandSide() const {
     return f_rhs;
 }
 
@@ -198,17 +198,17 @@ f_TYPE OdeSolver::GetRightHandSide() const {
  *
  * @return The solution vector at the final time step.
  */
-Eigen::VectorXd OdeSolver::SolveODE() {
+Eigen::VectorXd OdeSolver::solveOde() {
 
-    Eigen::VectorXd y = GetInitialValue();
-    double t = GetInitialTime();
-    CSVWriter writer(GetOutputFileName());
+    Eigen::VectorXd y = getInitialValue();
+    double t = getInitialTime();
+    CSVWriter writer(getOutputFileName());
     writer.writeHeader(y);
     writer.writeLine(t, y);
 
-    while (t <= GetFinalTime()) {
-        y = Step(y, t);
-        t += GetStepSize();
+    while (t <= getFinalTime()) {
+        y = calcStep(y, t);
+        t += getStepSize();
         writer.writeLine(t, y);
     }
 

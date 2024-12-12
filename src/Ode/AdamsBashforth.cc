@@ -55,30 +55,30 @@ Eigen::VectorXd AdamsBashforth::generateCoefficients(const int order) {
 
 // Set the maximum order for the Adams-Bashforth method.
 // @param maxOrder The desired maximum order of the Adams-Bashforth method.
-void AdamsBashforth::SetMaxOrder(const int maxOrder) {
+void AdamsBashforth::setOrder(const int maxOrder) {
     if (maxOrder < 1 || maxOrder > 4) {
-        logger->error("{in AdamsBashforth::SetMaxOrder()} Supported orders are 1 through 4. Order given: " + std::to_string(maxOrder));
+        logger->error("{in AdamsBashforth::setOrder()} Supported orders are 1 through 4. Order given: " + std::to_string(maxOrder));
     }
     this->maxOrder = maxOrder;
 }
 
 // Set custom coefficients for the Adams-Bashforth method.
 // @param customCoefficients A vector containing custom coefficients for the method.
-void AdamsBashforth::SetCustomCoefficients(Eigen::VectorXd customCoefficients) {
+void AdamsBashforth::setCustomCoefficients(Eigen::VectorXd customCoefficients) {
     this->customCoefficients = std::move(customCoefficients);
 }
 
 // Configure the Adams-Bashforth method based on settings provided by a `Reader` object.
 // @param Rdr The `Reader` instance containing configuration settings.
-void AdamsBashforth::SetConfig(const Reader& Rdr) {
-    SetGlobalConfig(Rdr);  // Call the base class method
+void AdamsBashforth::setConfig(const Reader& Rdr) {
+    setGlobalConfig(Rdr);  // Call the base class method
     ExplicitSettings settings = Rdr.getExplicitSettings();
     if (settings.AdamsBashforth_max_order.has_value()) {
-        SetMaxOrder(settings.AdamsBashforth_max_order.value());
+        setOrder(settings.AdamsBashforth_max_order.value());
     } else if (settings.AdamsBashforth_coefficients_vector.has_value()) {
-        SetCustomCoefficients(settings.AdamsBashforth_coefficients_vector.value());
+        setCustomCoefficients(settings.AdamsBashforth_coefficients_vector.value());
     } else {
-        logger->error("{in AdamsBashforth::SetConfig()} Missing AdamsBashforth settings");
+        logger->error("{in AdamsBashforth::setConfig()} Missing AdamsBashforth settings");
     }
 }
 
@@ -86,13 +86,13 @@ void AdamsBashforth::SetConfig(const Reader& Rdr) {
 // @param y The current state vector.
 // @param t The current time value.
 // @return Eigen::VectorXd The updated state vector after performing the integration step.
-Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
+Eigen::VectorXd AdamsBashforth::calcStep(const Eigen::VectorXd& y, double t) {
     const Eigen::VectorXd dydt = f_rhs(y, t);  // Compute the derivative at the current step
 
     // If history is empty, use order 1 as this is the first step
     if (history.empty()) {
         Eigen::VectorXd defaultCoefficients = generateCoefficients(1);
-        Eigen::VectorXd result = y + GetStepSize() * defaultCoefficients(0) * dydt;
+        Eigen::VectorXd result = y + getStepSize() * defaultCoefficients(0) * dydt;
         history.push_front(dydt);  // Update history with the current derivative
         return result;
     }
@@ -106,9 +106,9 @@ Eigen::VectorXd AdamsBashforth::Step(const Eigen::VectorXd& y, double t) {
     }
 
     // Perform the Adams-Bashforth step
-    Eigen::VectorXd result = y + GetStepSize() * coefficients(0) * dydt;
+    Eigen::VectorXd result = y + getStepSize() * coefficients(0) * dydt;
     for (int i = 1; i < coefficients.size(); ++i) {
-        result += GetStepSize() * coefficients(i) * history[i - 1];
+        result += getStepSize() * coefficients(i) * history[i - 1];
     }
 
     // Update history with the current derivative

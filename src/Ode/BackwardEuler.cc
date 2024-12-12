@@ -44,7 +44,7 @@ BackwardEuler::BackwardEuler(Logger& logger_) : Implicit(logger_) {}
  * @return Evaluated \( F(y_1, y_0, t_0) \).
  */
 Eigen::VectorXd BackwardEuler::F(Eigen::VectorXd y1, Eigen::VectorXd y0, double t0) {
-    return y1 - y0 - GetStepSize() * GetRightHandSide()(y1, t0);
+    return y1 - y0 - getStepSize() * getRightHandSide()(y1, t0);
 }
 
 /**
@@ -71,44 +71,44 @@ F_TYPE BackwardEuler::makeFstep(Eigen::VectorXd y0, double t0) {
  *
  * @param Rdr A `Reader` object containing configuration settings.
  */
-void BackwardEuler::SetConfig(const Reader& Rdr) {
+void BackwardEuler::setConfig(const Reader& Rdr) {
     ImplicitSettings settings = Rdr.getImplicitSettings();
-    SetRhsIsLinear(settings.rhs_is_linear);
-    SetLinearSystemSolver(settings.linear_system_solver.value());
+    setRhsIsLinear(settings.rhs_is_linear);
+    setLinearSystemSolver(settings.linear_system_solver.value());
 
-    if (GetRhsIsLinear()) {
-        SetRhsSystem(settings.rhs_system.value());
+    if (getRhsIsLinear()) {
+        setRhsSystem(settings.rhs_system.value());
     } else {
-        SetRootFinder(settings.root_finder.value());
+        setRootFinder(settings.root_finder.value());
     } 
-    if (! GetRhsIsLinear()){
+    if (! getRhsIsLinear()){
         if (settings.tolerance.has_value() &&
         settings.max_iterations.has_value()) {
-            SetTolerance(settings.tolerance.value());
-            SetMaxIterations(settings.max_iterations.value());
-            if (GetTolerance() > 1e-6) {
-                logger->warning("{in BackwardEuler::SetConfig()} Big tolerance, result might be not precise: " + std::to_string(GetTolerance()));
-            }if (GetMaxIterations() < 50 ) {
-                logger->warning("{in BackwardEuler::SetConfig()} Small number of iterations, result might be not precise: " + std::to_string(GetMaxIterations()));
-            }if (GetMaxIterations() > 1e6) {
-                logger->warning("{in BackwardEuler::SetConfig()} Big number of iterations, possibly long run time: " + std::to_string(GetMaxIterations()));
+            setTolerance(settings.tolerance.value());
+            setMaxIterations(settings.max_iterations.value());
+            if (getTolerance() > 1e-6) {
+                logger->warning("{in BackwardEuler::setConfig()} Big tolerance, result might be not precise: " + std::to_string(getTolerance()));
+            }if (getMaxIterations() < 50 ) {
+                logger->warning("{in BackwardEuler::setConfig()} Small number of iterations, result might be not precise: " + std::to_string(getMaxIterations()));
+            }if (getMaxIterations() > 1e6) {
+                logger->warning("{in BackwardEuler::setConfig()} Big number of iterations, possibly long run time: " + std::to_string(getMaxIterations()));
             }
-            if (settings.dx.has_value() && GetRootFinder() == "NewtonRaphson") {
-                SetDx(settings.dx.value());
-                if (GetDx() > 1e-3) {
-                    logger->warning("{in BackwardEuler::SetConfig()} Big dx, result might be not precise: " + std::to_string(GetDx()));
+            if (settings.dx.has_value() && getRootFinder() == "NewtonRaphson") {
+                setDx(settings.dx.value());
+                if (getDx() > 1e-3) {
+                    logger->warning("{in BackwardEuler::setConfig()} Big dx, result might be not precise: " + std::to_string(getDx()));
                 }
             } else {
-                logger->warning("{in BackwardEuler::SetConfig()} Missing parameter for root finder. Using default value.");
+                logger->warning("{in BackwardEuler::setConfig()} Missing parameter for root finder. Using default value.");
             }
         } else {
-            logger->warning("{in BackwardEuler::SetConfig()} Missing parameter for nonlinear solver. Using default values.");
+            logger->warning("{in BackwardEuler::setConfig()} Missing parameter for nonlinear solver. Using default values.");
         }
     }
     
 
-    // Call the base class method to set global configurations. (After potential linear system setup -> SetRhsSystem based on it)
-    SetGlobalConfig(Rdr);
+    // Call the base class method to set global configurations. (After potential linear system setup -> setRhsSystem based on it)
+    setGlobalConfig(Rdr);
 }
 
 /**
@@ -129,28 +129,28 @@ void BackwardEuler::SetConfig(const Reader& Rdr) {
  * @return Solution vector at the next time step.
  * @throws std::runtime_error If the configured linear solver is invalid.
  */
-Eigen::VectorXd BackwardEuler::LinStep(const Eigen::VectorXd y, double t) {
+Eigen::VectorXd BackwardEuler::calcLinStep(const Eigen::VectorXd y, double t) {
     // Construct the matrix \( I - hA \)
     const Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(
-        GetRhsSystem().A.rows(), GetRhsSystem().A.cols());
-    const Eigen::MatrixXd A = identity - GetStepSize() * GetRhsSystem().A;
+        getRhsSystem().A.rows(), getRhsSystem().A.cols());
+    const Eigen::MatrixXd A = identity - getStepSize() * getRhsSystem().A;
 
     // Construct the vector \( b + hy \)
-    const Eigen::VectorXd b = GetStepSize() * GetRhsSystem().b + y;
+    const Eigen::VectorXd b = getStepSize() * getRhsSystem().b + y;
 
     // Solve the system according to the configured solver
-    if (GetLinearSystemSolver() == "GaussianElimination") {
+    if (getLinearSystemSolver() == "GaussianElimination") {
         GaussElimSolve solver(*logger);
-        solver.SetA(A);
-        solver.SetB(b);
-        return solver.Solve();
-    } else if (GetLinearSystemSolver() == "LU") {
+        solver.setA(A);
+        solver.setB(b);
+        return solver.solveSys();
+    } else if (getLinearSystemSolver() == "LU") {
         LUSolve solver(*logger);
-        solver.SetA(A);
-        solver.SetB(b);
-        return solver.Solve();
+        solver.setA(A);
+        solver.setB(b);
+        return solver.solveSys();
     } else {
-        logger->error("{in BackwardEuler::LinStep()} Invalid linear system solver, GetLinearSystemSolver() returns: " + GetLinearSystemSolver());
+        logger->error("{in BackwardEuler::calcLinStep()} Invalid linear system solver, getLinearSystemSolver() returns: " + getLinearSystemSolver());
         return Eigen::VectorXd();
     }
 }

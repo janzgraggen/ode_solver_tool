@@ -26,7 +26,7 @@ Implicit::Implicit(Logger& logger_) : OdeSolver(logger_), tol(0.0), max_iter(0),
  * @brief Checks if the right-hand side function is linear.
  * @return `true` if the right-hand side is linear, `false` otherwise.
  */
-bool Implicit::GetRhsIsLinear() const {
+bool Implicit::getRhsIsLinear() const {
     return rhs_is_linear;
 }
 
@@ -34,7 +34,7 @@ bool Implicit::GetRhsIsLinear() const {
  * @brief Sets whether the right-hand side function is linear.
  * @param is_linear A boolean indicating if the function is linear.
  */
-void Implicit::SetRhsIsLinear(bool is_linear) {
+void Implicit::setRhsIsLinear(bool is_linear) {
     rhs_is_linear = is_linear;
 }
 
@@ -42,7 +42,7 @@ void Implicit::SetRhsIsLinear(bool is_linear) {
  * @brief Retrieves the name of the linear system solver.
  * @return The solver's name as a string.
  */
-str Implicit::GetLinearSystemSolver() const {
+str Implicit::getLinearSystemSolver() const {
     return linear_system_solver;
 }
 
@@ -50,7 +50,7 @@ str Implicit::GetLinearSystemSolver() const {
  * @brief Retrieves the name of the root-finder method.
  * @return The root-finder's name as a string.
  */
-str Implicit::GetRootFinder() const {
+str Implicit::getRootFinder() const {
     return root_finder;
 }
 
@@ -58,7 +58,7 @@ str Implicit::GetRootFinder() const {
  * @brief Retrieves the linear system representation for implicit methods.
  * @return The `LinearSystem` object representing the right-hand side.
  */
-LinearSystem Implicit::GetRhsSystem() const {
+LinearSystem Implicit::getRhsSystem() const {
     return rhs_system;
 }
 
@@ -67,7 +67,7 @@ LinearSystem Implicit::GetRhsSystem() const {
  * @brief Retrieves the tolerance for root-finding algorithms.
  * @return The tolerance value as a double.
  */
-double Implicit::GetTolerance() const {
+double Implicit::getTolerance() const {
     return tol;   
 }
 
@@ -76,7 +76,7 @@ double Implicit::GetTolerance() const {
  * @return The maximum number of iterations as an integer.
  */
 
-int Implicit::GetMaxIterations() const {
+int Implicit::getMaxIterations() const {
     return max_iter;
 
 }
@@ -85,7 +85,7 @@ int Implicit::GetMaxIterations() const {
  * @brief Retrieves the step size for numerical differentiation.
  * @return The step size value as a double.
  */
-double Implicit::GetDx() const {
+double Implicit::getDx() const {
     return dx;
 }
 
@@ -93,7 +93,7 @@ double Implicit::GetDx() const {
  * @brief Sets the step size for numerical differentiation.
  * @param dx The step size value to set.
  */
-void Implicit::SetDx(double dx) {
+void Implicit::setDx(double dx) {
     this->dx = dx;
 }
 
@@ -101,7 +101,7 @@ void Implicit::SetDx(double dx) {
  * @brief Sets the number of iterations for root-finding.
  * @param max_iter The maximum number of iterations to set.
  */
-void Implicit::SetMaxIterations(int max_iter) {
+void Implicit::setMaxIterations(int max_iter) {
     this->max_iter = max_iter;
 }
 
@@ -110,7 +110,7 @@ void Implicit::SetMaxIterations(int max_iter) {
  * @param tol The tolerance value to set.
  */
 
-void Implicit::SetTolerance(double tol) {
+void Implicit::setTolerance(double tol) {
     this->tol = tol;
 }
 
@@ -118,7 +118,7 @@ void Implicit::SetTolerance(double tol) {
  * @brief Sets the root-finder method for nonlinear systems.
  * @param root_finder_in The name of the root-finder to use.
  */
-void Implicit::SetRootFinder(str root_finder_in) {
+void Implicit::setRootFinder(str root_finder_in) {
     root_finder = root_finder_in;
 }
 
@@ -126,7 +126,7 @@ void Implicit::SetRootFinder(str root_finder_in) {
  * @brief Sets the linear system representation for the right-hand side.
  * @param system The `LinearSystem` object representing the system.
  */
-void Implicit::SetRhsSystem(LinearSystem system) {
+void Implicit::setRhsSystem(LinearSystem system) {
     rhs_system = system;
 }
 
@@ -134,7 +134,7 @@ void Implicit::SetRhsSystem(LinearSystem system) {
  * @brief Sets the linear system solver to use.
  * @param solver The name of the solver as a string.
  */
-void Implicit::SetLinearSystemSolver(str solver) {
+void Implicit::setLinearSystemSolver(str solver) {
     linear_system_solver = solver;
 }
 
@@ -146,10 +146,10 @@ void Implicit::SetLinearSystemSolver(str solver) {
  *
  * @param f The right-hand side function \( f(y, t) \).
  */
-void Implicit::SetRightHandSide(const f_TYPE& f) {
-    if (GetRhsIsLinear()) {
+void Implicit::setRightHandSide(const f_TYPE& f) {
+    if (getRhsIsLinear()) {
         f_rhs = [this](const Eigen::VectorXd& y, double t) {
-            return this->GetRhsSystem().A * y + this->GetRhsSystem().b;
+            return this->getRhsSystem().A * y + this->getRhsSystem().b;
         };
     } else {
         this->f_rhs = f;
@@ -167,33 +167,33 @@ void Implicit::SetRightHandSide(const f_TYPE& f) {
  * @return The solution vector at the next time step.
  * @throws std::runtime_error if an invalid root finder method is specified.
  */
-Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
+Eigen::VectorXd Implicit::calcNonLinStep(const Eigen::VectorXd y, double t) {
     RootFinder* solver = nullptr;
-    if (GetRootFinder() == "NewtonRaphson") {
+    if (getRootFinder() == "NewtonRaphson") {
         solver = new NewtonRaphson(*logger, makeFstep(y, t));
         solver->setInitialGuess(y);
-        solver->SetLinearSystemSolver(GetLinearSystemSolver());
+        solver->setLinearSystemSolver(getLinearSystemSolver());
         
-        if (GetTolerance() && GetMaxIterations()) { //< they are initialized to 0
-            solver->setTolerance(GetTolerance());
-            solver->setMaxIterations(GetMaxIterations());
-            if (GetDx() && GetRootFinder() == "NewtonRaphson") {
-                solver->setDx(GetDx());
+        if (getTolerance() && getMaxIterations()) { //< they are initialized to 0
+            solver->setTolerance(getTolerance());
+            solver->setMaxIterations(getMaxIterations());
+            if (getDx() && getRootFinder() == "NewtonRaphson") {
+                solver->setDx(getDx());
             } else {
-                logger->warning("{in Implicit::NonLinStep()} Missing parameter for nonlinear solver: dx. Using default values.");
+                logger->warning("{in Implicit::calcNonLinStep()} Missing parameter for nonlinear solver: dx. Using default values.");
             }
 
         } else {
-            logger->warning("{in Implicit::NonLinStep()} Missing parameter for nonlinear solver. Using default values.");
+            logger->warning("{in Implicit::calcNonLinStep()} Missing parameter for nonlinear solver. Using default values.");
         }
         
-        Eigen::VectorXd solution = solver->Solve();
+        Eigen::VectorXd solution = solver->solveRoot();
 
         // Clean up resources
         delete solver;
         return solution;
     } else {
-        logger->error("Invalid root finder method: " + GetRootFinder());
+        logger->error("Invalid root finder method: " + getRootFinder());
         return Eigen::VectorXd(); // Return an empty vector
     }
 }
@@ -208,10 +208,10 @@ Eigen::VectorXd Implicit::NonLinStep(const Eigen::VectorXd y, double t) {
  * @param t Current time.
  * @return The solution vector at the next time step.
  */
-Eigen::VectorXd Implicit::Step(const Eigen::VectorXd& y, double t) {
-    if (GetRhsIsLinear()) {
-        return LinStep(y, t);
+Eigen::VectorXd Implicit::calcStep(const Eigen::VectorXd& y, double t) {
+    if (getRhsIsLinear()) {
+        return calcLinStep(y, t);
     } else {
-        return NonLinStep(y, t);
+        return calcNonLinStep(y, t);
     }
 }

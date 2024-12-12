@@ -23,7 +23,7 @@ using str = std::string;
 
 class NewtonRaphson : public RootFinder {
 private:
-    /** @brief Step size for numerical differentiation in the Newton-Raphson method. */
+    /** @brief calcStep size for numerical differentiation in the Newton-Raphson method. */
     double dx;
 
     /** @brief Name of the linear system solver to use for solving implicit equations. */
@@ -67,7 +67,7 @@ public:
      *
      * @param solver The solver type as a string (e.g., "Gaussian Elimination" or "LU").
      */
-    void SetLinearSystemSolver(str solver) override;
+    void setLinearSystemSolver(str solver) override;
 
     /**
      * @brief Retrieves the step size `dx` for numerical differentiation.
@@ -81,7 +81,7 @@ public:
      *
      * @return The solver type as a string.
      */
-    str GetLinearSystemSolver() const override;
+    str getLinearSystemSolver() const override;
 
     /**
      * @brief Computes the numerical Jacobian matrix for a system of nonlinear equations.
@@ -92,7 +92,7 @@ public:
      * @param x The input vector representing the current state of the system.
      * @return The computed Jacobian matrix.
      */
-    Eigen::MatrixXd NumericalJacobian(Eigen::VectorXd& x);
+    Eigen::MatrixXd calcNumericalJacobian(Eigen::VectorXd& x);
 
     /**
      * @brief Solves the system of equations using the Newton-Raphson iterative method.
@@ -102,7 +102,7 @@ public:
      *
      * @return The computed root of the system as an Eigen::VectorXd.
      */
-    Eigen::VectorXd Solve() override;
+    Eigen::VectorXd solveRoot() override;
 };
 
 #endif // __NEWTON_RAPHSON__HH__

@@ -29,7 +29,7 @@ public:
      * @brief Constructor to set the verbosity level.
      *
      * @param verbosity An integer representing the desired logging verbosity level.
-     * - Silent: 0
+     * - silent: 0
      * - Error: 1
      * - Warning: 2
      * - Info: 3
@@ -69,11 +69,11 @@ public:
 
 private:
     int verbosity;  //!< Current verbosity level of logging.
-    static const int Silent = 0;  //!< Logging level for silent mode.
-    static const int Error = 1;   //!< Logging level for errors only.
-    static const int Warning = 2; //!< Logging level for warnings.
-    static const int Info = 3;    //!< Logging level for informational messages.
-    static const int Debug = 4;   //!< Logging level for debug messages.
+    static const int silent = 0;  //!< Logging level for silent mode.
+    static const int err = 1;   //!< Logging level for errors only.
+    static const int warn = 2; //!< Logging level for warnings.
+    static const int inf = 3;    //!< Logging level for informational messages.
+    static const int debg = 4;   //!< Logging level for debug messages.
 };
 
 #endif // LOGGER_HH

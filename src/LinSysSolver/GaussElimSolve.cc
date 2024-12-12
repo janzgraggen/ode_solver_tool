@@ -38,10 +38,10 @@ GaussElimSolve::GaussElimSolve(Logger& logger_) : LinSysSolver(logger_) {}
  *
  * @return Eigen::VectorXd The computed solution vector \( x \).
  */
-Eigen::VectorXd GaussElimSolve::Solve() {
+Eigen::VectorXd GaussElimSolve::solveSys() {
   // Retrieve the coefficient matrix (A) and the right-hand side vector (b)
-  Eigen::MatrixXd A = this->GetA();
-  Eigen::VectorXd b = this->GetB();
+  Eigen::MatrixXd A = this->getA();
+  Eigen::VectorXd b = this->getB();
 
   // Solve the system using Eigen's QR decomposition
   return A.colPivHouseholderQr().solve(b);

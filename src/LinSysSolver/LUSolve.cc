@@ -41,10 +41,10 @@ LUSolve::~LUSolve() = default;
  * @return Eigen::VectorXd The solution vector \( x \).
  * @throws std::runtime_error If the coefficient matrix \( A \) is singular.
  */
-Eigen::VectorXd LUSolve::Solve() {
+Eigen::VectorXd LUSolve::solveSys() {
     // Retrieve the coefficient matrix (A) and the right-hand side vector (b)
-    Eigen::MatrixXd A = this->GetA();
-    Eigen::VectorXd b = this->GetB();
+    Eigen::MatrixXd A = this->getA();
+    Eigen::VectorXd b = this->getB();
 
     // Perform LU decomposition using Eigen's FullPivLU
     Eigen::FullPivLU<Eigen::MatrixXd> lu(A);

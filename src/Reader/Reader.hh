@@ -63,15 +63,15 @@ public:
     str getOutputFileName() const;
 
     /**
-     * @brief Retrieves the dimension of the system specified in the configuration.
-     * @return An integer representing the dimension of the system (number of state variables).
+     * @brief Retrieves the getDimension of the system specified in the configuration.
+     * @return An integer representing the getDimension of the system (number of state variables).
      */
     int getDim() const;
 
     /**
      * @brief Retrieves a list of function strings for the system from the configuration.
      *
-     * Constructs a list of function strings corresponding to the dimension of the system.
+     * Constructs a list of function strings corresponding to the getDimension of the system.
      * These strings represent the mathematical functions defining the system's behavior.
      *
      * @return A `strList` containing the function strings.

@@ -50,7 +50,7 @@ public:
      *
      * @param Rdr A `Reader` object containing configuration settings.
      */
-    void SetConfig(const Reader& Rdr) override;
+    void setConfig(const Reader& Rdr) override;
 
     /**
      * @brief Advances the solution by one time step using the Forward Euler method.
@@ -61,7 +61,7 @@ public:
      * @param t The current time.
      * @return The solution vector at the next time step.
      */
-    Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;
+    Eigen::VectorXd calcStep(const Eigen::VectorXd& y, double t) override;
 };
 
 #endif // FORWARD_EULER_HH

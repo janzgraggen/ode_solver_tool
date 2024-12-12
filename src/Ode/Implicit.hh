@@ -82,43 +82,43 @@ public:
      * @brief Checks if the right-hand side function is linear.
      * @return `true` if the right-hand side is linear, `false` otherwise.
      */
-    bool GetRhsIsLinear() const;
+    bool getRhsIsLinear() const;
 
     /**
      * @brief Retrieves the name of the linear system solver.
      * @return A string containing the solver's name.
      */
-    str GetLinearSystemSolver() const;
+    str getLinearSystemSolver() const;
 
     /**
      * @brief Retrieves the name of the root finder.
      * @return A string containing the root finder's name.
      */
-    str GetRootFinder() const;
+    str getRootFinder() const;
 
     /**
      * @brief Gets the current linear system representation.
      * @return The `LinearSystem` object.
      */
-    LinearSystem GetRhsSystem() const;
+    LinearSystem getRhsSystem() const;
 
     /**
      * @brief Retrieves the tolerance for root-finding algorithms.
      * @return The tolerance value as a double.
      */
-    double GetTolerance() const;
+    double getTolerance() const;
 
     /**
      * @brief Retrieves the maximum number of iterations for root-finding.
      * @return The maximum number of iterations as an integer.
      */
-    int GetMaxIterations() const;
+    int getMaxIterations() const;
 
     /**
      * @brief Retrieves the step size for numerical differentiation.
      * @return The step size value as a double.
      */
-    double GetDx() const;
+    double getDx() const;
 
     // Setters
 
@@ -126,43 +126,43 @@ public:
      * @brief Sets the step size for numerical differentiation.
      * @param dx The step size value to set.
      */
-    void SetDx(double dx);
+    void setDx(double dx);
 
     /**
      * @brief Sets the number of iterations for root-finding.
      * @param max_iter The maximum number of iterations to set.
      */
-    void SetMaxIterations(int max_iter);
+    void setMaxIterations(int max_iter);
 
     /**
      * @brief Sets the tolerance for root-finding algorithms.
      * @param tol The tolerance value to set.
      */
-    void SetTolerance(double tol); 
+    void setTolerance(double tol); 
 
     /**
      * @brief Sets the linearity flag of the right-hand side function.
      * @param linear `true` if the right-hand side is linear, `false` otherwise.
      */
-    void SetRhsIsLinear(bool linear);
+    void setRhsIsLinear(bool linear);
 
     /**
      * @brief Sets the linear system solver to be used.
      * @param solver The name of the linear system solver as a string.
      */
-    void SetLinearSystemSolver(str solver);
+    void setLinearSystemSolver(str solver);
 
     /**
      * @brief Sets the root finder to be used for nonlinear solvers.
      * @param finder The name of the root finder as a string.
      */
-    void SetRootFinder(str finder);
+    void setRootFinder(str finder);
 
     /**
      * @brief Sets the linear system representation for implicit solvers.
      * @param system The `LinearSystem` object to use.
      */
-    void SetRhsSystem(LinearSystem system);
+    void setRhsSystem(LinearSystem system);
 
     // Overrides
 
@@ -174,7 +174,7 @@ public:
      *
      * @param f The right-hand side function \( f(y, t) \).
      */
-    void SetRightHandSide(const f_TYPE& f) override;
+    void setRightHandSide(const f_TYPE& f) override;
 
     /**
      * @brief Advances the solution for linear systems using an implicit step.
@@ -182,7 +182,7 @@ public:
      * @param t Current time.
      * @return The solution vector at the next time step.
      */
-    virtual Eigen::VectorXd LinStep(const Eigen::VectorXd y, double t) = 0;
+    virtual Eigen::VectorXd calcLinStep(const Eigen::VectorXd y, double t) = 0;
 
     /**
      * @brief Advances the solution for nonlinear systems using an implicit step.
@@ -190,7 +190,7 @@ public:
      * @param t Current time.
      * @return The solution vector at the next time step.
      */
-    Eigen::VectorXd NonLinStep(const Eigen::VectorXd y, double t);
+    Eigen::VectorXd calcNonLinStep(const Eigen::VectorXd y, double t);
 
     /**
      * @brief Creates a function \( F \) for a nonlinear step.
@@ -209,7 +209,7 @@ public:
      * @param t Current time.
      * @return The solution vector at the next time step.
      */
-    Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;
+    Eigen::VectorXd calcStep(const Eigen::VectorXd& y, double t) override;
 };
 
 #endif // IMPLICIT_HH

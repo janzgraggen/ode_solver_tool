@@ -194,7 +194,7 @@ public:
      *
      * @return An Eigen vector representing the root solution.
      */
-    virtual Eigen::VectorXd Solve() = 0;
+    virtual Eigen::VectorXd solveRoot() = 0;
 
     /**
      * @brief Sets the linear system solver.
@@ -203,14 +203,14 @@ public:
      *
      * @param solver The solver type as a string.
      */
-    virtual void SetLinearSystemSolver(str solver) = 0;
+    virtual void setLinearSystemSolver(str solver) = 0;
 
     /**
      * @brief Gets the linear system solver currently in use.
      *
      * @return The solver type as a string.
      */
-    virtual str GetLinearSystemSolver() const = 0;
+    virtual str getLinearSystemSolver() const = 0;
 };
 
 #endif // __ROOT_FINDER__HH__

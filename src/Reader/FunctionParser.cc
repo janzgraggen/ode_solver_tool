@@ -17,7 +17,7 @@
  /**
   * @brief Constructor for the FunctionParser class.
   * 
-  * Initializes the FunctionParser with a specified dimension `n` and a list of functions.
+  * Initializes the FunctionParser with a specified getDimension `n` and a list of functions.
   * Sets up the parsers for each function, binds variables to shared storage, and parses the provided
   * mathematical expressions.
   *
@@ -28,10 +28,10 @@
 FunctionParser::FunctionParser(int n, const strList& functions)
     : f_i(functions), n(n) {
     if (n == 0) {
-        throw std::invalid_argument("The dimension (n) must not be zero.");
+        throw std::invalid_argument("The getDimension (n) must not be zero.");
     }
     if (functions.size() != n) {
-        throw std::invalid_argument("The number of functions does not match the specified dimension (n).");
+        throw std::invalid_argument("The number of functions does not match the specified getDimension (n).");
     }
 
     // Initialize shared variables for parsers
@@ -66,7 +66,7 @@ FunctionParser::FunctionParser(int n, const strList& functions)
  * @throws std::invalid_argument if the input vector size does not match `n + 1`.
  * @throws std::runtime_error if an error occurs during function evaluation.
  */
-Eigen::VectorXd FunctionParser::evaluate(const Eigen::VectorXd& input) {
+Eigen::VectorXd FunctionParser::evaluateParsedFunction(const Eigen::VectorXd& input) {
     if (input.size() != n + 1) {
         throw std::invalid_argument("Input vector size must be " + std::to_string(n + 1) + ".");
     }

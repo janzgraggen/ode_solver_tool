@@ -78,7 +78,7 @@ public:
      *
      * @param Rdr A `Reader` object containing configuration settings.
      */
-    void SetConfig(const Reader& Rdr) override;
+    void setConfig(const Reader& Rdr) override;
 
     /**
      * @brief Advances the solution by one time step using the Backward Euler method for linear systems.
@@ -98,7 +98,7 @@ public:
      * @return The solution vector at the next time step.
      * @throws std::runtime_error If the configured linear solver is not recognized.
      */
-    Eigen::VectorXd LinStep(const Eigen::VectorXd y, double t) override;
+    Eigen::VectorXd calcLinStep(const Eigen::VectorXd y, double t) override;
 };
 
 #endif // __BACKWARDEULER_HH__

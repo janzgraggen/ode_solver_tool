@@ -64,7 +64,7 @@ public:
      * @brief Sets the coefficients for a user-defined Runge-Kutta method.
      * @param Rdr The reader object containing the coefficients.
      */
-    void SetConfig(const Reader& Rdr) override;
+    void setConfig(const Reader& Rdr) override;
 
     /**
      * @brief Performs a single step of the Runge-Kutta integration method.
@@ -72,7 +72,7 @@ public:
      * @param t The current time.
      * @return The updated state vector after one Runge-Kutta step.
      */
-    Eigen::VectorXd Step(const Eigen::VectorXd& y, double t) override;  // Vectorized Step
+    Eigen::VectorXd calcStep(const Eigen::VectorXd& y, double t) override;  // Vectorized calcStep
 };
 
 #endif // RUNGEKUTTA_HH

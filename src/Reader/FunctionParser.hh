@@ -64,7 +64,7 @@ public:
      * @throws std::invalid_argument if the input vector size does not match `n + 1`.
      * @throws std::runtime_error if any error occurs during function evaluation.
      */
-    Eigen::VectorXd evaluate(const Eigen::VectorXd& input);
+    Eigen::VectorXd evaluateParsedFunction(const Eigen::VectorXd& input);
 
     /**
      * @brief Returns a callable function that evaluates the stored functions dynamically.
@@ -83,7 +83,7 @@ public:
      *
      * @return The dimension `n` representing the number of functions.
      */
-    size_t dimension() const { return n; }
+    size_t getDimension() const { return n; }
 };
 
 #endif // __FUNCTIONPARSER_HH__

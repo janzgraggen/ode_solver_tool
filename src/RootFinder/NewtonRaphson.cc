@@ -71,7 +71,7 @@ void NewtonRaphson::setDx(double dx){
  *
  * @param linear_system_solver_in The solver to use (e.g., Gaussian Elimination or LU decomposition).
  */
-void NewtonRaphson::SetLinearSystemSolver(str linear_system_solver_in) {
+void NewtonRaphson::setLinearSystemSolver(str linear_system_solver_in) {
     linear_system_solver = linear_system_solver_in;
 }
 
@@ -89,7 +89,7 @@ double NewtonRaphson::getDx() const {
  *
  * @return The solver as a string representing its name (e.g., "GaussianElimination").
  */
-str NewtonRaphson::GetLinearSystemSolver() const {
+str NewtonRaphson::getLinearSystemSolver() const {
     return linear_system_solver;
 }
 
@@ -102,7 +102,7 @@ str NewtonRaphson::GetLinearSystemSolver() const {
  * @param x The input vector representing the current state of the system.
  * @return The computed Jacobian matrix.
  */
-Eigen::MatrixXd NewtonRaphson::NumericalJacobian(Eigen::VectorXd& x) {
+Eigen::MatrixXd NewtonRaphson::calcNumericalJacobian(Eigen::VectorXd& x) {
     double dx = getDx();
     int n = x.size();
     Eigen::MatrixXd J(callF(x).size(), n);
@@ -135,29 +135,29 @@ Eigen::MatrixXd NewtonRaphson::NumericalJacobian(Eigen::VectorXd& x) {
  *
  * @return The computed root as an Eigen::VectorXd.
  */
-Eigen::VectorXd NewtonRaphson::Solve() {
+Eigen::VectorXd NewtonRaphson::solveRoot() {
     Eigen::VectorXd x = getInitialGuess();
     Eigen::VectorXd Fx = callF(x);
 
     LinSysSolver* solver = nullptr;
 
-    if (GetLinearSystemSolver() == "GaussianElimination") {
+    if (getLinearSystemSolver() == "GaussianElimination") {
         solver = new GaussElimSolve(logger);
-    } else if (GetLinearSystemSolver() == "LU") {
+    } else if (getLinearSystemSolver() == "LU") {
         solver = new LUSolve(logger);
     } else {
-        logger.error("Invalid linear system solver: " + GetLinearSystemSolver());
+        logger.error("Invalid linear system solver: " + getLinearSystemSolver());
         return x;
     }
 
     while (Fx.norm() > getTolerance() && getIterationCount() < getMaxIterations()) {
-        Eigen::MatrixXd J = NumericalJacobian(x);
+        Eigen::MatrixXd J = calcNumericalJacobian(x);
 
         try {
-            solver->SetA(J);
-            solver->SetB(-Fx);
+            solver->setA(J);
+            solver->setB(-Fx);
 
-            Eigen::VectorXd delta = solver->Solve();
+            Eigen::VectorXd delta = solver->solveSys();
             x += delta;
 
             Fx = callF(x);

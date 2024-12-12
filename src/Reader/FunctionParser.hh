@@ -9,12 +9,11 @@
  * The class supports multiple functions, dynamically binds time and state variables, and ensures proper
  * error handling and evaluation of mathematical expressions for scalable ODE-solving and simulation tasks.
  *
- * Author: [Your Name]  
- * Date: [YYYY-MM-DD]
+ * Author: janzgraggen
  */
 
-#ifndef __FUNCTIONPARSER_HH__
-#define __FUNCTIONPARSER_HH__
+#ifndef FUNCTIONPARSER_HH
+#define FUNCTIONPARSER_HH
 
 #include <vector>
 #include <string>
@@ -86,4 +85,4 @@ public:
     size_t getDimension() const { return n; }
 };
 
-#endif // __FUNCTIONPARSER_HH__
+#endif // FUNCTIONPARSER_HH

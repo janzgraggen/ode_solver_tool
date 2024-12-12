@@ -194,7 +194,7 @@ Eigen::VectorXd Implicit::calcNonLinStep(const Eigen::VectorXd y, double t) {
         return solution;
     } else {
         logger->error("Invalid root finder method: " + getRootFinder());
-        return Eigen::VectorXd(); // Return an empty vector
+        return {}; // Return an empty vector
     }
 }
 

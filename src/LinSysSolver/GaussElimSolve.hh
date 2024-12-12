@@ -11,8 +11,8 @@
  * Date: 27/11/2024
  */
 
-#ifndef __GAUSSELIMSOLVE_HH__
-#define __GAUSSELIMSOLVE_HH__
+#ifndef GAUSSELIMSOLVE_HH
+#define GAUSSELIMSOLVE_HH
 
 #include "LinSysSolver.hh"
 #include <Eigen/Dense>
@@ -54,4 +54,4 @@ public:
  Eigen::VectorXd solveSys() override;
 };
 
-#endif // __GAUSSELIMSOLVE_HH__
+#endif // GAUSSELIMSOLVE_HH

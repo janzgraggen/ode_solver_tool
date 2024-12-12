@@ -10,8 +10,8 @@
  * Date: 27/11/2024
  */
 
-#ifndef __BACKWARDEULER_HH__
-#define __BACKWARDEULER_HH__
+#ifndef BACKWARDEULER_HH
+#define BACKWARDEULER_HH
 
 #include "Implicit.hh"
 #include <functional>
@@ -66,7 +66,7 @@ public:
      * @param t0 The current time.
      * @return A callable object representing \( F(y_1) \) for root-finding.
      */
-    virtual F_TYPE makeFstep(Eigen::VectorXd y0, double t0) override;
+    F_TYPE makeFstep(Eigen::VectorXd y0, double t0) override;
 
     /**
      * @brief Configures the Backward Euler solver based on settings from a configuration reader.
@@ -101,4 +101,4 @@ public:
     Eigen::VectorXd calcLinStep(const Eigen::VectorXd y, double t) override;
 };
 
-#endif // __BACKWARDEULER_HH__
+#endif // BACKWARDEULER_HH

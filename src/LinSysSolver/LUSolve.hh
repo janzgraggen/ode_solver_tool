@@ -10,8 +10,8 @@
  * Date: 27/11/2024
  */
 
-#ifndef __LU_SOLVE_HH__
-#define __LU_SOLVE_HH__
+#ifndef LU_SOLVE_HH
+#define LU_SOLVE_HH
 
 #include "LinSysSolver.hh"
 
@@ -51,4 +51,4 @@ public:
  Eigen::VectorXd solveSys() override;
 };
 
-#endif // __LU_SOLVE_HH__
+#endif // LU_SOLVE_HH

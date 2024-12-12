@@ -1,5 +1,22 @@
-#ifndef __READER_HH__
-#define __READER_HH__
+/**
+ * @file Reader.hh
+ * @brief Header file for the `Reader` class, which loads and parses ODE solver configurations from a YAML file.
+ *
+ * This header defines the `Reader` class, responsible for reading and parsing YAML configuration files
+ * to set up the parameters required for ODE solvers. It supports retrieving solver types (explicit or implicit),
+ * solver-specific settings, initial conditions, and function strings that define the system's behavior.
+ * The `Reader` also integrates with a `Logger` object, allowing logging of messages and activities related
+ * to the configuration parsing process and solver diagnostics.
+ *
+ * The class ensures that all necessary solver parameters, such as system dimensions, output filenames,
+ * and verbosity levels, are correctly interpreted and made accessible for efficient solver initialization
+ * and execution.
+ *
+ * Author: janzgraggen
+ */
+
+#ifndef READER_HH
+#define READER_HH
 
 #include <string>
 #include <vector>
@@ -121,4 +138,4 @@ private:
     YAML::Node config; //!< The YAML configuration object storing all configuration parameters.
 };
 
-#endif // __READER_HH__
+#endif // READER_HH

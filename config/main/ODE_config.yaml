@@ -3,7 +3,7 @@ output_file: "output_test_ExplAB4.csv" # Empty string or Nothing for no output f
 verbosity_level: 3    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
 
 # Function configuration
-Dim: 3
+Dim: 3 # An integer must be provided, that matches the f and y dimension
 Function: 
   f1: "0"
   f2: "y2"

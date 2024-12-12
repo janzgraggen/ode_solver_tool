@@ -151,6 +151,6 @@ Eigen::VectorXd BackwardEuler::calcLinStep(const Eigen::VectorXd y, double t) {
         return solver.solveSys();
     } else {
         logger->error("{in BackwardEuler::calcLinStep()} Invalid linear system solver, getLinearSystemSolver() returns: " + getLinearSystemSolver());
-        return Eigen::VectorXd();
+        return {};
     }
 }

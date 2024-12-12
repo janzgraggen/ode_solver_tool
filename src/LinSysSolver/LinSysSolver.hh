@@ -11,8 +11,8 @@
  * Date: 27/11/2024
  */
 
-#ifndef __LIN_SYS_SOLVER_HH__
-#define __LIN_SYS_SOLVER_HH__
+#ifndef LIN_SYS_SOLVER_HH
+#define LIN_SYS_SOLVER_HH
 
 #include <Eigen/Dense>
 #include "../Logger/Logger.hh"
@@ -81,4 +81,4 @@ public:
     virtual Eigen::VectorXd solveSys() = 0;
 };
 
-#endif // __LIN_SYS_SOLVER_HH__
+#endif // LIN_SYS_SOLVER_HH

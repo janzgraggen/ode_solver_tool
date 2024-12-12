@@ -154,7 +154,6 @@ overwrite the current file by keeping the output filename intact.
 
 The Doxyfile necessary to generate an .html is included in the repository. An `html` folder containing the `index.html` 
 is generated from building the project if you have Doxygen installed. Otherwise, it is also possible to run the command:
-the project.
    ```bash
    cmake --build . --target doc_doxygen
    ```

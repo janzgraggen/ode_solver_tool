@@ -10,8 +10,8 @@
  * @date 27/11/2024
  */
 
-#ifndef __ROOT_FINDER__HH__
-#define __ROOT_FINDER__HH__
+#ifndef ROOT_FINDER__HH
+#define ROOT_FINDER__HH
 
 #include <Eigen/Dense>
 #include <functional>
@@ -213,5 +213,5 @@ public:
     virtual str getLinearSystemSolver() const = 0;
 };
 
-#endif // __ROOT_FINDER__HH__
+#endif // ROOT_FINDER__HH
 

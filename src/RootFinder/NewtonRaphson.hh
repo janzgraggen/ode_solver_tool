@@ -13,8 +13,8 @@
  * @date 27/11/2024
  */
 
-#ifndef __NEWTON_RAPHSON__HH__
-#define __NEWTON_RAPHSON__HH__
+#ifndef NEWTON_RAPHSON__HH
+#define NEWTON_RAPHSON__HH
 
 #include "RootFinder.hh"
 
@@ -105,4 +105,4 @@ public:
     Eigen::VectorXd solveRoot() override;
 };
 
-#endif // __NEWTON_RAPHSON__HH__
+#endif // NEWTON_RAPHSON__HH

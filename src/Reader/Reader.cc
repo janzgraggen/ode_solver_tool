@@ -199,7 +199,7 @@ ExplicitSettings Reader::getExplicitSettings() const {
  * @throws std::runtime_error If the configuration for an implicit solver is invalid.
  */
 ImplicitSettings Reader::getImplicitSettings() const {
-    ImplicitSettings implSet;
+    ImplicitSettings implSet = {};
     auto implicitNode = config["Implicit"];
 
     if (implicitNode["method"].IsScalar()

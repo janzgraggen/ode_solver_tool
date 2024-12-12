@@ -36,17 +36,52 @@ using str = std::string; ///< Alias for the string type.
  */
 class OdeSolver {
 private:
-    double stepSize; ///< The step size for the numerical method.
-    double initialTime; ///< The initial time of the simulation.
-    double finalTime; ///< The final time of the simulation.
-    Eigen::VectorXd initialValue; ///< The initial state vector of the system.
-    str outputFileName; ///< The output file name for storing results.
+ /**
+  * @brief The step size for the numerical method.
+  *
+  * This defines the size of each integration step.
+  */
+ double stepSize;
+
+ /**
+  * @brief The initial time of the simulation.
+  *
+  * This specifies the starting time for the ODE solver.
+  */
+ double initialTime;
+
+ /**
+  * @brief The final time of the simulation.
+  *
+  * This specifies the end time for the ODE solver.
+  */
+ double finalTime;
+
+ /**
+  * @brief The initial state vector of the system.
+  *
+  * This vector contains the initial conditions for the system being solved.
+  */
+ Eigen::VectorXd initialValue;
+
+ /**
+  * @brief The output file name for storing results.
+  *
+  * Specifies the name of the file where results will be saved.
+  */
+ str outputFileName;
 
 protected: // Protected access to allow assignment of different right-hand side functions in derived classes.
     f_TYPE f_rhs; ///< The right-hand side function of the ODE system.
 
 public:
-    Logger* logger; ///< Pointer to the logger object for logging messages and solver activities.
+      /**
+     * @brief Pointer to the logger object for recording solver activities and diagnostics.
+     *
+     * The `logger` provides an interface to log events, errors, and performance metrics,
+     * aiding in debugging, monitoring, and analyzing the solver's behavior and progress.
+     */
+    Logger* logger;
 
     /**
      * @brief Default constructor for the OdeSolver class.

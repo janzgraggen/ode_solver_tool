@@ -46,5 +46,5 @@ Implicit:
   # if rhs is NOT linear 
   tolerance:
   max_iterations:
-  root_finder:  # Choose between "NewtonRaphson" (or "FixedPoint")
+  root_finder:  # Choose "NewtonRaphson" 
   dx : # for NewtonRaphson (or methods that use numerical differentiation)  

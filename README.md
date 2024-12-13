@@ -33,7 +33,7 @@ It offers a flexible framework for solving ODEs based on user-defined equations 
 
 ### Numerical Subroutines (for implicit methods)
 - **Linear System Solvers**:
-  - Gaussian Elimination
+  - QR Decompositions
   - LU Decomposition
 - **Root-Finding**:
   - Newton-Raphson Method
@@ -137,7 +137,7 @@ higher orders, such that only one initial vector is sufficient. More documentati
 ### Implicit Solver Settings (if `solver_type: "Implicit"`)
 - `method`: Choose `"BackwardEuler"`.
 - `rhs_is_linear`: Boolean to specify if the Right Hand Side (RHS) function is linear.
-- `linear_system_solver`: Choose from `"GaussianElimination"` or `"LU"`.
+- `linear_system_solver`: Choose from `"QRn"` or `"LU"`.
 - **Linear RHS**:
   - `rhs_system`: Define the system matrix A and vector b such that $$ f = A y + b $$
 
@@ -170,7 +170,7 @@ The project is modularly organized for easy extensibility:
 ```
 src
 ├── LinSysSolver
-│   ├── GaussElimSolve.cc & .hh
+│   ├── QRSolve.cc & .hh
 │   ├── LUSolve.cc & .hh
 │   └── LinSysSolver.cc & .hh
 ├── Logger

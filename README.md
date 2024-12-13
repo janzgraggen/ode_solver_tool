@@ -11,7 +11,7 @@ by Jan Zgraggen and Nathan Kabas Kuroiwa
 
 Welcome to our ODE-Solver Project!
 
-> Note: The project is part of the **MATH-458: Programming Concepts in Scientific Computing** course at EPFL (Fall semester 2024) thaught by Guillaume Anciaux.
+> Note: The project is part of the **MATH-458: Programming Concepts in Scientific Computing** course at EPFL (Fall semester 2024) taught by Guillaume Anciaux.
 
 Built using C++, the project is dedicated to solving systems of ordinary differential equations (ODEs) of the form
 $$\frac{dy}{dt} = f(t,y),$$ where we want to find $$\quad y(t) \in \mathbb{R}^n,$$
@@ -54,6 +54,10 @@ If the `html` folder is not automatically generated, you can still run the comma
 ---
 
 ## Getting Started
+
+### Development Environment
+This project has been developed and tested using the following tools and environments: CMake and Bundled MinGW (GCC/G++,
+GDB) in CLion on Windows, and Apple Clang with ARM64 (Apple Silicon, macOS) on macOS.
 
 ### Dependencies
 In this project, the following libraries are used:

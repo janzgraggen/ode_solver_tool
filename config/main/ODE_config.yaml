@@ -40,7 +40,7 @@ Explicit:
 Implicit:
   method: "BackwardEuler"  # Choose "BackwardEuler" 
   rhs_is_linear: false
-  linear_system_solver: "jn"  # Choose between "QR" or "LU"  (also needed for systems in RootFinding)
+  linear_system_solver: "QR"  # Choose between "QR" or "LU"  (also needed for systems in RootFinding)
   # if rhs is linear :y' = Ay + b
   rhs_system:         
     A:
@@ -48,5 +48,5 @@ Implicit:
   # if rhs is NOT linear 
   tolerance: 0.000001
   max_iterations: 50
-  root_finder: "NewtonRaphson"  # Choose between "NewtonRaphson" (or "FixedPoint")
+  root_finder: "NewtonRaphson"  # Choose between "NewtonRaphson"
   dx : 0.0001 # for NewtonRaphson (or methods that use numerical differentiation)

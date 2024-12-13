@@ -57,7 +57,7 @@ If the `html` folder is not automatically generated, you can still run the comma
 
 ### Development Environment
 This project has been developed and tested using the following tools and environments: CMake and Bundled MinGW (GCC/G++,
-GDB) in CLion on Windows, and Apple Clang with ARM64 (Apple Silicon, macOS) on macOS.
+GDB) in CLion on Windows, and Apple Clang Apple Clang version 16.0.0 (clang-1600.0.26.3) with ARM64 (Apple Silicon, macOS) on macOS.
 
 ### Dependencies
 In this project, the following libraries are used:

@@ -210,3 +210,87 @@ TEST(TestReaderAndRunnerWithPlanetRK4, BasicTest) {
   EXPECT_NEAR(finalSolution[2], 0.0, 0.01); // Because 2-pi periodic
   delete loggerPtr;
 }
+
+TEST(TestParsing, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Reader reader(*loggerPtr, "../config/test/config_test_Parser_bad.yaml");
+    f_TYPE f = reader.getFunction();
+    Eigen::VectorXd vec = reader.getOdeSettings().initial_value;  // Vector of size 3
+    double time = reader.getOdeSettings().initial_time;
+    Eigen::VectorXd parsresult =  f(vec, time);
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithExplFwdEuler, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ExplFwdEuler_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithExplRK4, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ExplRK4_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithExplCustomRK, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ExplCustomRK_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithExplAB4, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ExplAB4_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithExplABcustomCoef, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ExplABcustomCoef_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithImplBwdEulerLinearqr, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinearQR_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithImplBwdEulerLinearLU, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinearLU_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithImplBwdEulerNonlinear, TestBadConfig) {
+  auto* loggerPtr = new Logger(1);
+  EXPECT_THROW({
+    Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerNonlinear_bad.yaml");
+    const Eigen::VectorXd finalSolution = runner.run();
+  }, std::runtime_error);  // Expecting std::runtime_error
+  delete loggerPtr;
+}

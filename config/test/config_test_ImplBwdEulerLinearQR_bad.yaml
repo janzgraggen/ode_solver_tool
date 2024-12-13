@@ -1,9 +1,10 @@
+
 # General configuration ––––––––––––––––––––––––––––––––––––––––
-output_file: "output.csv" # Empty string or Nothing for no output file
-verbosity_level: 3    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
+output_file: #"output_test_ImplBwdEulerLinear.csv" #Empty string or Nothing for no output file
+verbosity_level: 1    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
 
 # Function configuration
-Dim: 3 # An integer must be provided, that matches the f and y dimension
+Dim: 3
 Function: 
   f1: "0"
   f2: "y2"
@@ -16,6 +17,7 @@ OdeSolver:
   initial_time: 0.0
   final_time: 1.0
   initial_value: [1.0, 1.0, 0.0]
+
 
 # Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Explicit:
@@ -38,15 +40,19 @@ Explicit:
 
 # Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Implicit:
-  method: "BackwardEuler"  # Choose "BackwardEuler" 
-  rhs_is_linear: false
-  linear_system_solver: "jn"  # Choose between "QR" or "LU"  (also needed for systems in RootFinding)
+  method: "BackwardEuler"  # Choose  "BackwardEuler" 
+  rhs_is_linear: true 
+  linear_system_solver: "QR"  # Choose between "QR" or "LU" (also needed for systems in RootFinding)
   # if rhs is linear :y' = Ay + b
   rhs_system:         
-    A:
+    A: 
+      - 
+      - 
+      - 
+
     b:
   # if rhs is NOT linear 
-  tolerance: 0.000001
-  max_iterations: 50
-  root_finder: "NewtonRaphson"  # Choose between "NewtonRaphson" (or "FixedPoint")
-  dx : 0.0001 # for NewtonRaphson (or methods that use numerical differentiation)
+  tolerance:
+  max_iterations:
+  root_finder: # Choose between "NewtonRaphson" (or "FixedPoint")
+  dx : # for NewtonRaphson (or methods that use numerical differentiation)

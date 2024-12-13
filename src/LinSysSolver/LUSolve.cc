@@ -55,7 +55,7 @@ Eigen::VectorXd LUSolve::solveSys() {
         return lu.solve(b);
     } else {
         // Log an error if the matrix is singular
-        logger->error("Matrix is singular, cannot solve.");
+        logger->error("Matrix is singular, cannot solve. Try QRSolve instead.");
         return Eigen::VectorXd();  // Return an empty vector
     }
 }

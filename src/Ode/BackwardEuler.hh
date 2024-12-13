@@ -91,7 +91,7 @@ public:
      * - \( A \) is the matrix representing the linear system's coefficients.
      * - \( b \) is the vector from the system's right-hand side.
      *
-     * This method uses the configured solver (Gaussian elimination or LU decomposition).
+     * This method uses the configured solver (QR or LU decomposition).
      *
      * @param y The solution vector at the current time step.
      * @param t The current time.

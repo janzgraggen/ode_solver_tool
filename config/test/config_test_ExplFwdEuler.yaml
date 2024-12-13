@@ -40,9 +40,9 @@ Explicit:
 
 # Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
 Implicit:
-  method:  # Choose between "BackwardEuler" (or "CrankNicolson")
+  method:  # Choose  "BackwardEuler" 
   rhs_is_linear:
-  linear_system_solver:  # Choose between "GaussianElimination" (or "LU")
+  linear_system_solver:  # Choose between "QR" or "LU"
   # if rhs is linear :y' = Ay + b
   rhs_system:         
     A:

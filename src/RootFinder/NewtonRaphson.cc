@@ -1,7 +1,7 @@
 /**
  * @file NewtonRaphson.cc
  * @brief Implementation of the NewtonRaphson class, which provides a method to find roots of a system of equations
- *        using the Newton-Raphson iterative method. It uses different linear system solvers like Gaussian Elimination and LU decomposition.
+ *        using the Newton-Raphson iterative method. It uses different linear system solvers like QR or LU decomposition.
  *
  * This class is responsible for:
  * - Constructing the Newton-Raphson solver with custom tolerances and step sizes
@@ -14,7 +14,7 @@
 
 #include "NewtonRaphson.hh"
 #include "../LinSysSolver/LinSysSolver.hh"
-#include "../LinSysSolver/GaussElimSolve.hh"
+#include "../LinSysSolver/QRSolve.hh"
 #include "../LinSysSolver/LUSolve.hh"
 
 using F_TYPE = std::function<Eigen::VectorXd(const Eigen::VectorXd&)> ;
@@ -69,7 +69,7 @@ void NewtonRaphson::setDx(double dx){
 /**
  * @brief Sets the linear system solver to use during the Newton-Raphson iterations.
  *
- * @param linear_system_solver_in The solver to use (e.g., Gaussian Elimination or LU decomposition).
+ * @param linear_system_solver_in The solver to use (e.g., QR or LU decomposition).
  */
 void NewtonRaphson::setLinearSystemSolver(str linear_system_solver_in) {
     linear_system_solver = linear_system_solver_in;
@@ -87,7 +87,7 @@ double NewtonRaphson::getDx() const {
 /**
  * @brief Retrieves the selected linear system solver.
  *
- * @return The solver as a string representing its name (e.g., "GaussianElimination").
+ * @return The solver as a string representing its name (e.g., "LU decomposition").
  */
 str NewtonRaphson::getLinearSystemSolver() const {
     return linear_system_solver;
@@ -141,8 +141,8 @@ Eigen::VectorXd NewtonRaphson::solveRoot() {
 
     LinSysSolver* solver = nullptr;
 
-    if (getLinearSystemSolver() == "GaussianElimination") {
-        solver = new GaussElimSolve(logger);
+    if (getLinearSystemSolver() == "QR") {
+        solver = new QRSolve(logger);
     } else if (getLinearSystemSolver() == "LU") {
         solver = new LUSolve(logger);
     } else {

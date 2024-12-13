@@ -11,7 +11,7 @@
  */
 
 #include "BackwardEuler.hh"
-#include "../LinSysSolver/GaussElimSolve.hh"
+#include "../LinSysSolver/QRSolve.hh"
 #include "../LinSysSolver/LUSolve.hh"
 
 
@@ -140,8 +140,8 @@ Eigen::VectorXd BackwardEuler::calcLinStep(const Eigen::VectorXd y, double t) {
 
     // Solve the system according to the configured solver
     LinSysSolver* solver = nullptr;
-    if (getLinearSystemSolver() == "GaussianElimination") {
-        solver = new GaussElimSolve(*logger);
+    if (getLinearSystemSolver() == "QR") {
+        solver = new QRSolve(*logger);
     } else if (getLinearSystemSolver() == "LU") {
         solver = new LUSolve(*logger);
     } else {

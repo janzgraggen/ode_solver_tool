@@ -2,7 +2,7 @@
  * @file NewtonRaphson.hh
  * @brief Defines the `NewtonRaphson` class, which provides an implementation of the Newton-Raphson method
  *        to find roots of a system of nonlinear equations. This class extends the `RootFinder` class and
- *        supports different linear system solvers such as Gaussian Elimination and LU decomposition.
+ *        supports different linear system solvers such as QR or LU decomposition.
  *
  * The `NewtonRaphson` class is responsible for:
  * - Performing iterative root finding using the Newton-Raphson method.
@@ -65,7 +65,7 @@ public:
     /**
      * @brief Sets the linear system solver to be used during the Newton-Raphson iterations.
      *
-     * @param solver The solver type as a string (e.g., "Gaussian Elimination" or "LU").
+     * @param solver The solver type as a string (e.g., "QR" or "LU").
      */
     void setLinearSystemSolver(str solver) override;
 

@@ -74,7 +74,7 @@ public:
      * @brief Pure virtual method to solve the system \( Ax = b \).
      *
      * Derived classes must implement this method to solve the system using a
-     * specific solving algorithm (e.g., Gaussian elimination, LU decomposition).
+     * specific solving algorithm (e.g., QR or LU decomposition).
      *
      * @return Eigen::VectorXd The solution vector \( x \).
      */

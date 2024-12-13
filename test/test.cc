@@ -4,51 +4,16 @@
 #include "../src/Reader/Reader.hh"
 #include "../src/Runner/Runner.hh"
 #include "../src/Logger/Logger.hh"
-#include "../src/LinSysSolver/GaussElimSolve.hh"
+#include "../src/LinSysSolver/QRSolve.hh"
 #include "../src/LinSysSolver/LUSolve.hh"
 #include "../src/RootFinder/NewtonRaphson.hh"
 
-TEST(TestGaussElimSolve, BasicTest) {
+TEST(TestLUSolve, CompareWithQRSolve) {
     // Create a Logger instance
     auto* loggerPtr = new Logger(0);
 
-    // Instantiate GaussElimSolve with the logger
-    GaussElimSolve solver(*loggerPtr);
-
-    // Define a test linear system Ax = b
-    Eigen::MatrixXd A(3, 3);
-    A << 3, 1, -1,
-         2, 4, 1,
-         -1, 2, 5;
-
-    Eigen::VectorXd b(3);
-    b << 4, 1, 1;
-
-    // Set A and b in the solver (using inherited methods from LinSysSolver)
-    solver.setA(A);
-    solver.setB(b);
-
-    // Solve the system
-    Eigen::VectorXd x = solver.solveSys();
-
-    // Compute the expected solution using Eigen for verification
-    Eigen::VectorXd expectedSolution = A.colPivHouseholderQr().solve(b);
-
-    // Compare the computed solution to the expected solution
-    for (int i = 0; i < x.size(); ++i) {
-        EXPECT_NEAR(x[i], expectedSolution[i], 1e-5);
-    }
-
-    // Clean up
-    delete loggerPtr;
-}
-
-TEST(TestLUSolver, CompareWithGaussElim) {
-    // Create a Logger instance
-    auto* loggerPtr = new Logger(0);
-
-    // Instantiate GaussElimSolve and LUSolve with the logger
-    GaussElimSolve gaussSolver(*loggerPtr);
+    // Instantiate qrElimSolve and LUSolve with the logger
+    QRSolve qrSolver(*loggerPtr);
     LUSolve luSolver(*loggerPtr);
 
     // Define a test linear system Ax = b
@@ -61,20 +26,20 @@ TEST(TestLUSolver, CompareWithGaussElim) {
     b << 4, 1, 1;
 
     // Set A and b in both solvers
-    gaussSolver.setA(A);
-    gaussSolver.setB(b);
+    qrSolver.setA(A);
+    qrSolver.setB(b);
 
     luSolver.setA(A);
     luSolver.setB(b);
 
     // Solve the system with both solvers
-    Eigen::VectorXd xGauss = gaussSolver.solveSys();
+    Eigen::VectorXd xQR = qrSolver.solveSys();
     Eigen::VectorXd xLU = luSolver.solveSys();
 
     // Compare the solutions
-    ASSERT_EQ(xGauss.size(), xLU.size()) << "Solution sizes differ!";
-    for (int i = 0; i < xGauss.size(); ++i) {
-        EXPECT_NEAR(xGauss[i], xLU[i], 1e-5);
+    ASSERT_EQ(xQR.size(), xLU.size()) << "Solution sizes differ!";
+    for (int i = 0; i < xQR.size(); ++i) {
+        EXPECT_NEAR(xQR[i], xLU[i], 1e-5);
     }
 
     // Clean up
@@ -100,7 +65,7 @@ TEST(TestNewtonRaphson, BasicRootSolve) {
     solver.setInitialGuess(Eigen::VectorXd::Constant(1, 1.0)); // Initial guess x = [1.0]
     solver.setTolerance(1e-5);
     solver.setMaxIterations(50);
-    solver.setLinearSystemSolver("GaussianElimination");
+    solver.setLinearSystemSolver("QR");
 
     // Solve for the root
     Eigen::VectorXd root = solver.solveRoot();
@@ -197,10 +162,10 @@ TEST(TestReaderAndRunnerWithExplABcustomCoef, BasicTest) {
 }
 
 
-TEST(TestReaderAndRunnerWithImplBwdEulerLinearGauss, BasicTest) {
+TEST(TestReaderAndRunnerWithImplBwdEulerLinearqr, BasicTest) {
   auto* loggerPtr = new Logger(0);
    // Create the Runner object using the test config file
-   Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinearGauss.yaml");
+   Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinearQR.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 

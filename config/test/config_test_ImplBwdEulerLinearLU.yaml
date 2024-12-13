@@ -1,0 +1,58 @@
+
+# General configuration ––––––––––––––––––––––––––––––––––––––––
+output_file: #"output_test_ImplBwdEulerLinear.csv" #Empty string or Nothing for no output file
+verbosity_level: 2    # Silent = 0; Error = 1; Warning = 2; Info = 3; Debug = 4;
+
+# Function configuration
+Dim: 3
+Function: 
+  f1: "0"
+  f2: "y2"
+  f3: "2.0 * t"
+  
+# OdeSolver settings
+solver_type: "Implicit"  # Choose between "Implicit" or "Explicit"
+OdeSolver:
+  step_size: 0.01
+  initial_time: 0.0
+  final_time: 1.0
+  initial_value: [1.0, 1.0, 0.0]
+
+
+# Explicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Explicit:
+  method:  # Choose between "ForwardEuler", "RungeKutta", "AdamsBashforth"
+  #if method is "RungeKutta"
+  RungeKutta:
+    order:  # Choose between 1, 2, 3, 4
+    #if not order
+    coefficients:
+      a:
+      b:
+      c:
+
+  #if method is "AdamsBashforth"
+  AdamsBashforth:
+    max_order: # Choose between 1, 2, 3, 4
+    #if NOT max_order
+    coefficients_vector:
+
+
+# Implicit solver settings ––––––––––––––––––––––––––––––––––––––––
+Implicit:
+  method: "BackwardEuler"  # Choose between "BackwardEuler" 
+  rhs_is_linear: true 
+  linear_system_solver: "LU"  # Choose between "GaussianElimination" or "LU" (also needed for systems in RootFinding)
+  # if rhs is linear :y' = Ay + b
+  rhs_system:         
+    A: 
+      - [0.0, 0.0, 0.0]
+      - [0.0, 1.0, 0.0]
+      - [0.0, 0.0, 0.0]
+
+    b:
+  # if rhs is NOT linear 
+  tolerance:
+  max_iterations:
+  root_finder: # Choose between "NewtonRaphson" (or "FixedPoint")
+  dx : # for NewtonRaphson (or methods that use numerical differentiation)

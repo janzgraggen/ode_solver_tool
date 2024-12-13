@@ -90,24 +90,20 @@ Eigen::VectorXd Runner::run() {
         logger->error("{in Runner::run()} Invalid solver type: Rdr.getSolverType() returned:" + SolverType);
         return Eigen::VectorXd();  // Return empty vector for failure
     }
+    // Configure the solver with the settings from the configuration
+    Solver->setConfig(Rdr); 
+    logger->info("{in Runner::run()} Solver configured successfully");
 
-    // Check if solver instance creation was successful
-    if (Solver == nullptr) {
-        logger->error("{in Runner::run()} Solver instance creation failed");
-        delete Solver;
-        return Eigen::VectorXd();  // Return empty vector for failure
-    } else {
-        Solver->setConfig(Rdr);
-        logger->info("{in Runner::run()} Solver configured successfully");
+    // Solve the ODE using the configured solver
+    Eigen::VectorXd Result = Solver->solveOde();
+    logger->info("{in Runner::run()} Solving completed successfully");
 
-        Eigen::VectorXd Result = Solver->solveOde();
-        logger->info("{in Runner::run()} Solving completed successfully");
+    // Clean up dynamically allocated memory
+    delete Solver;  // Safely delete the solver instance
+    logger->info("{in Runner::run()} Solver instance deleted for clean up");
+    Solver = nullptr;  // Best practice to avoid dangling pointers
 
-        // Clean up dynamically allocated memory
-        delete Solver;  // Safely delete the solver instance
-        logger->info("{in Runner::run()} Solver instance deleted for clean up");
-        Solver = nullptr;  // Best practice to avoid dangling pointers
-
-        return Result;
-    }
+    // Return the computed result
+    return Result;
+    
 }

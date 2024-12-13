@@ -168,34 +168,33 @@ void Implicit::setRightHandSide(const f_TYPE& f) {
  * @throws std::runtime_error if an invalid root finder method is specified.
  */
 Eigen::VectorXd Implicit::calcNonLinStep(const Eigen::VectorXd y, double t) {
-    RootFinder* solver = nullptr;
+    RootFinder* solver = nullptr; //< Initialize the solver object
     if (getRootFinder() == "NewtonRaphson") {
-        solver = new NewtonRaphson(*logger, makeFstep(y, t));
-        solver->setInitialGuess(y);
-        solver->setLinearSystemSolver(getLinearSystemSolver());
-        
-        if (getTolerance() && getMaxIterations()) { //< they are initialized to 0
-            solver->setTolerance(getTolerance());
-            solver->setMaxIterations(getMaxIterations());
-            if (getDx() && getRootFinder() == "NewtonRaphson") {
-                solver->setDx(getDx());
-            } else {
-                logger->warning("{in Implicit::calcNonLinStep()} Missing parameter for nonlinear solver: dx. Using default values.");
-            }
-
-        } else {
-            logger->warning("{in Implicit::calcNonLinStep()} Missing parameter for nonlinear solver. Using default values.");
-        }
-        
-        Eigen::VectorXd solution = solver->solveRoot();
-
-        // Clean up resources
-        delete solver;
-        return solution;
-    } else {
+        solver = new NewtonRaphson(*logger, makeFstep(y, t)); //< Instantiate the NewtonRaphson solver
+    } else { //< [DEV]: Add more root finders here
         logger->error("Invalid root finder method: " + getRootFinder());
         return {}; // Return an empty vector
     }
+
+    solver->setInitialGuess(y);
+    solver->setLinearSystemSolver(getLinearSystemSolver());
+    
+    if (getTolerance() && getMaxIterations()) { //< they are initialized to 0
+        solver->setTolerance(getTolerance());
+        solver->setMaxIterations(getMaxIterations());
+        if (getDx() && getRootFinder() == "NewtonRaphson") { //< not all root finders need dx
+            solver->setDx(getDx());
+        } else {
+            logger->info("{in Implicit::calcNonLinStep()} Missing parameter for nonlinear solver: dx. Using default values.");
+        }
+    } else {
+        logger->info("{in Implicit::calcNonLinStep()} Missing parameter for nonlinear solver. Using default values.");
+    }
+    
+    Eigen::VectorXd solution = solver->solveRoot(); //< Solve for the root
+    delete solver; //< Clean up the solver object
+    solver = nullptr; //< Reset the pointer
+    return solution; //< Return the computed solution
 }
 
 /**

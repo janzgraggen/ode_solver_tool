@@ -42,7 +42,7 @@ Explicit:
 Implicit:
   method: "BackwardEuler"  # Choose between "BackwardEuler" (or "CrankNicolson")
   rhs_is_linear: true 
-  linear_system_solver: "LU"  # Choose between "GaussianElimination" (or "LU") (also needed for systems in RootFinding)
+  linear_system_solver: "GaussianElimination"  # Choose between "GaussianElimination" (or "LU") (also needed for systems in RootFinding)
   # if rhs is linear :y' = Ay + b
   rhs_system:         
     A: 

@@ -197,10 +197,22 @@ TEST(TestReaderAndRunnerWithExplABcustomCoef, BasicTest) {
 }
 
 
-TEST(TestReaderAndRunnerWithImplBwdEulerLinear, BasicTest) {
+TEST(TestReaderAndRunnerWithImplBwdEulerLinearGauss, BasicTest) {
   auto* loggerPtr = new Logger(0);
    // Create the Runner object using the test config file
-   Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinear.yaml");
+   Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinearGauss.yaml");
+
+  const Eigen::VectorXd finalSolution = runner.run();
+
+  EXPECT_NEAR(finalSolution[0], 1.0, 0.00001); // Expected to remain constant
+  EXPECT_NEAR(finalSolution[1], std::exp(1), std::exp(1)*0.01); // expected solution of dy/dt = y
+  delete loggerPtr;
+}
+
+TEST(TestReaderAndRunnerWithImplBwdEulerLinearLU, BasicTest) {
+  auto* loggerPtr = new Logger(0);
+  // Create the Runner object using the test config file
+  Runner runner(*loggerPtr, "../config/test/config_test_ImplBwdEulerLinearLU.yaml");
 
   const Eigen::VectorXd finalSolution = runner.run();
 

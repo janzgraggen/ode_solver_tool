@@ -139,18 +139,27 @@ Eigen::VectorXd BackwardEuler::calcLinStep(const Eigen::VectorXd y, double t) {
     const Eigen::VectorXd b = getStepSize() * getRhsSystem().b + y;
 
     // Solve the system according to the configured solver
+    LinSysSolver* solver = nullptr;
     if (getLinearSystemSolver() == "GaussianElimination") {
-        GaussElimSolve solver(*logger);
-        solver.setA(A);
-        solver.setB(b);
-        return solver.solveSys();
+        solver = new GaussElimSolve(*logger);
     } else if (getLinearSystemSolver() == "LU") {
-        LUSolve solver(*logger);
-        solver.setA(A);
-        solver.setB(b);
-        return solver.solveSys();
+        solver = new LUSolve(*logger);
     } else {
         logger->error("{in BackwardEuler::calcLinStep()} Invalid linear system solver, getLinearSystemSolver() returns: " + getLinearSystemSolver());
         return {};
     }
+    
+    // Set the matrix \( A \) and vector \( b \) in the solver
+    solver->setA(A);
+    solver->setB(b);
+
+    // Solve the system 
+    Eigen::VectorXd solution = solver->solveSys();
+
+    // Clean up
+    delete solver; //< Clean up the solver object
+    solver = nullptr; //< Reset the pointer
+
+    // Return the computed solution
+    return solution; //< Return the computed solution
 }
